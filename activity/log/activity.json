@@ -1,0 +1,20 @@
+{
+  "name": "flogo-log",
+  "type": "flogo:activity",
+  "version": "0.0.2",
+  "title": "Log Message",
+  "description": "Simple Log Activity",
+  "homepage": "https://github.com/project-flogo/log-act/tree/master",
+  "input":[
+    {
+      "name": "message",
+      "type": "string",
+      "value": ""
+    },
+    {
+      "name": "addDetails",
+      "type": "boolean",
+      "value": "false"
+    }
+  ]
+}

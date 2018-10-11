@@ -1,0 +1,62 @@
+{
+  "name": "flogo-rest",
+  "type": "flogo:trigger",
+  "version": "0.0.2",
+  "title": "Receive HTTP Message",
+  "description": "Simple REST Trigger",
+  "homepage": "https://github.com/project-flogo/rest-trg/tree/master",
+  "settings": [
+    {
+      "name": "port",
+      "type": "integer",
+      "required": true
+    }
+  ],
+  "output": [
+    {
+      "name": "params",
+      "type": "params"
+    },
+    {
+      "name": "pathParams",
+      "type": "params"
+    },
+    {
+      "name": "queryParams",
+      "type": "params"
+    },
+    {
+      "name": "header",
+      "type": "params"
+    },
+    {
+      "name": "content",
+      "type": "any"
+    }
+  ],
+  "reply": [
+    {
+      "name": "code",
+      "type": "integer"
+    },
+    {
+      "name": "data",
+      "type": "any"
+    }
+  ],
+  "handler": {
+    "settings": [
+      {
+        "name": "method",
+        "type": "string",
+        "required" : true,
+        "allowed" : ["GET", "POST", "PUT", "PATCH", "DELETE"]
+      },
+      {
+        "name": "path",
+        "type": "string",
+        "required" : true
+      }
+    ]
+  }
+}
