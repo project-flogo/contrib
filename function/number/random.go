@@ -1,10 +1,11 @@
 package number
 
 import (
-	"github.com/project-flogo/core/data"
-	"github.com/project-flogo/fscript/function"
 	"math/rand"
 	"time"
+
+	"github.com/project-flogo/core/data"
+	"github.com/project-flogo/core/data/expression/function"
 )
 
 func init() {
