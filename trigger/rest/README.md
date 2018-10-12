@@ -1,7 +1,7 @@
----
+<!--
 title: REST
 weight: 4706
----
+-->
 # REST Trigger
 This trigger provides your flogo application the ability to start a flow via REST over HTTP
 
@@ -19,28 +19,11 @@ Settings, Outputs and Endpoint:
   "settings": [
     {
       "name": "port",
-      "type": "integer"
+      "type": "integer",
+      "required" : true
     }
   ],
-  "output": [
-    {
-      "name": "pathParams",
-      "type": "params"
-    },
-    {
-      "name": "queryParams",
-      "type": "params"
-    },
-    {
-      "name": "header",
-      "type": "params"
-    },
-    {
-      "name": "content",
-      "type": "object"
-    }
-  ],
-  "endpoint": {
+  "handler": {
     "settings": [
       {
         "name": "method",
@@ -53,19 +36,39 @@ Settings, Outputs and Endpoint:
         "required" : true
       }
     ]
-  }
+  },
+  "output": [
+    {
+      "name": "pathParams",
+      "type": "params"
+    },
+    {
+      "name": "queryParams",
+      "type": "params"
+    },
+    {
+      "name": "headers",
+      "type": "params"
+    },
+    {
+      "name": "content",
+      "type": "object"
+    }
+  ]
 }
 ```
 ## Settings
 ### Trigger:
-| Setting     | Description    |
-|:------------|:---------------|
-| port | The port to listen on |         
-### Endpoint:
-| Setting     | Description    |
-|:------------|:---------------|
-| method      | The HTTP method |         
-| path        | The resource path  |
+| Setting  | Required | Description |
+|:---------|:---------|:------------|
+| port     | true     | The port to listen on
+
+
+### Handler:
+| Setting  | Required | Description |
+|:---------|:---------|:------------|
+| method   | true     | The HTTP method
+| path     | true     | The resource path
 
 
 ## Example Configurations
@@ -124,7 +127,10 @@ Configure the Trigger to handle a GET on /device/:id
           "action": {
             "ref": "github.com/project-flogo/flow",
             "settings": {
-              "flowURI": "res://flow:new_device_flow"
+              "flowURI": "res://flow:get_device_flow"
+            },
+            "input":{
+              "deviceId":"=$.pathParams.id"
             }
           }
         }
