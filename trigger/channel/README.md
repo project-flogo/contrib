@@ -37,14 +37,14 @@ Settings, Outputs and Endpoint:
 ```
 ## Settings      
 ### Handler:
-| Setting     | Description    |
-|:------------|:---------------|
-| channel      | The internal engine channel |         
+| Setting  | Required | Description |
+|:---------|:---------|:------------|
+| channel  | true     | The internal engine channel |
 
 
 ## Example Configurations
 
-Triggers are configured via the triggers.json of your application. The following are some example configuration of the CHANNEL Trigger.
+Triggers are configured via the triggers.json of your application. The following are some example configuration of the Channel Trigger.
 
 ### Run Flow
 Configure the Trigger to handle an event recieved on the 'test' channel

@@ -1,7 +1,7 @@
----
+<!--
 title: Timer
 weight: 4707
----
+-->
 # Timer Trigger
 This trigger provides your flogo application the ability to schedule an action
 
