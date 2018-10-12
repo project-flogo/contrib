@@ -1,4 +1,4 @@
-package activity_return
+package actreturn
 
 import (
 	"github.com/project-flogo/core/activity"
@@ -11,7 +11,7 @@ import (
 var log = logger.GetLogger("activity-return")
 
 func init() {
-	activity.Register(&ReturnActivity{}, New)
+	activity.Register(&Activity{}, New)
 }
 
 type Settings struct {
@@ -27,7 +27,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, err
 	}
 
-	act := &ReturnActivity{}
+	act := &Activity{}
 
 	log.Debugf("Mappings: %+v", s.Mappings)
 
@@ -39,19 +39,19 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	return act, nil
 }
 
-// ReturnActivity is an Activity that is used to return/return via the trigger
+// Activity is an Activity that is used to return/return via the trigger
 // inputs : {method,uri,params}
 // outputs: {result}
-type ReturnActivity struct {
+type Activity struct {
 	mapper mapper.Mapper
 }
 
-func (a *ReturnActivity) Metadata() *activity.Metadata {
+func (a *Activity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
 // Eval implements api.Activity.Eval - Invokes a REST Operation
-func (a *ReturnActivity) Eval(ctx activity.Context) (done bool, err error) {
+func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	actionCtx := ctx.ActivityHost()
 

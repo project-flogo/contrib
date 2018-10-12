@@ -11,7 +11,7 @@ This activity allows you to reply to a trigger invocation and map output values.
 This activity comes out of the box with the Flogo Web UI
 ### Flogo CLI
 ```bash
-flogo install github.com/project-flogo/contrib/activity/reply
+flogo install github.com/project-flogo/contrib/activity/actreturn
 ```
 
 ## Schema
@@ -52,7 +52,7 @@ The below example allows you to configure the activity to reply and set the outp
   "id": "return",
   "name": "Return",
   "activity": {
-    "ref": "github.com/project-flogo/contrib/activity/return",
+    "ref": "github.com/project-flogo/contrib/activity/actreturn",
     "settings": {
       "mappings": {
         "Output1":"name",

@@ -1,4 +1,4 @@
-package activity_return
+package actreturn
 
 import (
 	"encoding/json"
@@ -15,7 +15,7 @@ import (
 
 func TestRegister(t *testing.T) {
 
-	ref := activity.GetRef(&ReturnActivity{})
+	ref := activity.GetRef(&Activity{})
 	act := activity.Get(ref)
 
 	assert.NotNil(t, act)

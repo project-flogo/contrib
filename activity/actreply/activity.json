@@ -1,11 +1,11 @@
 {
-  "name": "flogo-return",
+  "name": "flogo-reply",
   "type": "flogo:activity",
   "version": "0.0.2",
-  "title": "Return",
-  "description": "Return Activity",
-  "homepage": "https://github.com/prject-flogo/contrib/tree/master/activity/return",
-  "setting":[
+  "title": "Reply To Trigger",
+  "description": "Replies to Trigger",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/activity/actreply",
+  "settings":[
     {
       "name": "mappings",
       "type": "object",
