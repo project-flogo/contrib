@@ -22,11 +22,35 @@ func TestRegister(t *testing.T) {
 	assert.NotNil(t, act)
 }
 
+func TestSettings(t *testing.T) {
+	settings := &Settings{Method: "POS", Uri: "http://petstore.swagger.io/v2/pet"}
+
+	iCtx := test.NewActivityInitContext(settings, nil)
+	_, err := New(iCtx)
+	assert.NotNil(t, err)
+
+	settings = &Settings{Method: "POST", Uri: ""}
+
+	iCtx = test.NewActivityInitContext(settings, nil)
+	_, err = New(iCtx)
+	assert.NotNil(t, err)
+
+	settings = &Settings{Method: "pOsT", Uri: "http://petstore.swagger.io/v2/pet"}
+
+	iCtx = test.NewActivityInitContext(settings, nil)
+	_, err = New(iCtx)
+	assert.Nil(t, err)
+}
+
+
+
 const reqPostStr string = `{
   "name": "my pet"
 }
 `
 var petID string
+
+
 
 func TestSimplePost(t *testing.T) {
 

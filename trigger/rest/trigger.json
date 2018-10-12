@@ -4,7 +4,7 @@
   "version": "0.0.2",
   "title": "Receive HTTP Message",
   "description": "Simple REST Trigger",
-  "homepage": "https://github.com/project-flogo/rest-trg/tree/master",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/trigger/rest",
   "settings": [
     {
       "name": "port",
