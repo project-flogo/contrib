@@ -1,0 +1,20 @@
+{
+  "name": "flogo-timer",
+  "type": "flogo:trigger",
+  "version": "0.0.2",
+  "title": "Timer",
+  "description": "Simple Timer trigger",
+  "homepage": "https://github.com/project-flogo/contrib/tree/master/trigger/timer",
+  "handler": {
+    "settings": [
+      {
+        "name": "startDelay",
+        "type": "string"
+      },
+      {
+        "name": "repeatInterval",
+        "type": "string"
+      }
+    ]
+  }
+}
