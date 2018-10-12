@@ -79,11 +79,12 @@ Configure the Trigger to handle a POST on /device
 {
   "triggers": [
     {
-      "name": "flogo-rest",
+      "id": "flogo-rest",
+      "ref": "github.com/project-flogo/contrib/trigger/rest",
       "settings": {
         "port": "8080"
       },
-      "endpoints": [
+      "handlers": [
         {
           "actionType": "flow",
           "actionURI": "embedded://new_device_flow",
@@ -105,11 +106,12 @@ Configure the Trigger to handle a GET on /device/:id
 {
   "triggers": [
     {
-      "name": "flogo-rest",
+      "id": "flogo-rest",
+      "ref": "github.com/project-flogo/contrib/trigger/rest",
       "settings": {
         "port": "8080"
       },
-      "endpoints": [
+      "handlers": [
         {
           "actionType": "flow",
           "actionURI": "embedded://get_device_flow",

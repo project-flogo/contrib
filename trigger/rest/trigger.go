@@ -21,7 +21,6 @@ const (
 	CorsPrefix = "REST_TRIGGER"
 )
 
-// log is the default package logger
 var log = logger.GetLogger("trigger-rest")
 
 var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{}, &Reply{})
@@ -54,10 +53,6 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	}
 
 	return &Trigger{id: config.Id, settings: s}, nil
-}
-
-func (t *Trigger) Metadata() *trigger.Metadata {
-	return triggerMd
 }
 
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
