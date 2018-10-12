@@ -32,14 +32,8 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	return &Trigger{}, nil
 }
 
-
-// Trigger CHANNEL trigger struct
 type Trigger struct {
-	metadata *trigger.Metadata
-	config   *trigger.Config
-	handlers []*trigger.Handler
 }
-
 
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
