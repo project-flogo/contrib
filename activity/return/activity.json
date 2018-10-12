@@ -1,0 +1,20 @@
+{
+  "name": "flogo-return",
+  "type": "flogo:activity",
+  "version": "0.0.2",
+  "title": "Return",
+  "description": "Return Activity",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/activity/return",
+  "setting":[
+    {
+      "name": "mappings",
+      "type": "object",
+      "required": true,
+      "display": {
+        "name": "Mapper",
+        "type": "mapper",
+        "mapperOutputScope" : "action.output"
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "flogo-channel",
+  "type": "flogo:activity",
+  "version": "0.0.2",
+  "title": "Channel",
+  "description": "Publish on Channel",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/activity/channel",
+  "input":[
+    {
+      "name": "channel",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "value",
+      "type": "any"
+    }
+  ]
+}

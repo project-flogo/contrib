@@ -19,7 +19,7 @@ func TestRegister(t *testing.T) {
 func TestEval(t *testing.T) {
 
 	act := &Activity{}
-	tc := test.NewTestActivityContext(act.Metadata())
+	tc := test.NewActivityContext(act.Metadata())
 
 	input := &Input{Message: "test message", AddDetails: true}
 	tc.SetInputObject(input)
@@ -30,7 +30,7 @@ func TestEval(t *testing.T) {
 func TestAddToFlow(t *testing.T) {
 
 	act := &Activity{}
-	tc := test.NewTestActivityContext(act.Metadata())
+	tc := test.NewActivityContext(act.Metadata())
 
 	//setup attrs
 	tc.SetInput("message", "test message")
