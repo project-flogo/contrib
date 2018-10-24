@@ -22,12 +22,12 @@ func init() {
 }
 
 const (
-	methodPOST   = "POST"
-	methodPUT    = "PUT"
-	methodPATCH  = "PATCH"
+	methodPOST  = "POST"
+	methodPUT   = "PUT"
+	methodPATCH = "PATCH"
 )
 
-var activityMd = activity.ToMetadata(&Settings{},&Input{},&Output{})
+var activityMd = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
 
 func New(ctx activity.InitContext) (activity.Activity, error) {
 	s := &Settings{}
@@ -36,7 +36,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, err
 	}
 
-	act := &Activity{settings:s}
+	act := &Activity{settings: s}
 	act.containsParam = strings.Index(s.Uri, "/:") > -1
 
 	if len(s.Proxy) > 0 {
@@ -165,11 +165,10 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	client = &http.Client{Transport: httpTransportSettings}
 	resp, err := client.Do(req)
-	defer resp.Body.Close()
-
 	if err != nil {
 		return false, err
 	}
+	defer resp.Body.Close()
 
 	log.Debug("response Status:", resp.Status)
 	respBody, _ := ioutil.ReadAll(resp.Body)
@@ -186,7 +185,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		log.Debug("response body:", result)
 	}
 
-	output := &Output{Status:resp.StatusCode, Result:result }
+	output := &Output{Status: resp.StatusCode, Result: result}
 
 	ctx.SetOutputObject(output)
 
