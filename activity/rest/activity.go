@@ -39,6 +39,9 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	act := &Activity{settings: s}
 	act.containsParam = strings.Index(s.Uri, "/:") > -1
 
+	httpTransportSettings := http.Transport{}
+
+	// Set the proxy server to use, if supplied
 	if len(s.Proxy) > 0 {
 		proxyURL, err := url.Parse(s.Proxy)
 		if err != nil {
@@ -46,8 +49,18 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 			return nil, err
 		}
 
-		act.proxyURL = proxyURL
+		if log.DebugEnabled() {
+			log.Debug("Setting proxy server:", s.Proxy)
+		}
+		httpTransportSettings.Proxy = http.ProxyURL(proxyURL)
 	}
+
+	// Skip ssl validation
+	if s.SkipSSL {
+		httpTransportSettings.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	}
+
+	act.client = http.Client{Transport: &httpTransportSettings}
 
 	return act, nil
 }
@@ -59,7 +72,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 type Activity struct {
 	settings      *Settings
 	containsParam bool
-	proxyURL      *url.URL
+	client        http.Client
 }
 
 func (a *Activity) Metadata() *activity.Metadata {
@@ -147,24 +160,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		}
 	}
 
-	httpTransportSettings := &http.Transport{}
-
-	// Set the proxy server to use, if supplied
-	var client *http.Client
-	if a.proxyURL != nil {
-		if log.DebugEnabled() {
-			log.Debug("Setting proxy server:", a.settings.Proxy)
-		}
-		httpTransportSettings.Proxy = http.ProxyURL(a.proxyURL)
-	}
-
-	// Skip ssl validation
-	if a.settings.SkipSSL {
-		httpTransportSettings.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	}
-
-	client = &http.Client{Transport: httpTransportSettings}
-	resp, err := client.Do(req)
+	resp, err := a.client.Do(req)
 	if err != nil {
 		return false, err
 	}
