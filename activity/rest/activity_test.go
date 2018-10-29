@@ -42,15 +42,12 @@ func TestSettings(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-
-
 const reqPostStr string = `{
   "name": "my pet"
 }
 `
+
 var petID string
-
-
 
 func TestSimplePost(t *testing.T) {
 

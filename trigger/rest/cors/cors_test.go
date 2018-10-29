@@ -16,7 +16,6 @@ const (
 	TEST_CORS_PREFIX = "FOO_"
 )
 
-
 // Test Has Origin Header method
 func TestHasOriginHeaderOk(t *testing.T) {
 	// Create request

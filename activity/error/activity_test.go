@@ -8,7 +8,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
 func TestRegister(t *testing.T) {
 
 	ref := activity.GetRef(&Activity{})
@@ -16,7 +15,6 @@ func TestRegister(t *testing.T) {
 
 	assert.NotNil(t, act)
 }
-
 
 func TestSimpleError(t *testing.T) {
 
@@ -31,7 +29,7 @@ func TestSimpleError(t *testing.T) {
 	assert.False(t, done)
 	assert.NotNil(t, err)
 
-	ae,ok := err.(*activity.Error)
+	ae, ok := err.(*activity.Error)
 	assert.True(t, ok)
 	assert.Equal(t, "test error", ae.Error())
 }

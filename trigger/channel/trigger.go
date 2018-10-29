@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/engine/channels"
+	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
 )
 

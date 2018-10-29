@@ -6,7 +6,6 @@ import (
 	"github.com/project-flogo/core/data/metadata"
 )
 
-
 func init() {
 	activity.Register(&Activity{}, New)
 }

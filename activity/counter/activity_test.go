@@ -27,7 +27,7 @@ func TestIncrement(t *testing.T) {
 		}
 	}()
 
-	settings := &Settings{CounterName:"test", Op:"increment"}
+	settings := &Settings{CounterName: "test", Op: "increment"}
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
 
@@ -45,7 +45,7 @@ func TestIncrement(t *testing.T) {
 
 func TestGet(t *testing.T) {
 
-	settings := &Settings{CounterName:"test", Op:"get"}
+	settings := &Settings{CounterName: "test", Op: "get"}
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
 
@@ -69,7 +69,7 @@ func TestGet(t *testing.T) {
 
 func TestReset(t *testing.T) {
 
-	settings := &Settings{CounterName:"test", Op:"reset"}
+	settings := &Settings{CounterName: "test", Op: "reset"}
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
 

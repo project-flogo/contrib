@@ -64,7 +64,6 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
 	pathMap := make(map[string]string)
 
-
 	preflightHandler := &PreflightHandler{logger: t.logger, c: cors.New(CorsPrefix, t.logger)}
 
 	// Init handlers

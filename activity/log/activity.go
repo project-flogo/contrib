@@ -3,10 +3,9 @@ package log
 import (
 	"fmt"
 
-	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/data/coerce"
 )
-
 
 func init() {
 	activity.Register(&LogActivity{})

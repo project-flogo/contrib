@@ -7,7 +7,6 @@ import (
 	"github.com/project-flogo/core/engine/channels"
 )
 
-
 func init() {
 	activity.Register(&Activity{})
 }
