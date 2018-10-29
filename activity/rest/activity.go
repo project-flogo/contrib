@@ -12,10 +12,7 @@ import (
 
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
-	"github.com/project-flogo/core/support/logger"
 )
-
-var log = logger.GetLogger("activity-rest")
 
 func init() {
 	activity.Register(&Activity{}, New)
@@ -41,17 +38,17 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 
 	httpTransportSettings := http.Transport{}
 
+	logger := ctx.Logger()
+
 	// Set the proxy server to use, if supplied
 	if len(s.Proxy) > 0 {
 		proxyURL, err := url.Parse(s.Proxy)
 		if err != nil {
-			log.Debugf("Error parsing proxy url '%s': %s", s.Proxy, err)
+			logger.Debugf("Error parsing proxy url '%s': %s", s.Proxy, err)
 			return nil, err
 		}
 
-		if log.DebugEnabled() {
-			log.Debug("Setting proxy server:", s.Proxy)
-		}
+		logger.Debug("Setting proxy server:", s.Proxy)
 		httpTransportSettings.Proxy = http.ProxyURL(proxyURL)
 	}
 
@@ -107,8 +104,10 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		uri = uri + "?" + qp.Encode()
 	}
 
-	if log.DebugEnabled() {
-		log.Debugf("REST Call: [%s] %s", a.settings.Method, uri)
+	logger := ctx.Logger()
+
+	if logger.DebugEnabled() {
+		logger.Debugf("REST Call: [%s] %s", a.settings.Method, uri)
 	}
 
 	var reqBody io.Reader
@@ -149,12 +148,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	// Set headers
 	if len(headers) > 0 {
-		if log.DebugEnabled() {
-			log.Debug("Setting HTTP request headers...")
+		if logger.DebugEnabled() {
+			logger.Debug("Setting HTTP request headers...")
 		}
 		for key, value := range headers {
-			if log.DebugEnabled() {
-				log.Debugf("%s: %s", key, value)
+			if logger.DebugEnabled() {
+				logger.Debugf("%s: %s", key, value)
 			}
 			req.Header.Set(key, value)
 		}
@@ -166,7 +165,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 	defer resp.Body.Close()
 
-	log.Debug("response Status:", resp.Status)
+	logger.Debug("response Status:", resp.Status)
 	respBody, _ := ioutil.ReadAll(resp.Body)
 
 	var result interface{}
@@ -177,8 +176,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	//json.Unmarshal(respBody, &result)
 
-	if log.DebugEnabled() {
-		log.Debug("response body:", result)
+	if logger.DebugEnabled() {
+		logger.Debug("response body:", result)
 	}
 
 	output := &Output{Status: resp.StatusCode, Result: result}

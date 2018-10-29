@@ -14,8 +14,7 @@ This activity comes out of the box with the Flogo Web UI
 flogo install github.com/project-flogo/contrib/activity/actreply
 ```
 
-## Schema
-Input and Output:
+## Metadata
 
 ```json
 {
@@ -30,10 +29,6 @@ Input and Output:
         "mapperOutputScope" : "action.output"
       }
     }
-  ],
-  "input": [
-  ],
-  "output": [
   ]
 }
 ```

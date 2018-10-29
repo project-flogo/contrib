@@ -2,10 +2,7 @@ package error
 
 import (
 	"github.com/project-flogo/core/activity"
-	"github.com/project-flogo/core/support/logger"
 )
-
-var log = logger.GetLogger("activity-error")
 
 func init() {
 	activity.Register(&Activity{})
@@ -30,8 +27,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	input := &Input{}
 	ctx.GetInputObject(input)
 
-	if log.DebugEnabled() {
-		log.Debugf("Message :'%s', Data: '%+v'", input.Message, input.Data)
+	if logger := ctx.Logger(); logger.DebugEnabled() {
+		logger.Debugf("Message :'%s', Data: '%+v'", input.Message, input.Data)
 	}
 
 	return false, activity.NewError(input.Message, "", input.Data)

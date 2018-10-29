@@ -1,0 +1,24 @@
+{
+  "name": "json",
+  "type": "flogo:function",
+  "version": "0.0.1",
+  "title": "Json Functions",
+  "description": "Json Functions",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/json",
+  "functions": [
+    {
+      "name": "json.path",
+      "description": "apply a json path to an object",
+      "args": [
+        {
+          "name ": "path",
+          "type": "string"
+        },
+        {
+          "name ": "object",
+          "type": "any"
+        }
+      ]
+    }
+  ]
+}

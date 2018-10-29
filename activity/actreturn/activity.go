@@ -4,11 +4,8 @@ import (
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/mapper"
 	"github.com/project-flogo/core/data/metadata"
-	"github.com/project-flogo/core/support/logger"
 )
 
-// log is the default package logger
-var log = logger.GetLogger("activity-return")
 
 func init() {
 	activity.Register(&Activity{}, New)
@@ -29,7 +26,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 
 	act := &Activity{}
 
-	log.Debugf("Mappings: %+v", s.Mappings)
+	ctx.Logger().Debugf("Mappings: %+v", s.Mappings)
 
 	act.mapper, err = ctx.MapperFactory().NewMapper(s.Mappings)
 	if err != nil {

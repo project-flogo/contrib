@@ -10,7 +10,7 @@ import (
 
 func TestRegister(t *testing.T) {
 
-	ref := activity.GetRef(&Activity{})
+	ref := activity.GetRef(&LogActivity{})
 	act := activity.Get(ref)
 
 	assert.NotNil(t, act)
@@ -18,7 +18,7 @@ func TestRegister(t *testing.T) {
 
 func TestEval(t *testing.T) {
 
-	act := &Activity{}
+	act := &LogActivity{}
 	tc := test.NewActivityContext(act.Metadata())
 
 	input := &Input{Message: "test message", AddDetails: true}
@@ -29,7 +29,7 @@ func TestEval(t *testing.T) {
 
 func TestAddToFlow(t *testing.T) {
 
-	act := &Activity{}
+	act := &LogActivity{}
 	tc := test.NewActivityContext(act.Metadata())
 
 	//setup attrs

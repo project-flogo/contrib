@@ -4,14 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/engine/channels"
-	"github.com/project-flogo/core/support/logger"
 	"github.com/project-flogo/core/trigger"
-
 )
-
-var log = logger.GetLogger("trigger-channel")
 
 var triggerMd = trigger.NewMetadata(&HandlerSettings{}, &Output{})
 
@@ -70,6 +67,7 @@ func (t *Trigger) Stop() error {
 
 type Listener struct {
 	handler trigger.Handler
+	logger  log.Logger
 }
 
 func (l *Listener) OnMessage(msg interface{}) {
@@ -85,6 +83,6 @@ func (l *Listener) OnMessage(msg interface{}) {
 	_, err := l.handler.Handle(context.TODO(), triggerData)
 
 	if err != nil {
-		log.Error(err)
+		l.logger.Error(err)
 	}
 }

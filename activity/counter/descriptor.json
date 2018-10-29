@@ -1,0 +1,26 @@
+{
+  "name": "flogo-counter",
+  "type": "flogo:activity",
+  "version": "0.0.1",
+  "title": "Counter Activity",
+  "description": "Global Counter Activity",
+  "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/counter",
+  "settings":[
+    {
+      "name": "counterName",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "op",
+      "type": "string",
+      "allowed" : ["get", "increment", "reset"]
+    }
+  ],
+  "output": [
+    {
+      "name": "value",
+      "type": "integer"
+    }
+  ]
+}

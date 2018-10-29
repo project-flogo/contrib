@@ -8,19 +8,19 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/project-flogo/core/support/logger"
+	"github.com/project-flogo/core/support/log"
 )
 
 const (
-	ORIGIN_HEADER                           string = "Origin"
-	ACCESS_CONTROL_REQUEST_METHOD_HEADER    string = "Access-Control-Request-Method"
-	ACCESS_CONTROL_REQUEST_HEADER_HEADER    string = "Access-Control-Request-Headers"
-	ACCESS_CONTROL_ALLOW_ORIGIN_HEADER      string = "Access-Control-Allow-Origin"
-	ACCESS_CONTROL_ALLOW_METHODS_HEADER     string = "Access-Control-Allow-Methods"
-	ACCESS_CONTROL_ALLOW_HEADERS_HEADER     string = "Access-Control-Allow-Headers"
-	ACCESS_CONTROL_EXPOSE_HEADERS_HEADER    string = "Access-Control-Expose-Headers"
-	ACCESS_CONTROL_ALLOW_CREDENTIALS_HEADER string = "Access-Control-Allow-Credentials"
-	ACCESS_CONTROL_MAX_AGE_HEADER           string = "Access-Control-Max-Age"
+	HeaderOrigin                        string = "Origin"
+	HeaderAccessControlRequestMethod    string = "Access-Control-Request-Method"
+	HeaderAccessControlRequestHeaders   string = "Access-Control-Request-Headers"
+	HeaderAccessControlAllowOrigin      string = "Access-Control-Allow-Origin"
+	HeaderAccessControlAllowMethods     string = "Access-Control-Allow-Methods"
+	HeaderAccessControlAllowHeaders     string = "Access-Control-Allow-Headers"
+	HeaderAccessControlExposeHeaders    string = "Access-Control-Expose-Headers"
+	HeaderAccessControlAllowCredentials string = "Access-Control-Allow-Credentials"
+	HeaderAccessControlMaxAge           string = "Access-Control-Max-Age"
 )
 
 // CORS interface
@@ -35,15 +35,15 @@ type cors struct {
 	// Prefix used for the CORS environment variables
 	Prefix string
 
-	log logger.Logger
+	logger log.Logger
 }
 
 // make sure that the cors implements the Cors interface
 var _ Cors = (*cors)(nil)
 
 //Cors constructor
-func New(prefix string, log logger.Logger) Cors {
-	return cors{Prefix: prefix, log: log}
+func New(prefix string, logger log.Logger) Cors {
+	return cors{Prefix: prefix, logger: logger}
 }
 
 // HandlePreflight Handles the cors preflight request setting the right headers and responding to the request
@@ -51,22 +51,22 @@ func (c cors) HandlePreflight(w http.ResponseWriter, r *http.Request) {
 	// Check if it has Origin Header
 	hasOrigin := HasOriginHeader(r)
 	if hasOrigin == false {
-		c.log.Info("Invalid CORS preflight request, no Origin header found")
+		c.logger.Info("Invalid CORS preflight request, no Origin header found")
 		writeInvalidPreflightResponse(w)
 		return
 	}
 
 	// Check Access-Control-Request-Method header
-	requestMethodHeader := r.Header.Get(ACCESS_CONTROL_REQUEST_METHOD_HEADER)
-	if isValidAccessControlMethod(requestMethodHeader, c.Prefix, c.log) != true {
+	requestMethodHeader := r.Header.Get(HeaderAccessControlRequestMethod)
+	if isValidAccessControlMethod(requestMethodHeader, c.Prefix, c.logger) != true {
 		// Invalid Access Control Method
 		writeInvalidPreflightResponse(w)
 		return
 	}
 
 	// Check Access-Control-Allow-Headers header
-	requestHeadersHeader := r.Header.Get(ACCESS_CONTROL_REQUEST_HEADER_HEADER)
-	if isValidAccessControlHeaders(requestHeadersHeader, c.Prefix, c.log) != true {
+	requestHeadersHeader := r.Header.Get(HeaderAccessControlRequestHeaders)
+	if isValidAccessControlHeaders(requestHeadersHeader, c.Prefix, c.logger) != true {
 		// Invalid Access Control Header
 		writeInvalidPreflightResponse(w)
 		return
@@ -77,7 +77,7 @@ func (c cors) HandlePreflight(w http.ResponseWriter, r *http.Request) {
 
 // HasOriginHeader returns true if the request has Origin header, false otherwise
 func HasOriginHeader(r *http.Request) bool {
-	h := r.Header.Get(ORIGIN_HEADER)
+	h := r.Header.Get(HeaderOrigin)
 	if h == "" {
 		return false
 	}
@@ -85,25 +85,25 @@ func HasOriginHeader(r *http.Request) bool {
 }
 
 // Check if the method name is valid and allowed by the environment variable
-func isValidAccessControlMethod(methodName string, prefix string, log logger.Logger) bool {
+func isValidAccessControlMethod(methodName string, prefix string, logger log.Logger) bool {
 	if methodName == "" {
-		log.Infof("Invalid Access Control Method for preflight request: '%s'", methodName)
+		logger.Infof("Invalid Access Control Method for preflight request: '%s'", methodName)
 		return false
 	}
 	allowedMethodsEnv := GetCorsAllowMethods(prefix)
 	allowedMethods := strings.Split(allowedMethodsEnv, ",")
-	log.Debugf("Allowed Methods '%s'", allowedMethods)
+	logger.Debugf("Allowed Methods '%s'", allowedMethods)
 	for i := range allowedMethods {
 		if strings.ToLower(strings.TrimSpace(allowedMethods[i])) == strings.ToLower(strings.TrimSpace(methodName)) {
 			return true
 		}
 	}
-	log.Infof("Invalid Access Control Method for preflight request: '%s'", methodName)
+	logger.Infof("Invalid Access Control Method for preflight request: '%s'", methodName)
 	return false
 }
 
 // Check if the headers are valid and allowed by the environment variable
-func isValidAccessControlHeaders(headersStr string, prefix string, log logger.Logger) bool {
+func isValidAccessControlHeaders(headersStr string, prefix string, logger log.Logger) bool {
 	if headersStr == "" {
 		return true
 	}
@@ -121,7 +121,7 @@ func isValidAccessControlHeaders(headersStr string, prefix string, log logger.Lo
 	for i := range headers {
 		_, ok := allowedHeadersMap[strings.ToLower(strings.TrimSpace(headers[i]))]
 		if ok == false {
-			log.Infof("Invalid Access Control Header for preflight request: '%s'", strings.TrimSpace(headers[i]))
+			logger.Infof("Invalid Access Control Header for pre-flight request: '%s'", strings.TrimSpace(headers[i]))
 			return false
 		}
 	}
@@ -146,20 +146,20 @@ func writeValidPreflightResponse(w http.ResponseWriter, c cors) {
 // Writes the CORS preflight request headers (origin and credential)
 func writeCorsPreflightHeaders(w http.ResponseWriter, c cors) {
 	c.WriteCorsActualRequestHeaders(w)
-	w.Header().Set(ACCESS_CONTROL_ALLOW_METHODS_HEADER, GetCorsAllowMethods(c.Prefix))
-	w.Header().Set(ACCESS_CONTROL_ALLOW_HEADERS_HEADER, GetCorsAllowHeaders(c.Prefix))
-	w.Header().Set(ACCESS_CONTROL_EXPOSE_HEADERS_HEADER, GetCorsExposeHeaders(c.Prefix))
+	w.Header().Set(HeaderAccessControlAllowMethods, GetCorsAllowMethods(c.Prefix))
+	w.Header().Set(HeaderAccessControlAllowHeaders, GetCorsAllowHeaders(c.Prefix))
+	w.Header().Set(HeaderAccessControlExposeHeaders, GetCorsExposeHeaders(c.Prefix))
 	maxAge := GetCorsMaxAge(c.Prefix)
 	if maxAge != "" {
-		w.Header().Set(ACCESS_CONTROL_MAX_AGE_HEADER, maxAge)
+		w.Header().Set(HeaderAccessControlMaxAge, maxAge)
 	}
 }
 
 // Writes the CORS actual request headers (origin and credential)
 func (c cors) WriteCorsActualRequestHeaders(w http.ResponseWriter) {
-	w.Header().Set(ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, GetCorsAllowOrigin(c.Prefix))
+	w.Header().Set(HeaderAccessControlAllowOrigin, GetCorsAllowOrigin(c.Prefix))
 	allowCredentials := GetCorsAllowCredentials(c.Prefix)
 	if strings.TrimSpace(allowCredentials) == "true" {
-		w.Header().Set(ACCESS_CONTROL_ALLOW_CREDENTIALS_HEADER, strings.TrimSpace(allowCredentials))
+		w.Header().Set(HeaderAccessControlAllowCredentials, strings.TrimSpace(allowCredentials))
 	}
 }

@@ -2,18 +2,14 @@ package log
 
 import (
 	"fmt"
-	"github.com/project-flogo/core/data/coerce"
 
+	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/activity"
-	"github.com/project-flogo/core/support/logger"
 )
 
-// activityLog is the default logger for the Log Activity
-var activityLog = logger.GetLogger("activity-log")
 
 func init() {
-	activityLog.SetLogLevel(logger.InfoLevel)
-	activity.Register(&Activity{})
+	activity.Register(&LogActivity{})
 }
 
 type Input struct {
@@ -45,19 +41,19 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 
 var activityMd = activity.ToMetadata(&Input{})
 
-// Activity is an Activity that is used to log a message to the console
+// LogActivity is an LogActivity that is used to log a message to the console
 // inputs : {message, flowInfo}
 // outputs: none
-type Activity struct {
+type LogActivity struct {
 }
 
 // Metadata returns the activity's metadata
-func (a *Activity) Metadata() *activity.Metadata {
+func (a *LogActivity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
-// Eval implements api.Activity.Eval - Logs the Message
-func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
+// Eval implements api.LogActivity.Eval - Logs the Message
+func (a *LogActivity) Eval(ctx activity.Context) (done bool, err error) {
 
 	input := &Input{}
 	ctx.GetInputObject(input)
@@ -65,11 +61,11 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	msg := input.Message
 
 	if input.AddDetails {
-		msg = fmt.Sprintf("'%s' - HostID [%s], HostName [%s], Activity [%s]", msg,
+		msg = fmt.Sprintf("'%s' - HostID [%s], HostName [%s], LogActivity [%s]", msg,
 			ctx.ActivityHost().ID(), ctx.ActivityHost().Name(), ctx.Name())
 	}
 
-	activityLog.Info(msg)
+	ctx.Logger().Info(msg)
 
 	return true, nil
 }

@@ -1,0 +1,77 @@
+{
+  "name": "strings",
+  "type": "flogo:function",
+  "version": "0.0.1",
+  "title": "String Functions",
+  "description": "String Functions",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/string",
+  "functions": [
+    {
+      "name": "string.concat",
+      "description": "concatenate a set of string",
+      "varArgs": true,
+      "args": [
+        {
+          "name ": "str",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "string.equals",
+      "description": "check if two strings are equal",
+      "args": [
+        {
+          "name ": "str1",
+          "type": "string"
+        },
+        {
+          "name ": "str2",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "string.equalsIgnoreCase",
+      "description": "check if two strings are equal ignoring case",
+      "args": [
+        {
+          "name ": "str1",
+          "type": "string"
+        },
+        {
+          "name ": "str2",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "string.len",
+      "description": "get the length of a string",
+      "args": [
+        {
+          "name ": "str1",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "string.substring",
+      "description": "get a substring from a string",
+      "args": [
+        {
+          "name ": "str",
+          "type": "string"
+        },
+        {
+          "name ": "start",
+          "type": "string"
+        },
+        {
+          "name ": "end",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}

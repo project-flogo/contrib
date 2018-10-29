@@ -14,9 +14,7 @@ This activity comes out of the box with the Flogo Web UI
 flogo install github.com/project-flogo/contrib/activity/actreturn
 ```
 
-## Schema
-Input and Output:
-
+## Metadata
 ```json
 {
   "settings":[
@@ -30,10 +28,6 @@ Input and Output:
         "mapperOutputScope" : "action.output"
       }
     }
-  ],
-  "input": [
-  ],
-  "output": [
   ]
 }
 ```

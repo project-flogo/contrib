@@ -1,0 +1,21 @@
+{
+  "name": "strings",
+  "type": "flogo:function",
+  "version": "0.0.1",
+  "title": "String Functions",
+  "description": "String Functions",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/string",
+  "functions": [
+    {
+      "name": "number.random",
+      "description": "generate a random number",
+      "varArgs": true,
+      "args": [
+        {
+          "name ": "limit",
+          "type": "int"
+        }
+      ]
+    }
+  ]
+}

@@ -13,15 +13,13 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/project-flogo/contrib/trigger/rest/cors"
 	"github.com/project-flogo/core/data/metadata"
-	"github.com/project-flogo/core/support/logger"
+	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
 )
 
 const (
 	CorsPrefix = "REST_TRIGGER"
 )
-
-var log = logger.GetLogger("trigger-rest")
 
 var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{}, &Reply{})
 
@@ -34,6 +32,7 @@ type Trigger struct {
 	server   *Server
 	settings *Settings
 	id       string
+	logger   log.Logger
 }
 
 type Factory struct {
@@ -56,11 +55,17 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 }
 
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
+
+	t.logger = ctx.Logger()
+
 	router := httprouter.New()
 
 	addr := ":" + strconv.Itoa(t.settings.Port)
 
 	pathMap := make(map[string]string)
+
+
+	preflightHandler := &PreflightHandler{logger: t.logger, c: cors.New(CorsPrefix, t.logger)}
 
 	// Init handlers
 	for _, handler := range ctx.GetHandlers() {
@@ -74,18 +79,18 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		method := s.Method
 		path := s.Path
 
-		log.Debugf("Registering handler [%s: %s]", method, path)
+		t.logger.Debugf("Registering handler [%s: %s]", method, path)
 
 		if _, ok := pathMap[path]; !ok {
 			pathMap[path] = path
-			router.OPTIONS(path, handleCorsPreflight) // for CORS
+			router.OPTIONS(path, preflightHandler.handleCorsPreflight) // for CORS
 		}
 
 		//router.OPTIONS(path, handleCorsPreflight) // for CORS
 		router.Handle(method, path, newActionHandler(t, handler))
 	}
 
-	log.Debugf("Configured on port %d", t.settings.Port)
+	t.logger.Debugf("Configured on port %d", t.settings.Port)
 	t.server = NewServer(addr, router)
 
 	return nil
@@ -100,13 +105,16 @@ func (t *Trigger) Stop() error {
 	return t.server.Stop()
 }
 
+type PreflightHandler struct {
+	logger log.Logger
+	c      cors.Cors
+}
+
 // Handles the cors preflight request
-func handleCorsPreflight(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (h *PreflightHandler) handleCorsPreflight(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
-	log.Infof("Received [OPTIONS] request to CorsPreFlight: %+v", r)
-
-	c := cors.New(CorsPrefix, log)
-	c.HandlePreflight(w, r)
+	h.logger.Infof("Received [OPTIONS] request to CorsPreFlight: %+v", r)
+	h.c.HandlePreflight(w, r)
 }
 
 // IDResponse id response object
@@ -118,9 +126,9 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-		log.Infof("Received request for id '%s'", rt.id)
+		rt.logger.Debugf("Received request for id '%s'", rt.id)
 
-		c := cors.New(CorsPrefix, log)
+		c := cors.New(CorsPrefix, rt.logger)
 		c.WriteCorsActualRequestHeaders(w)
 
 		out := &Output{}
@@ -152,7 +160,7 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 			m, err := url.ParseQuery(s)
 			content := make(map[string]interface{}, 0)
 			if err != nil {
-				log.Errorf("Error while parsing query string: %s", err.Error())
+				rt.logger.Errorf("Error while parsing query string: %s", err.Error())
 				http.Error(w, err.Error(), http.StatusBadRequest)
 			}
 			for key, val := range m {
@@ -186,7 +194,7 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 		reply.FromMap(results)
 
 		if err != nil {
-			log.Debugf("REST Trigger Error: %s", err.Error())
+			rt.logger.Debugf("Error: %s", err.Error())
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}

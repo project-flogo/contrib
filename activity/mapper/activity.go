@@ -1,4 +1,4 @@
-package actreply
+package activity_mapper
 
 import (
 	"github.com/project-flogo/core/activity"
@@ -6,8 +6,9 @@ import (
 	"github.com/project-flogo/core/data/metadata"
 )
 
+
 func init() {
-	activity.Register(&Activity{}, New)
+	activity.Register(&MapperActivity{}, New)
 }
 
 type Settings struct {
@@ -17,13 +18,14 @@ type Settings struct {
 var activityMd = activity.ToMetadata(&Settings{})
 
 func New(ctx activity.InitContext) (activity.Activity, error) {
+
 	s := &Settings{}
 	err := metadata.MapToStruct(ctx.Settings(), s, true)
 	if err != nil {
 		return nil, err
 	}
 
-	act := &Activity{}
+	act := &MapperActivity{}
 
 	ctx.Logger().Debugf("Mappings: %+v", s.Mappings)
 
@@ -35,25 +37,25 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	return act, nil
 }
 
-// Activity is an Activity that is used to reply/return via the trigger
+// MapperActivity is an Activity that is used to reply/return via the trigger
 // inputs : {method,uri,params}
 // outputs: {result}
-type Activity struct {
+type MapperActivity struct {
 	mapper mapper.Mapper
 }
 
-func (a *Activity) Metadata() *activity.Metadata {
+// Metadata returns the activity's metadata
+func (a *MapperActivity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
 // Eval implements api.Activity.Eval - Invokes a REST Operation
-func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
+func (a *MapperActivity) Eval(ctx activity.Context) (done bool, err error) {
 
 	actionCtx := ctx.ActivityHost()
 
 	if a.mapper == nil {
 		//No mapping
-		actionCtx.Reply(nil, nil)
 		return true, nil
 	}
 
@@ -64,7 +66,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return false, activity.NewError(err.Error(), "", nil)
 	}
 
-	actionCtx.Reply(results, nil)
+	for name, value := range results {
+		actionCtx.Scope().SetValue(name, value)
+	}
 
 	return true, nil
 }

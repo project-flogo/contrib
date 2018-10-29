@@ -7,11 +7,9 @@ import (
 
 	"github.com/carlescere/scheduler"
 	"github.com/project-flogo/core/data/metadata"
-	"github.com/project-flogo/core/support/logger"
+	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
 )
-
-var log = logger.GetLogger("trigger-timer")
 
 type HandlerSettings struct {
 	StartInterval  string `md:"startDelay"`
@@ -40,12 +38,15 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 type Trigger struct {
 	timers   []*scheduler.Job
 	handlers []trigger.Handler
+	logger   log.Logger
 }
 
 // Init implements trigger.Init
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
 	t.handlers = ctx.GetHandlers()
+	t.logger = ctx.Logger()
+
 	return nil
 }
 
@@ -98,17 +99,17 @@ func (t *Trigger) scheduleOnce(handler trigger.Handler, settings *HandlerSetting
 		}
 
 		seconds = int(d.Seconds())
-		log.Debugf("Scheduling action to run once in %d seconds", seconds)
+		t.logger.Debugf("Scheduling action to run once in %d seconds", seconds)
 	}
 
 	timerJob := scheduler.Every(seconds).Seconds()
 
 	fn := func() {
-		log.Debug("Executing \"Once\" timer trigger")
+		t.logger.Debug("Executing \"Once\" timer trigger")
 
 		_, err := handler.Handle(context.Background(), nil)
 		if err != nil {
-			log.Error("Error running handler: ", err.Error())
+			t.logger.Error("Error running handler: ", err.Error())
 		}
 
 		if timerJob != nil {
@@ -117,12 +118,12 @@ func (t *Trigger) scheduleOnce(handler trigger.Handler, settings *HandlerSetting
 	}
 
 	if seconds == 0 {
-		log.Debug("Start delay not specified, executing action immediately")
+		t.logger.Debug("Start delay not specified, executing action immediately")
 		fn()
 	} else {
 		timerJob, err := timerJob.NotImmediately().Run(fn)
 		if err != nil {
-			log.Error("Error scheduling execute \"once\" timer: ", err.Error())
+			t.logger.Error("Error scheduling execute \"once\" timer: ", err.Error())
 		}
 
 		t.timers = append(t.timers, timerJob)
@@ -132,7 +133,7 @@ func (t *Trigger) scheduleOnce(handler trigger.Handler, settings *HandlerSetting
 }
 
 func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSettings) error {
-	log.Info("Scheduling a repeating timer")
+	t.logger.Info("Scheduling a repeating timer")
 
 	startSeconds := 0
 
@@ -143,7 +144,7 @@ func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSe
 		}
 
 		startSeconds = int(d.Seconds())
-		log.Debugf("Scheduling action to start in %d seconds", startSeconds)
+		t.logger.Debugf("Scheduling action to start in %d seconds", startSeconds)
 	}
 
 	d, err := time.ParseDuration(settings.RepeatInterval)
@@ -152,21 +153,21 @@ func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSe
 	}
 
 	repeatInterval := int(d.Seconds())
-	log.Debugf("Scheduling action to repeat every %d seconds", repeatInterval)
+	t.logger.Debugf("Scheduling action to repeat every %d seconds", repeatInterval)
 
 	fn := func() {
-		log.Debug("Executing \"Repeating\" timer")
+		t.logger.Debug("Executing \"Repeating\" timer")
 
 		_, err := handler.Handle(context.Background(), nil)
 		if err != nil {
-			log.Error("Error running handler: ", err.Error())
+			t.logger.Error("Error running handler: ", err.Error())
 		}
 	}
 
 	if startSeconds == 0 {
 		timerJob, err := scheduler.Every(repeatInterval).Seconds().Run(fn)
 		if err != nil {
-			log.Error("Error scheduling repeating timer: ", err.Error())
+			t.logger.Error("Error scheduling repeating timer: ", err.Error())
 		}
 
 		t.timers = append(t.timers, timerJob)
@@ -175,11 +176,11 @@ func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSe
 		timerJob := scheduler.Every(startSeconds).Seconds()
 
 		fn2 := func() {
-			log.Debug("Executing first run of repeating timer")
+			t.logger.Debug("Executing first run of repeating timer")
 
 			_, err := handler.Handle(context.Background(), nil)
 			if err != nil {
-				log.Error("Error running handler: ", err.Error())
+				t.logger.Error("Error running handler: ", err.Error())
 			}
 
 			if timerJob != nil {
@@ -188,7 +189,7 @@ func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSe
 
 			timerJob, err := scheduler.Every(repeatInterval).Seconds().NotImmediately().Run(fn)
 			if err != nil {
-				log.Error("Error scheduling repeating timer: ", err.Error())
+				t.logger.Error("Error scheduling repeating timer: ", err.Error())
 			}
 
 			t.timers = append(t.timers, timerJob)
@@ -196,7 +197,7 @@ func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSe
 
 		timerJob, err := timerJob.NotImmediately().Run(fn2)
 		if err != nil {
-			log.Error("Error scheduling delayed start repeating timer: ", err.Error())
+			t.logger.Error("Error scheduling delayed start repeating timer: ", err.Error())
 		}
 
 		t.timers = append(t.timers, timerJob)
@@ -205,11 +206,11 @@ func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSe
 	return nil
 }
 
-type PrintJob struct {
-	Msg string
-}
-
-func (j *PrintJob) Run() error {
-	log.Debug(j.Msg)
-	return nil
-}
+//type PrintJob struct {
+//	Msg string
+//}
+//
+//func (j *PrintJob) Run() error {
+//	t.logger.Debug(j.Msg)
+//	return nil
+//}

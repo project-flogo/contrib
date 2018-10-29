@@ -5,10 +5,8 @@ import (
 
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/engine/channels"
-	"github.com/project-flogo/core/support/logger"
 )
 
-var log = logger.GetLogger("activity-counter")
 
 func init() {
 	activity.Register(&Activity{})
@@ -52,8 +50,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		ch.PublishNoWait(input.Data)
 	}
 
-	if log.DebugEnabled() {
-		log.Debugf("Published on '%s' value: %+v", input.Channel, input.Data)
+	if logger := ctx.Logger(); logger.DebugEnabled() {
+		logger.Debugf("Published on '%s' value: %+v", input.Channel, input.Data)
 	}
 
 	return true, nil
