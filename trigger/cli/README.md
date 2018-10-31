@@ -1,27 +1,19 @@
----
+<!--
 title: CLI
 weight: 4701
----
-# tibco-cli
+-->
+# CLI Trigger
 This trigger provides your flogo application the ability to run as a CLI app, that is, accept input via the CLI & run once till completion and return the results to stdout.
 
 ## Installation
 
 ```bash
-flogo install github.com/TIBCOSoftware/flogo-contrib/trigger/cli
+flogo install github.com/project-flogo/cli
 ```
 
-## Schema
-Settings, Outputs and Endpoint:
-
+## Metadata
 ```json
 {
-  "output": [
-    {
-      "name": "args",
-      "type": "array"
-    }
-  ],
   "handler": {
     "settings": [
       {
@@ -33,14 +25,26 @@ Settings, Outputs and Endpoint:
         "type": "boolean"
       }
     ]
-  }
+  },
+  "output": [
+    {
+      "name": "args",
+      "type": "array"
+    }
+  ]
 }
 ```
-## Settings
-### Trigger
-| Output      | Description                        |
+### Details
+####  Handler Settings:
+| Setting      | Description                          |
+|:-------------|:-------------------------------------|
+| command      | The command invoked                  |         
+| default      | Indicates if its the default command |
+
+#### Trigger Settings:
+| Name      | Description                        |
 |:------------|:-----------------------------------|
-| args        | An array of command line arguments |  
+| args        | An array of the command line arguments |  
 
 
 The array contains the command-line flags from `os.Args[2:]`, `os.Args[1]` is used to determine which flow is called. So a Flogo app with a CLI trigger that is started like:
@@ -48,12 +52,6 @@ The array contains the command-line flags from `os.Args[2:]`, `os.Args[1]` is us
 $ ./cliapp -myflow -param1 foo -param2 bar 
 ```
 will result in the engine executing the flow where the `handler.settings.command` field is `myflow` and pass on the other four arguments in the array `args`.
-
-### Handler:
-| Setting      | Description                          |
-|:-------------|:-------------------------------------|
-| command      | The command invoked                  |         
-| default      | Indicates if its the default command |
 
 
 ## Example Configurations

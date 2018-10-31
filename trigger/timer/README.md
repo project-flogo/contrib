@@ -12,8 +12,6 @@ flogo install github.com/project-flogo/contrib/trigger/timer
 ```
 
 ## Metadata
-Settings:
-
 ```json
 {
   "handler": {

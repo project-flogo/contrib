@@ -12,8 +12,6 @@ flogo install github.com/project-flogo/contrib/trigger/rest
 ```
 
 ## Metadata
-Settings, Handler Settings, Output and Reply:
-
 ```json
 {
   "settings": [

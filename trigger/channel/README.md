@@ -12,8 +12,6 @@ flogo install github.com/project-flogo/contrib/trigger/channel
 ```
 
 ## Metadata
-Handler Settings, Output:
-
 ```json
 {
   "handler": {
@@ -40,7 +38,7 @@ Handler Settings, Output:
 | channel  | true     | The internal engine channel |
 
 #### Output:
-|Value   | Description |
+|Name   | Description |
 |:--------|:------------|
 | data     | The data pulled from the channel
 
