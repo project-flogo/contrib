@@ -1,0 +1,35 @@
+{
+  "name": "tibco-mashling-ping",
+  "type": "flogo:trigger",
+  "ref": "https://github.com/AkshayGadikar/contrib/tree/master/trigger/ping",
+  "version": "0.0.1",
+  "title": "Ping Service",
+  "author": "Andrew Snodgrass <asnodgra@tibco.com>",
+  "description": "Simple Ping service for mashling gateway",
+  "settings": [
+    {
+      "name": "port",
+      "type": "integer",
+      "required": true
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "appversion",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "appdescription",
+      "type": "string",
+      "required": false
+    }
+  ],
+  "outputs": [],
+  "handler": {
+    "settings": []
+  }
+}
