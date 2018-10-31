@@ -31,22 +31,21 @@ type Trigger struct {
 
 // Factory Ping Trigger factory
 type Factory struct {
-	metadata *trigger.Metadata
 }
 
 // Metadata implements trigger.Factory.Metadata
-func (*Factory) Metadata() *trigger.Metadata {
+func (f *Factory) Metadata() *trigger.Metadata {
 	return pingTriggerMd
 }
 
 // New implements trigger.Factory.New
-func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
+func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	s := &Settings{}
 	err := metadata.MapToStruct(config.Settings, s, true)
 	if err != nil {
 		return nil, err
 	}
-	return &Trigger{metadata: (*Factory).metadata, config:   config}, nil
+	return &Trigger{metadata: f.Metadata(), config:config}, nil
 }
 
 
@@ -54,9 +53,9 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 func (t *Trigger) Initialize(context trigger.InitContext) error {
 	t.logger = context.Logger()
 	response := PingResponse{
-		Version:        config.GetSetting("version"),
-		Appversion:     config.GetSetting("appversion"),
-		Appdescription: config.GetSetting("appdescription"),
+		Version:        t.config.GetSetting("version"),
+		Appversion:     t.config.GetSetting("appversion"),
+		Appdescription: t.config.GetSetting("appdescription"),
 	}
 
 	data, err := json.Marshal(response)
@@ -64,7 +63,7 @@ func (t *Trigger) Initialize(context trigger.InitContext) error {
 		t.logger.Errorf("Ping service data formation error")
 	}
 
-	port := config.GetSetting("port")
+	port := t.config.GetSetting("port")
 	if len(port) == 0 {
 		port = DefaultPort
 	}
