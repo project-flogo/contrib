@@ -8,18 +8,18 @@ This trigger provides your flogo application the ability to start a flow via RES
 ## Installation
 
 ```bash
-flogo install github.com/TIBCOSoftware/flogo-contrib/trigger/rest
+flogo install github.com/project-flogo/contrib/trigger/rest
 ```
 
-## Schema
-Settings, Outputs and Endpoint:
+## Metadata
+Settings, Handler Settings, Output and Reply:
 
 ```json
 {
   "settings": [
     {
       "name": "port",
-      "type": "integer",
+      "type": "int",
       "required" : true
     }
   ],
@@ -28,7 +28,8 @@ Settings, Outputs and Endpoint:
       {
         "name": "method",
         "type": "string",
-        "required" : true
+        "required" : true,
+        "allowed" : ["GET", "POST", "PUT", "PATCH", "DELETE"]
       },
       {
         "name": "path",
@@ -54,21 +55,45 @@ Settings, Outputs and Endpoint:
       "name": "content",
       "type": "object"
     }
+  ],
+  "reply": [
+    {
+      "name": "code",
+      "type": "int"
+    },
+    {
+      "name": "data",
+      "type": "any"
+    }
   ]
 }
 ```
-## Settings
-### Trigger:
+### Details
+#### Trigger Settings:
 | Setting  | Required | Description |
 |:---------|:---------|:------------|
 | port     | true     | The port to listen on
 
 
-### Handler:
+#### Handler Settings:
 | Setting  | Required | Description |
 |:---------|:---------|:------------|
-| method   | true     | The HTTP method
+| method   | true     | The HTTP method (ie. GET,POST,PUT,PATCH or DELETE)
 | path     | true     | The resource path
+
+#### Output:
+|Value   | Description |
+|:--------|:------------|
+| pathParams  | The path params, ex. /device/:id, 'id' would be a path param
+| queryParams | The query params
+| headers     | The headers
+| content     | The content of the request
+
+#### Reply:
+|Value   | Description |
+|:--------|:------------|
+| code  | The http code to reply with
+| data  | The data to reply with
 
 
 ## Example Configurations

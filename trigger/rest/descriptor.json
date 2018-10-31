@@ -8,15 +8,11 @@
   "settings": [
     {
       "name": "port",
-      "type": "integer",
+      "type": "int",
       "required": true
     }
   ],
   "output": [
-    {
-      "name": "params",
-      "type": "params"
-    },
     {
       "name": "pathParams",
       "type": "params"
@@ -26,7 +22,7 @@
       "type": "params"
     },
     {
-      "name": "header",
+      "name": "headers",
       "type": "params"
     },
     {
@@ -37,7 +33,7 @@
   "reply": [
     {
       "name": "code",
-      "type": "integer"
+      "type": "int"
     },
     {
       "name": "data",
