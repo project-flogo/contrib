@@ -7,7 +7,7 @@ import (
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
-	"github.com/project-flogo/contrib/trigger/ping"
+	//"github.com/project-flogo/contrib/trigger/ping"
 )
 
 const (
