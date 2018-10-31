@@ -45,6 +45,8 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("settings :", s)
+	fmt.Println("config :", config)
 	return &Trigger{metadata: f.Metadata(), config:config}, nil
 }
 
@@ -53,8 +55,9 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 func (t *Trigger) Initialize(context trigger.InitContext) error {
 	t.logger = context.Logger()
 	response := PingResponse{
-		Version:        t.config.GetSetting("version"),
-		Appversion:     t.config.GetSetting("appversion"),
+		Version:        "version",
+		Appversion:     "appversion",
+		Appdescription: "appdescription",
 		Appdescription: t.config.GetSetting("appdescription"),
 	}
 
@@ -72,8 +75,8 @@ func (t *Trigger) Initialize(context trigger.InitContext) error {
 	t.response = string(data)
 	t.Server = &http.Server{Addr:    ":" + port, Handler: mux, }
 
-	mux.HandleFunc("/ping", trigger.PingResponseHandlerShort)
-	mux.HandleFunc("/ping/details", trigger.PingResponseHandlerDetail)
+	mux.HandleFunc("/ping", t.PingResponseHandlerShort)
+	mux.HandleFunc("/ping/details", t.PingResponseHandlerDetail)
 	return nil
 }
 
