@@ -11,19 +11,11 @@ This trigger provides your flogo application the ability to start an action via 
 flogo install github.com/project-flogo/contrib/trigger/channel
 ```
 
-## Schema
-Settings, Outputs and Endpoint:
+## Metadata
+Handler Settings, Output:
 
 ```json
 {
-  "settings": [
-  ],
-  "output": [
-    {
-      "name": "data",
-      "type": "any"
-    }
-  ],
   "handler": {
     "settings": [
       {
@@ -32,14 +24,25 @@ Settings, Outputs and Endpoint:
         "required" : true
       }
     ]
-  }
+  },
+  "output": [
+    {
+      "name": "data",
+      "type": "any"
+    }
+  ]
 }
 ```
-## Settings      
-### Handler:
+### Details    
+#### Handler Settings:
 | Setting  | Required | Description |
 |:---------|:---------|:------------|
 | channel  | true     | The internal engine channel |
+
+#### Output:
+|Value   | Description |
+|:--------|:------------|
+| data     | The data pulled from the channel
 
 
 ## Example Configurations
@@ -71,4 +74,11 @@ Configure the Trigger to handle an event recieved on the 'test' channel
     }
   ]
 }
+```
+
+Note: a channel must be defined in the app in order to use it in a trigger or activity.  A channel is specified by "\<name\>:\<buffer size\>"
+```
+"channels": [
+  "test:5"
+]
 ```
