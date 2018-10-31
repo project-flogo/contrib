@@ -82,7 +82,7 @@ Settings, Handler Settings, Output and Reply:
 | path     | true     | The resource path
 
 #### Output:
-|Value   | Description |
+|Name   | Description |
 |:--------|:------------|
 | pathParams  | The path params, ex. /device/:id, 'id' would be a path param
 | queryParams | The query params
@@ -90,7 +90,7 @@ Settings, Handler Settings, Output and Reply:
 | content     | The content of the request
 
 #### Reply:
-|Value   | Description |
+|Name   | Description |
 |:--------|:------------|
 | code  | The http code to reply with
 | data  | The data to reply with

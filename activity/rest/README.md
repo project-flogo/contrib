@@ -14,9 +14,7 @@ This activity comes out of the box with the Flogo Web UI
 flogo install github.com/project-flogo/contrib/activity/rest
 ```
 
-## Schema
-Settings, Inputs and Outputs:
-
+## Metadata
 ```json
 {
   "settings":[
@@ -65,7 +63,7 @@ Settings, Inputs and Outputs:
   ],
   "output": [
     {
-      "name": "result",
+      "name": "data",
       "type": "any"
     },
     {
@@ -75,7 +73,8 @@ Settings, Inputs and Outputs:
   ]
 }
 ```
-## Settings
+### Details
+#### Settings:
 | Setting     | Required | Description |
 |:------------|:---------|:------------|
 | method      | true     | The HTTP method to invoke (Allowed values are GET, POST, PUT, DELETE, and PATCH) |         
@@ -84,13 +83,19 @@ Settings, Inputs and Outputs:
 | headers     | false    | The header parameters |
 | skipSSL     | false    | If set to true, skips the SSL validation (defaults to false)
 
-## Input
-| Setting     | Required | Description |
+#### Input:
+| Name     | Required | Description |
 |:------------|:---------|:------------|
 | pathParams  | false    | The path parameters. This field is only required if you have params in your URI (for example http://.../pet/:id) |
 | queryParams | false    | The query parameters |
 | headers     | false    | The header parameters |
 | content     | false    | The message content you want to send. This field is only used in POST, PUT, and PATCH |
+
+#### Output:
+|Name   | Description |
+|:--------|:------------|
+| status  | The http status code
+| data  | The http data
 
 
 ## Examples

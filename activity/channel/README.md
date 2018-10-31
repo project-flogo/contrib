@@ -13,9 +13,7 @@ This activity allows you to put a data on a named channel in the flogo engine.
 flogo install github.com/project-flogo/contrib/activity/channel
 ```
 
-## Schema
-Inputs and Outputs:
-
+## Metadata
 ```json
 {
   "input":[
@@ -29,12 +27,11 @@ Inputs and Outputs:
       "type": "interface{}",
       "required": true  
     }
-  ],
-  "output": [
   ]
 }
 ```
-## Input
+### Details
+#### Input:
 | Name     | Required | Description |
 |:------------|:---------|:------------|
 | channel    | true     | The channel to put the value on |

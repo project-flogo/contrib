@@ -50,13 +50,13 @@ func (o *Input) FromMap(values map[string]interface{}) error {
 
 type Output struct {
 	Status int         `md:"status"`
-	Result interface{} `md:"result"`
+	Data   interface{} `md:"result"`
 }
 
 func (r *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
 		"status": r.Status,
-		"result": r.Result,
+		"data": r.Data,
 	}
 }
 
@@ -67,7 +67,7 @@ func (r *Output) FromMap(values map[string]interface{}) error {
 	if err != nil {
 		return err
 	}
-	r.Result, _ = values["result"]
+	r.Data, _ = values["data"]
 
 	return nil
 }

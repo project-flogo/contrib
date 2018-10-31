@@ -14,9 +14,7 @@ This activity comes out of the box with the Flogo Web UI
 flogo install github.com/project-flogo/contrib/activity/log
 ```
 
-## Schema
-Inputs and Outputs:
-
+## Metadata
 ```json
 {
   "input":[
@@ -33,7 +31,8 @@ Inputs and Outputs:
   ]
 }
 ```
-## Input
+### Details
+#### Input:
 | Name     | Required | Description |
 |:------------|:---------|:------------|
 | message     | false    | The message to log |

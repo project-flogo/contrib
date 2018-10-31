@@ -180,7 +180,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		logger.Debug("response body:", result)
 	}
 
-	output := &Output{Status: resp.StatusCode, Result: result}
+	output := &Output{Status: resp.StatusCode, Data: result}
 
 	ctx.SetOutputObject(output)
 

@@ -14,9 +14,7 @@ This activity comes out of the box with the Flogo Web UI
 flogo install github.com/TIBCOSoftware/flogo-contrib/activity/mapper
 ```
 
-## Schema
-Input and Output:
-
+## Metadata
 ```json
 {
   "input":[
@@ -30,15 +28,14 @@ Input and Output:
         "mapperOutputScope" : "action"
       }
     }
-  ],
-  "output": [
   ]
 }
 ```
-## Settings
+### Details
+#### Settings:
 | Setting     | Required | Description |
 |:------------|:---------|:------------|
-| mappings    | True     | An array of mappings that are executed when the activity runs |
+| mappings    | true     | An array of mappings that are executed when the activity runs |
 
 ## Example
 The below example allows you to configure the activity to reply and set the output values to literals "name" (a string) and 2 (an integer).

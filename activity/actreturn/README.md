@@ -31,8 +31,8 @@ flogo install github.com/project-flogo/contrib/activity/actreturn
   ]
 }
 ```
-
-## Settings
+### Details
+#### Settings:
 | Setting     | Required | Description |
 |:------------|:---------|:------------|
 | mappings    | true     | An set of mappings that are executed when the activity runs |

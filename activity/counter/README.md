@@ -14,9 +14,7 @@ This activity comes out of the box with the Flogo Web UI
 flogo install github.com/project-flogo/contrib/activity/counter
 ```
 
-## Schema
-Inputs and Outputs:
-
+## Metadata
 ```json
 {
   "settings":[
@@ -39,11 +37,17 @@ Inputs and Outputs:
   ]
 }
 ```
-## Settings
+### Details
+#### Settings:
 | Setting     | Required | Description |
 |:------------|:---------|:------------|
-| counterName | True     | The name of the counter |         
-| op          | False    | Counter operation, 'get' is the default operation|
+| counterName | true     | The name of the counter |         
+| op          | false    | Counter operation, 'get' is the default operation|
+
+#### Output:
+|Name   | Description |
+|:--------|:------------|
+| value  | the result of the counter operation
 
 ## Examples
 ### Increment

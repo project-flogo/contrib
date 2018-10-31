@@ -15,9 +15,7 @@ This activity comes out of the box with the Flogo Web UI
 flogo install  github.com/project-flogo/contrib/activity/error
 ```
 
-## Schema
-Inputs and Outputs:
-
+## Metadata
 ```json
 {
   "input":[
@@ -29,14 +27,12 @@ Inputs and Outputs:
       "name": "data",
       "type": "object"
     }
-  ],
-  "output": [
   ]
 }
 ```
-
-## Input
-| name     | Required | Description |
+### Details
+#### Input:
+| Name     | Required | Description |
 |:------------|:---------|:------------|
 | message     | false    | The error message you want to throw |         
 | data        | false    | The error data you want to throw |

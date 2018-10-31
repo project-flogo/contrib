@@ -15,7 +15,6 @@ flogo install github.com/project-flogo/contrib/activity/actreply
 ```
 
 ## Metadata
-
 ```json
 {
   "settings":[
@@ -32,8 +31,8 @@ flogo install github.com/project-flogo/contrib/activity/actreply
   ]
 }
 ```
-
-## Settings
+### Details
+#### Settings:
 | Setting     | Required | Description |
 |:------------|:---------|:------------|
 | mappings    | true     | An set of mappings that are executed when the activity runs |
