@@ -1,6 +1,7 @@
 package ping
 
 import (
+	"fmt"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -58,7 +59,7 @@ func (t *Trigger) Initialize(context trigger.InitContext) error {
 		Version:        "version",
 		Appversion:     "appversion",
 		Appdescription: "appdescription",
-		Appdescription: t.config.GetSetting("appdescription"),
+		//Appdescription: t.config.GetSetting("appdescription"),
 	}
 
 	data, err := json.Marshal(response)
@@ -66,7 +67,7 @@ func (t *Trigger) Initialize(context trigger.InitContext) error {
 		t.logger.Errorf("Ping service data formation error")
 	}
 
-	port := t.config.GetSetting("port")
+	port := DefaultPort//t.config.GetSetting("port")
 	if len(port) == 0 {
 		port = DefaultPort
 	}
