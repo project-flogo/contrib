@@ -5,24 +5,24 @@ import (
 )
 
 func init() {
-	activity.Register(&Activity{})
+	activity.Register(&ErrorActivity{})
 }
 
 var activityMd = activity.ToMetadata(&Input{})
 
-// ErrorActivity is an Activity that used to cause an explicit error in the flow
+// ErrorActivity is an ErrorActivity that used to cause an explicit error in the flow
 // inputs : {message,data}
 // outputs: node
-type Activity struct {
+type ErrorActivity struct {
 }
 
 // Metadata returns the activity's metadata
-func (a *Activity) Metadata() *activity.Metadata {
+func (a *ErrorActivity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
 // Eval returns an error
-func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
+func (a *ErrorActivity) Eval(ctx activity.Context) (done bool, err error) {
 
 	input := &Input{}
 	ctx.GetInputObject(input)

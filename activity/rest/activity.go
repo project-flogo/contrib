@@ -15,7 +15,7 @@ import (
 )
 
 func init() {
-	activity.Register(&Activity{}, New)
+	activity.Register(&RestActivity{}, New)
 }
 
 const (
@@ -33,7 +33,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, err
 	}
 
-	act := &Activity{settings: s}
+	act := &RestActivity{settings: s}
 	act.containsParam = strings.Index(s.Uri, "/:") > -1
 
 	httpTransportSettings := http.Transport{}
@@ -62,22 +62,22 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	return act, nil
 }
 
-// Activity is an activity that is used to invoke a REST Operation
+// RestActivity is an activity that is used to invoke a REST Operation
 // settings : {method, uri, headers, proxy, skipSSL}
 // input    : {pathParams, queryParams, headers, content}
 // outputs  : {status, result}
-type Activity struct {
+type RestActivity struct {
 	settings      *Settings
 	containsParam bool
 	client        http.Client
 }
 
-func (a *Activity) Metadata() *activity.Metadata {
+func (a *RestActivity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
-// Eval implements api.Activity.Eval - Invokes a REST Operation
-func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
+// Eval implements api.RestActivity.Eval - Invokes a REST Operation
+func (a *RestActivity) Eval(ctx activity.Context) (done bool, err error) {
 
 	input := &Input{}
 	ctx.GetInputObject(input)

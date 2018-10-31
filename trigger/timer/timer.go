@@ -19,7 +19,7 @@ type HandlerSettings struct {
 var triggerMd = trigger.NewMetadata(&HandlerSettings{})
 
 func init() {
-	trigger.Register(&Trigger{}, &Factory{})
+	trigger.Register(&TimerTrigger{}, &Factory{})
 }
 
 type Factory struct {
@@ -32,17 +32,17 @@ func (*Factory) Metadata() *trigger.Metadata {
 
 // New implements trigger.Factory.New
 func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
-	return &Trigger{}, nil
+	return &TimerTrigger{}, nil
 }
 
-type Trigger struct {
+type TimerTrigger struct {
 	timers   []*scheduler.Job
 	handlers []trigger.Handler
 	logger   log.Logger
 }
 
 // Init implements trigger.Init
-func (t *Trigger) Initialize(ctx trigger.InitContext) error {
+func (t *TimerTrigger) Initialize(ctx trigger.InitContext) error {
 
 	t.handlers = ctx.GetHandlers()
 	t.logger = ctx.Logger()
@@ -50,8 +50,8 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 	return nil
 }
 
-// Start implements ext.Trigger.Start
-func (t *Trigger) Start() error {
+// Start implements ext.TimerTrigger.Start
+func (t *TimerTrigger) Start() error {
 
 	handlers := t.handlers
 
@@ -73,8 +73,8 @@ func (t *Trigger) Start() error {
 	return nil
 }
 
-// Stop implements ext.Trigger.Stop
-func (t *Trigger) Stop() error {
+// Stop implements ext.TimerTrigger.Stop
+func (t *TimerTrigger) Stop() error {
 
 	for _, timer := range t.timers {
 
@@ -88,7 +88,7 @@ func (t *Trigger) Stop() error {
 	return nil
 }
 
-func (t *Trigger) scheduleOnce(handler trigger.Handler, settings *HandlerSettings) error {
+func (t *TimerTrigger) scheduleOnce(handler trigger.Handler, settings *HandlerSettings) error {
 
 	seconds := 0
 
@@ -132,7 +132,7 @@ func (t *Trigger) scheduleOnce(handler trigger.Handler, settings *HandlerSetting
 	return nil
 }
 
-func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSettings) error {
+func (t *TimerTrigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSettings) error {
 	t.logger.Info("Scheduling a repeating timer")
 
 	startSeconds := 0
