@@ -7,7 +7,7 @@
     {
       "name": "ping",
       "id": "ping",
-      "ref": "https://github.com/AkshayGadikar/contrib/trigger/ping",
+      "ref": "https://github.com/project-flogo/contrib/trigger/ping",
       "description": "Ping Example",
       "settings": {
         "port": 9096,
