@@ -13,7 +13,7 @@ import (
 var triggerMd = trigger.NewMetadata(&HandlerSettings{}, &Output{})
 
 func init() {
-	trigger.Register(&ChannelTrigger{}, &Factory{})
+	trigger.Register(&Trigger{}, &Factory{})
 }
 
 type Factory struct {
@@ -26,13 +26,13 @@ func (*Factory) Metadata() *trigger.Metadata {
 
 // New implements trigger.Factory.New
 func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
-	return &ChannelTrigger{}, nil
+	return &Trigger{}, nil
 }
 
-type ChannelTrigger struct {
+type Trigger struct {
 }
 
-func (t *ChannelTrigger) Initialize(ctx trigger.InitContext) error {
+func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
 	// validate handlers
 	for _, handler := range ctx.GetHandlers() {
@@ -56,12 +56,12 @@ func (t *ChannelTrigger) Initialize(ctx trigger.InitContext) error {
 }
 
 // Stop implements util.Managed.Start
-func (t *ChannelTrigger) Start() error {
+func (t *Trigger) Start() error {
 	return nil
 }
 
 // Stop implements util.Managed.Stop
-func (t *ChannelTrigger) Stop() error {
+func (t *Trigger) Stop() error {
 	return nil
 }
 

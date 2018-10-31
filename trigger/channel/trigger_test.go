@@ -65,7 +65,7 @@ package channel
 //	assert.Nil(t, err)
 //	assert.NotNil(t, trg)
 //
-//	ct, ok := trg.(*ChannelTrigger)
+//	ct, ok := trg.(*Trigger)
 //	assert.True(t, ok)
 //	assert.Equal(t, 1, len(ct.handlers))
 //
@@ -92,7 +92,7 @@ package channel
 //	assert.Nil(t, err)
 //	assert.NotNil(t, trg)
 //
-//	ct, ok := trg.(*ChannelTrigger)
+//	ct, ok := trg.(*Trigger)
 //	assert.True(t, ok)
 //	assert.Equal(t, 1, len(ct.handlers))
 //

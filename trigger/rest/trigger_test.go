@@ -10,7 +10,7 @@ import (
 
 func TestTrigger_Register(t *testing.T) {
 
-	ref := support.GetRef(&RestTrigger{})
+	ref := support.GetRef(&Trigger{})
 	f := trigger.GetFactory(ref)
 	assert.NotNil(t, f)
 }

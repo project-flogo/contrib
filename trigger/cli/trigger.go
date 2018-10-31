@@ -15,10 +15,10 @@ import (
 // log is the default package logger
 var log = logger.GetLogger("trigger-flogo-cli")
 
-var singleton *CliTrigger
+var singleton *Trigger
 
-// CliTrigger CLI trigger struct
-type CliTrigger struct {
+// Trigger CLI trigger struct
+type Trigger struct {
 	metadata     *trigger.Metadata
 	config       *trigger.Config
 	handlerInfos []*handlerInfo
@@ -42,17 +42,17 @@ type CliTriggerFactory struct {
 
 //New Creates a new trigger instance for a given id
 func (t *CliTriggerFactory) New(config *trigger.Config) trigger.Trigger {
-	singleton = &CliTrigger{metadata: t.metadata, config: config}
+	singleton = &Trigger{metadata: t.metadata, config: config}
 
 	return singleton
 }
 
 // Metadata implements trigger.Trigger.Metadata
-func (t *CliTrigger) Metadata() *trigger.Metadata {
+func (t *Trigger) Metadata() *trigger.Metadata {
 	return t.metadata
 }
 
-func (t *CliTrigger) Initialize(ctx trigger.InitContext) error {
+func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
 	level, err := logger.GetLevelForName(config.GetLogLevel())
 
@@ -106,12 +106,12 @@ func (t *CliTrigger) Initialize(ctx trigger.InitContext) error {
 	return nil
 }
 
-func (t *CliTrigger) Start() error {
+func (t *Trigger) Start() error {
 	return nil
 }
 
 // Stop implements util.Managed.Stop
-func (t *CliTrigger) Stop() error {
+func (t *Trigger) Stop() error {
 	return nil
 }
 
@@ -137,7 +137,7 @@ func Invoke() (string, error) {
 	return singleton.Invoke(singleton.defHandler, args)
 }
 
-func (t *CliTrigger) Invoke(handler *trigger.Handler, args []string) (string, error) {
+func (t *Trigger) Invoke(handler *trigger.Handler, args []string) (string, error) {
 
 	log.Infof("invoking handler '%s'", handler)
 

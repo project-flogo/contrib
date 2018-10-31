@@ -24,7 +24,7 @@ const (
 var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{}, &Reply{})
 
 func init() {
-	trigger.Register(&RestTrigger{}, &Factory{})
+	trigger.Register(&Trigger{}, &Factory{})
 }
 
 type Factory struct {
@@ -43,18 +43,18 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		return nil, err
 	}
 
-	return &RestTrigger{id: config.Id, settings: s}, nil
+	return &Trigger{id: config.Id, settings: s}, nil
 }
 
-// RestTrigger REST trigger struct
-type RestTrigger struct {
+// Trigger REST trigger struct
+type Trigger struct {
 	server   *Server
 	settings *Settings
 	id       string
 	logger   log.Logger
 }
 
-func (t *RestTrigger) Initialize(ctx trigger.InitContext) error {
+func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
 	t.logger = ctx.Logger()
 
@@ -95,12 +95,12 @@ func (t *RestTrigger) Initialize(ctx trigger.InitContext) error {
 	return nil
 }
 
-func (t *RestTrigger) Start() error {
+func (t *Trigger) Start() error {
 	return t.server.Start()
 }
 
 // Stop implements util.Managed.Stop
-func (t *RestTrigger) Stop() error {
+func (t *Trigger) Stop() error {
 	return t.server.Stop()
 }
 
@@ -121,7 +121,7 @@ type IDResponse struct {
 	ID string `json:"id"`
 }
 
-func newActionHandler(rt *RestTrigger, handler trigger.Handler) httprouter.Handle {
+func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
