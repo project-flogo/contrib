@@ -7,7 +7,6 @@ import (
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
-	//"github.com/project-flogo/contrib/trigger/ping"
 )
 
 const (
@@ -27,10 +26,13 @@ type Trigger struct {
 	config   *trigger.Config
 	response string
 	*http.Server
+	logger   log.Logger
 }
 
 // Factory Ping Trigger factory
-type Factory struct {}
+type Factory struct {
+	metadata *trigger.Metadata
+}
 
 // Metadata implements trigger.Factory.Metadata
 func (*Factory) Metadata() *trigger.Metadata {
@@ -44,8 +46,14 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	if err != nil {
 		return nil, err
 	}
+	return &Trigger{metadata: (*Factory).metadata, config:   config}, nil
+}
 
-	response := metadata.PingResponse{
+
+// Initialize start the Ping service
+func (t *Trigger) Initialize(context trigger.InitContext) error {
+	t.logger = context.Logger()
+	response := PingResponse{
 		Version:        config.GetSetting("version"),
 		Appversion:     config.GetSetting("appversion"),
 		Appdescription: config.GetSetting("appdescription"),
@@ -53,7 +61,7 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 
 	data, err := json.Marshal(response)
 	if err != nil {
-		log.Error("Ping service data formation error")
+		t.logger.Errorf("Ping service data formation error")
 	}
 
 	port := config.GetSetting("port")
@@ -62,24 +70,11 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	}
 
 	mux := http.NewServeMux()
-	trigger := &Trigger{
-		metadata: f.metadata,
-		config:   config,
-		response: string(data),
-		Server: &http.Server{
-			Addr:    ":" + port,
-			Handler: mux,
-		},
-	}
+	t.response = string(data)
+	t.Server = &http.Server{Addr:    ":" + port, Handler: mux, }
 
 	mux.HandleFunc("/ping", trigger.PingResponseHandlerShort)
 	mux.HandleFunc("/ping/details", trigger.PingResponseHandlerDetail)
-	return trigger,nil
-}
-
-
-// Initialize start the Ping service
-func (t *Trigger) Initialize(context trigger.InitContext) error {
 	return nil
 }
 
@@ -94,23 +89,23 @@ func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Req
 
 // Start implements util.Managed.Start
 func (t *Trigger) Start() error {
-	log.Info("Ping service starting...")
+	t.logger.Infof("Ping service starting...")
 
 	go func() {
 		if err := t.ListenAndServe(); err != http.ErrServerClosed {
-			log.Errorf("Ping service err:", err)
+			t.logger.Errorf("Ping service err:", err)
 		}
 	}()
-	log.Info("Ping service started")
+	t.logger.Infof("Ping service started")
 	return nil
 }
 
 // Stop implements util.Managed.Stop
 func (t *Trigger) Stop() error {
 	if err := t.Shutdown(nil); err != nil {
-		log.Errorf("[mashling-ping-service] Ping service error when stopping:", err)
+		t.logger.Errorf("[mashling-ping-service] Ping service error when stopping:", err)
 		return err
 	}
-	log.Info("[mashling-ping-service] Ping service stopped")
+	t.logger.Infof("[mashling-ping-service] Ping service stopped")
 	return nil
 }
