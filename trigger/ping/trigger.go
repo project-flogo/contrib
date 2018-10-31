@@ -7,7 +7,7 @@ import (
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
-	"github.com/AkshayGadikar/contrib/tree/master/trigger/ping"
+	"github.com/project-flogo/contrib/tree/master/trigger/ping"
 )
 
 const (

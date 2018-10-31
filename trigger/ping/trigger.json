@@ -1,7 +1,7 @@
 {
   "name": "tibco-mashling-ping",
   "type": "flogo:trigger",
-  "ref": "https://github.com/AkshayGadikar/contrib/tree/master/trigger/ping",
+  "ref": "https://github.com/project-flogo/contrib/tree/master/trigger/ping",
   "version": "0.0.1",
   "title": "Ping Service",
   "author": "Andrew Snodgrass <asnodgra@tibco.com>",
