@@ -56,7 +56,7 @@ type Output struct {
 func (r *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
 		"status": r.Status,
-		"data": r.Data,
+		"data":   r.Data,
 	}
 }
 
