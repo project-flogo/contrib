@@ -11,7 +11,7 @@ This trigger provides your flogo application the ability to schedule an action
 flogo install github.com/project-flogo/contrib/trigger/timer
 ```
 
-## Schema
+## Metadata
 Settings:
 
 ```json
@@ -30,6 +30,14 @@ Settings:
   }
 }
 ```
+### Details
+
+#### Handler Settings:
+| Setting  | Required | Description |
+|:---------|:---------|:------------|
+| startDelay   | false     | the start delay (ex. 1m, 1h, etc.), immediate if not specified
+| repeatInterval | false     | the repeat interval (ex. 1m, 1h, etc.), doesn't repeat if not specified
+
 
 ## Example Configurations
 
