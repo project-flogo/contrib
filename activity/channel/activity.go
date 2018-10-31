@@ -8,24 +8,24 @@ import (
 )
 
 func init() {
-	activity.Register(&ChannelActivity{})
+	activity.Register(&Activity{})
 }
 
 var activityMd = activity.ToMetadata(&Input{})
 
-// ChannelActivity is an ChannelActivity that is used to publish some data on a channel
+// Activity is an Activity that is used to publish some data on a channel
 // inputs : {channel, data}
 // outputs: none
-type ChannelActivity struct {
+type Activity struct {
 }
 
 // Metadata returns the activity's metadata
-func (a *ChannelActivity) Metadata() *activity.Metadata {
+func (a *Activity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
 // Eval publishes the data  on the specified channel
-func (a *ChannelActivity) Eval(ctx activity.Context) (done bool, err error) {
+func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	input := &Input{}
 	ctx.GetInputObject(input)

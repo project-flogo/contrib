@@ -13,7 +13,7 @@ import (
 
 func TestRegister(t *testing.T) {
 
-	ref := activity.GetRef(&MapperActivity{})
+	ref := activity.GetRef(&Activity{})
 	act := activity.Get(ref)
 
 	assert.NotNil(t, act)

@@ -25,13 +25,13 @@ type Output struct {
 }
 
 func init() {
-	activity.Register(&CounterActivity{}, New)
+	activity.Register(&Activity{}, New)
 }
 
 var activityMd = activity.ToMetadata(&Settings{}, &Output{})
 
-// CounterActivity is a Counter CounterActivity implementation
-type CounterActivity struct {
+// Activity is a Counter Activity implementation
+type Activity struct {
 	invoke CounterFunc
 }
 
@@ -42,7 +42,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, err
 	}
 
-	act := &CounterActivity{}
+	act := &Activity{}
 
 	counter, exists := counters[s.CounterName]
 
@@ -64,13 +64,13 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	return act, nil
 }
 
-// Metadata implements activity.CounterActivity.Metadata
-func (a *CounterActivity) Metadata() *activity.Metadata {
+// Metadata implements activity.Activity.Metadata
+func (a *Activity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
-// Eval implements activity.CounterActivity.Eval
-func (a *CounterActivity) Eval(context activity.Context) (done bool, err error) {
+// Eval implements activity.Activity.Eval
+func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 	val := a.invoke()
 
 	context.SetOutput(ovValue, int(val))

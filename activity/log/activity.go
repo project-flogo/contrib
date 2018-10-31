@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	activity.Register(&LogActivity{})
+	activity.Register(&Activity{})
 }
 
 type Input struct {
@@ -40,19 +40,19 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 
 var activityMd = activity.ToMetadata(&Input{})
 
-// LogActivity is an LogActivity that is used to log a message to the console
+// Activity is an Activity that is used to log a message to the console
 // inputs : {message, flowInfo}
 // outputs: none
-type LogActivity struct {
+type Activity struct {
 }
 
 // Metadata returns the activity's metadata
-func (a *LogActivity) Metadata() *activity.Metadata {
+func (a *Activity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
-// Eval implements api.LogActivity.Eval - Logs the Message
-func (a *LogActivity) Eval(ctx activity.Context) (done bool, err error) {
+// Eval implements api.Activity.Eval - Logs the Message
+func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	input := &Input{}
 	ctx.GetInputObject(input)
@@ -60,7 +60,7 @@ func (a *LogActivity) Eval(ctx activity.Context) (done bool, err error) {
 	msg := input.Message
 
 	if input.AddDetails {
-		msg = fmt.Sprintf("'%s' - HostID [%s], HostName [%s], LogActivity [%s]", msg,
+		msg = fmt.Sprintf("'%s' - HostID [%s], HostName [%s], Activity [%s]", msg,
 			ctx.ActivityHost().ID(), ctx.ActivityHost().Name(), ctx.Name())
 	}
 

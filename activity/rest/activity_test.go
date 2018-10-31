@@ -16,7 +16,7 @@ import (
 
 func TestRegister(t *testing.T) {
 
-	ref := activity.GetRef(&RestActivity{})
+	ref := activity.GetRef(&Activity{})
 	act := activity.Get(ref)
 
 	assert.NotNil(t, act)

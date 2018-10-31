@@ -12,7 +12,7 @@ import (
 
 func TestRegister(t *testing.T) {
 
-	ref := activity.GetRef(&ChannelActivity{})
+	ref := activity.GetRef(&Activity{})
 	act := activity.Get(ref)
 
 	assert.NotNil(t, act)
@@ -23,7 +23,7 @@ func TestEval(t *testing.T) {
 	channels.New("test", 5)
 	ch := channels.Get("test")
 
-	act := &ChannelActivity{}
+	act := &Activity{}
 	tc := test.NewActivityContext(act.Metadata())
 
 	input := &Input{Channel: "test", Data: 2}

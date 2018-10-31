@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	activity.Register(&MapperActivity{}, New)
+	activity.Register(&Activity{}, New)
 }
 
 type Settings struct {
@@ -24,7 +24,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, err
 	}
 
-	act := &MapperActivity{}
+	act := &Activity{}
 
 	ctx.Logger().Debugf("Mappings: %+v", s.Mappings)
 
@@ -36,20 +36,20 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	return act, nil
 }
 
-// MapperActivity is an Activity that is used to reply/return via the trigger
+// Activity is an Activity that is used to reply/return via the trigger
 // inputs : {method,uri,params}
 // outputs: {result}
-type MapperActivity struct {
+type Activity struct {
 	mapper mapper.Mapper
 }
 
 // Metadata returns the activity's metadata
-func (a *MapperActivity) Metadata() *activity.Metadata {
+func (a *Activity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
 // Eval implements api.Activity.Eval - Invokes a REST Operation
-func (a *MapperActivity) Eval(ctx activity.Context) (done bool, err error) {
+func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	actionCtx := ctx.ActivityHost()
 
