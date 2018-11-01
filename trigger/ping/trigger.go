@@ -10,7 +10,7 @@ import (
 )
 
 // DefaultPort is the default port for Ping service
-const DefaultPort = "9096"
+const DefaultPort = 9096
 
 type Settings struct {
 	Port 		int 	`md:"port,required"`
