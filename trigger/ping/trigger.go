@@ -106,7 +106,7 @@ func (t *Trigger) Start() error {
 
 	go func() {
 		fmt.Println("inside go routine")
-		if err := t.ListenAndServe(); err != http.ErrServerClosed {
+		if err := t.Server.ListenAndServe(); err != http.ErrServerClosed {
 			t.logger.Errorf("Ping service err:", err)
 		}
 	}()
@@ -116,7 +116,7 @@ func (t *Trigger) Start() error {
 
 // Stop implements util.Managed.Stop
 func (t *Trigger) Stop() error {
-	if err := t.Shutdown(nil); err != nil {
+	if err := t.Server.Shutdown(nil); err != nil {
 		t.logger.Errorf("[mashling-ping-service] Ping service error when stopping:", err)
 		return err
 	}
