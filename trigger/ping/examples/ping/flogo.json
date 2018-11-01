@@ -1,6 +1,6 @@
 {
   "name": "Ping",
-  "type": "flogo:trigger",
+  "type": "flogo:app",
   "version": "1.0.0",
   "title": "Ping Trigger",
   "description": "This is a simple ping example.",

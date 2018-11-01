@@ -10,7 +10,7 @@ import (
 )
 
 // DefaultPort is the default port for Ping service
-const DefaultPort = 9096
+const DefaultPort = "9096"
 
 type Settings struct {
 	Port 		int 	`md:"port,required"`
@@ -76,7 +76,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 			Handler: mux,
 		},
 	}
-
+	fmt.Println("trigger is :", trigger)
 	mux.HandleFunc("/ping", trigger.PingResponseHandlerShort)
 	mux.HandleFunc("/ping/details", trigger.PingResponseHandlerDetail)
 	return trigger, nil
