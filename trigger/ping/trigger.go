@@ -1,17 +1,17 @@
 package ping
 
 import (
-	"fmt"
+	//"fmt"
 	"encoding/json"
 	"io"
 	"net/http"
-	"github.com/project-flogo/core/data/metadata"
+	//"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
 )
 
 // DefaultPort is the default port for Ping service
-const DefaultPort = "9090"
+const DefaultPort = "9096"
 
 type Settings struct {
 	Port 		int 	`md:"port,required"`
@@ -44,7 +44,7 @@ type Trigger struct {
 }
 
 // New implements trigger.Factory.New
-func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
+func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	type PingResponse struct {
 		Version        string
 		Appversion     string
@@ -52,9 +52,9 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	}
 
 	response := PingResponse{
-		Version:        config.Settings.Version,
-		Appversion:     config.Settings.AppVersion,
-		Appdescription: config.Settings.AppDescription,
+		//Version:        config.Settings.Version,
+		//Appversion:     config.Settings.AppVersion,
+		//Appdescription: config.Settings.AppDescription,
 	}
 
 	data, err := json.Marshal(response)
@@ -62,14 +62,14 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		*Trigger.logger.Errorf("Ping service data formation error")
 	}
 
-	port := config.Settings.Port
+	port := DefaultPort //config.Settings.Port
 	if len(port) == 0 {
 		port = DefaultPort
 	}
 
 	mux := http.NewServeMux()
 	trigger := &Trigger{
-		metadata: (*Factory).Metadata(),
+		metadata: f.Metadata(),
 		config:   config,
 		response: string(data),
 		Server: &http.Server{
