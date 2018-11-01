@@ -52,7 +52,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	}
 	fmt.Println("config:", config.Settings)
 	response := PingResponse{
-		Version:        config.Settings["version"],
+		Version:        config.Settings["version"].(string),
 		Appversion:     "",//config.Settings.AppVersion,
 		Appdescription: "",//config.Settings.AppDescription,
 	}
