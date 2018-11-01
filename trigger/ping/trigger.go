@@ -51,9 +51,9 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	}
 
 	response := PingResponse{
-		Version:        config.settings.version,
-		Appversion:     config.settings.appversion,
-		Appdescription: config.settings.appdescription,
+		Version:        config.Settings.version,
+		Appversion:     config.Settings.appversion,
+		Appdescription: config.Settings.appdescription,
 	}
 
 	data, err := json.Marshal(response)
@@ -61,7 +61,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		fmt.Println("Ping service data formation error")
 	}
 
-	port := config.settings.port
+	port := config.Settings.port
 	if len(port) == 0 {
 		port = DefaultPort
 	}
