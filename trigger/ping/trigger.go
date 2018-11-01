@@ -62,7 +62,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		fmt.Println("Ping service data formation error")
 	}
 
-	port := config.Settings["port"]
+	port := config.Settings["port"].(string)
 	if len(port) == 0 {
 		port = DefaultPort
 	}
@@ -136,7 +136,7 @@ func PrintMemUsage() {
 	fmt.Printf("\tTotalAlloc = %v MiB", bToMb(m.TotalAlloc))
 	fmt.Printf("\tSys = %v MiB", bToMb(m.Sys))
 	fmt.Printf("\tNumGC = %v\n", m.NumGC)
-	fmt.Printf("No of GoRoutines active", m.NumGoroutine())
+	fmt.Printf("No of GoRoutines active", runtime.NumGoroutine())
 }
 
 
