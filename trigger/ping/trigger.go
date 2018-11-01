@@ -76,7 +76,10 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 			Handler: mux,
 		},
 	}
-	fmt.Println("trigger is :", trigger)
+	fmt.Println("trigger metadata is :", trigger.metadata)
+	fmt.Println("trigger config is :", trigger.config)
+	fmt.Println("trigger response is :", trigger.response)
+	fmt.Println("trigger server is :", trigger.Server)
 	mux.HandleFunc("/ping", trigger.PingResponseHandlerShort)
 	mux.HandleFunc("/ping/details", trigger.PingResponseHandlerDetail)
 	return trigger, nil
@@ -84,6 +87,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 
 // Init implements trigger.Init
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
+	t.Start()
 	return nil
 }
 
