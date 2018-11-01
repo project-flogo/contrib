@@ -2,6 +2,7 @@ package ping
 
 import (
 	"fmt"
+	"strconv"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -62,7 +63,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		fmt.Println("Ping service data formation error")
 	}
 
-	port := config.Settings["port"].(string)
+	port := strconv.Itoa(config.Settings["port"].(int))
 	if len(port) == 0 {
 		port = DefaultPort
 	}
