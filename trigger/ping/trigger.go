@@ -105,7 +105,7 @@ func (t *Trigger) Start() error {
 	fmt.Println("Inside trigger start")
 	fmt.Println("Server:", t.Server)
 
-	fmt.Infof("Ping service starting...")
+	fmt.Println("Ping service starting...")
 
 	go func() {
 		fmt.Println("inside go routine")
@@ -113,7 +113,7 @@ func (t *Trigger) Start() error {
 			fmt.Errorf("Ping service err:", err)
 		}
 	}()
-	fmt.Infof("Ping service started")
+	fmt.Println("Ping service started")
 	return nil
 }
 
@@ -123,6 +123,6 @@ func (t *Trigger) Stop() error {
 		fmt.Errorf("[mashling-ping-service] Ping service error when stopping:", err)
 		return err
 	}
-	fmt.Infof("[mashling-ping-service] Ping service stopped")
+	fmt.Println("[mashling-ping-service] Ping service stopped")
 	return nil
 }
