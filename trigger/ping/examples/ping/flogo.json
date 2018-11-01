@@ -1,5 +1,5 @@
 {
-  "name": "flogo-Ping",
+  "name": "Ping",
   "type": "flogo:trigger",
   "version": "1.0.0",
   "title": "Ping Trigger",
@@ -8,7 +8,7 @@
     {
       "name": "ping",
       "id": "flogo-ping",
-      "ref": "https://github.com/AkshayGadikar/contrib/trigger/ping",
+      "ref": "github.com/project-flogo/contrib/trigger/ping",
       "description": "Ping Example",
       "settings": {
         "port": 9096,

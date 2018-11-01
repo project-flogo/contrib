@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	//"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
 )
@@ -52,9 +51,9 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	}
 
 	response := PingResponse{
-		//Version:        config.settings.version,
-		//Appversion:     config.settings.appversion,
-		//Appdescription: config.settings.appdescription,
+		Version:        config.settings.version,
+		Appversion:     config.settings.appversion,
+		Appdescription: config.settings.appdescription,
 	}
 
 	data, err := json.Marshal(response)
@@ -62,7 +61,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		fmt.Println("Ping service data formation error")
 	}
 
-	port := DefaultPort //config.settings.port
+	port := config.settings.port
 	if len(port) == 0 {
 		port = DefaultPort
 	}
