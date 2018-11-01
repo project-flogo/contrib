@@ -9,7 +9,7 @@ import (
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
 	"runtime"
-	"net/trace"
+	"golang.org/x/net/trace"
 )
 
 // DefaultPort is the default port for Ping service
