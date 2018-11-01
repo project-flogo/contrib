@@ -52,10 +52,9 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	}
 	fmt.Println("config:", config.Settings)
 	response := PingResponse{
-		Version:        config.Settings.version,
+		Version:        config.Settings["version"],
 		Appversion:     "",//config.Settings.AppVersion,
 		Appdescription: "",//config.Settings.AppDescription,
-		"No of GoRoutines active": runtime.NumGoroutine(),
 	}
 
 	data, err := json.Marshal(response)
@@ -63,7 +62,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		fmt.Println("Ping service data formation error")
 	}
 
-	port := config.Settings.port
+	port := config.Settings["port"]
 	if len(port) == 0 {
 		port = DefaultPort
 	}
@@ -137,7 +136,9 @@ func PrintMemUsage() {
 	fmt.Printf("\tTotalAlloc = %v MiB", bToMb(m.TotalAlloc))
 	fmt.Printf("\tSys = %v MiB", bToMb(m.Sys))
 	fmt.Printf("\tNumGC = %v\n", m.NumGC)
+	fmt.Printf("No of GoRoutines active", m.NumGoroutine())
 }
+
 
 func bToMb(b uint64) uint64 {
 	return b / 1024 / 1024
