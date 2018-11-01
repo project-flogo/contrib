@@ -1,7 +1,7 @@
 package ping
 
 import (
-	//"fmt"
+	"fmt"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -59,7 +59,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 
 	data, err := json.Marshal(response)
 	if err != nil {
-		*Trigger.logger.Errorf("Ping service data formation error")
+		fmt.Println("Ping service data formation error")
 	}
 
 	port := DefaultPort //config.Settings.Port
