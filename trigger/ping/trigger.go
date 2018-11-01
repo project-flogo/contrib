@@ -87,7 +87,6 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 
 // Init implements trigger.Init
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
-	t.Start()
 	return nil
 }
 
@@ -102,9 +101,11 @@ func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Req
 
 // Start implements util.Managed.Start
 func (t *Trigger) Start() error {
+	fmt.Println("Inside trigger start")
 	t.logger.Infof("Ping service starting...")
 
 	go func() {
+		fmt.Println("inside go routine")
 		if err := t.ListenAndServe(); err != http.ErrServerClosed {
 			t.logger.Errorf("Ping service err:", err)
 		}
