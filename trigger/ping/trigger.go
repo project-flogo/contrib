@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
+	"runtime"
 )
 
 // DefaultPort is the default port for Ping service
@@ -51,9 +52,10 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	}
 	fmt.Println("config:", config.Settings)
 	response := PingResponse{
-		Version:        "version",//config.Settings.Version,
-		Appversion:     "appversion",//config.Settings.AppVersion,
-		Appdescription: "appdescr",//config.Settings.AppDescription,
+		Version:        config.Settings.version,
+		Appversion:     "",//config.Settings.AppVersion,
+		Appdescription: "",//config.Settings.AppDescription,
+		"No of GoRoutines active": runtime.NumGoroutine(),
 	}
 
 	data, err := json.Marshal(response)
@@ -61,7 +63,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		fmt.Println("Ping service data formation error")
 	}
 
-	port := DefaultPort//config.Settings.Port
+	port := config.Settings.port
 	if len(port) == 0 {
 		port = DefaultPort
 	}
@@ -97,6 +99,7 @@ func (t *Trigger) PingResponseHandlerShort(w http.ResponseWriter, req *http.Requ
 
 //PingResponseHandlerDetail handles simple response
 func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Request) {
+	PrintMemUsage()
 	io.WriteString(w, t.response+"\n")
 }
 
@@ -125,4 +128,17 @@ func (t *Trigger) Stop() error {
 	}
 	fmt.Println("[mashling-ping-service] Ping service stopped")
 	return nil
+}
+
+func PrintMemUsage() {
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	fmt.Printf("Alloc = %v MiB", bToMb(m.Alloc))
+	fmt.Printf("\tTotalAlloc = %v MiB", bToMb(m.TotalAlloc))
+	fmt.Printf("\tSys = %v MiB", bToMb(m.Sys))
+	fmt.Printf("\tNumGC = %v\n", m.NumGC)
+}
+
+func bToMb(b uint64) uint64 {
+	return b / 1024 / 1024
 }
