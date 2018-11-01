@@ -9,6 +9,7 @@ import (
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
 	"runtime"
+	"net/trace"
 )
 
 // DefaultPort is the default port for Ping service
@@ -101,8 +102,11 @@ func (t *Trigger) PingResponseHandlerShort(w http.ResponseWriter, req *http.Requ
 
 //PingResponseHandlerDetail handles simple response
 func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Request) {
+	tr := trace.New("TraceTest", req.URL.Path)
+	defer tr.Finish()
 	PrintMemUsage()
 	io.WriteString(w, t.response+"\n")
+	tr.LazyPrintf("Details through trace")
 }
 
 // Start implements util.Managed.Start
