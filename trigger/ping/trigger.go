@@ -49,7 +49,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		Appversion     string
 		Appdescription string
 	}
-	fmt.Println("config:", config)
+	fmt.Println("config:", config.Settings)
 	response := PingResponse{
 		Version:        "version",//config.Settings.Version,
 		Appversion:     "appversion",//config.Settings.AppVersion,
@@ -67,14 +67,15 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	}
 
 	mux := http.NewServeMux()
+	server := &http.Server{
+		Addr:    ":" + port,
+		Handler: mux,
+	}
 	trigger := &Trigger{
 		metadata: f.Metadata(),
 		config:   config,
 		response: string(data),
-		Server: &http.Server{
-			Addr:    ":" + port,
-			Handler: mux,
-		},
+		Server: server,
 	}
 	fmt.Println("trigger metadata is :", trigger.metadata)
 	fmt.Println("trigger config is :", trigger.config)
@@ -102,24 +103,26 @@ func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Req
 // Start implements util.Managed.Start
 func (t *Trigger) Start() error {
 	fmt.Println("Inside trigger start")
-	t.logger.Infof("Ping service starting...")
+	fmt.Println("Server:", t.Server)
+
+	fmt.Infof("Ping service starting...")
 
 	go func() {
 		fmt.Println("inside go routine")
 		if err := t.Server.ListenAndServe(); err != http.ErrServerClosed {
-			t.logger.Errorf("Ping service err:", err)
+			fmt.Errorf("Ping service err:", err)
 		}
 	}()
-	t.logger.Infof("Ping service started")
+	fmt.Infof("Ping service started")
 	return nil
 }
 
 // Stop implements util.Managed.Stop
 func (t *Trigger) Stop() error {
 	if err := t.Server.Shutdown(nil); err != nil {
-		t.logger.Errorf("[mashling-ping-service] Ping service error when stopping:", err)
+		fmt.Errorf("[mashling-ping-service] Ping service error when stopping:", err)
 		return err
 	}
-	t.logger.Infof("[mashling-ping-service] Ping service stopped")
+	fmt.Infof("[mashling-ping-service] Ping service stopped")
 	return nil
 }
