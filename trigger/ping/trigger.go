@@ -85,6 +85,8 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	fmt.Println("trigger server is :", trigger.Server)
 	mux.HandleFunc("/ping", trigger.PingResponseHandlerShort)
 	mux.HandleFunc("/ping/details", trigger.PingResponseHandlerDetail)
+	fmt.Println("After init :")
+	PrintMemUsage()
 	return trigger, nil
 }
 
@@ -131,16 +133,46 @@ func (t *Trigger) Stop() error {
 }
 
 func PrintMemUsage() {
-	var m runtime.MemStats
-	runtime.ReadMemStats(&m)
-	fmt.Printf("Alloc = %v MiB", bToMb(m.Alloc))
-	fmt.Printf("\tTotalAlloc = %v MiB", bToMb(m.TotalAlloc))
-	fmt.Printf("\tSys = %v MiB", bToMb(m.Sys))
-	fmt.Printf("\tNumGC = %v\n", m.NumGC)
-	fmt.Printf("No of GoRoutines active", runtime.NumGoroutine())
+	var rtm runtime.MemStats
+	var m Monitor
+	runtime.ReadMemStats(&rtm)
+
+	// Number of goroutines
+	m.NumGoroutine = runtime.NumGoroutine()
+
+	// Misc memory stats
+	m.Alloc = rtm.Alloc
+	m.TotalAlloc = rtm.TotalAlloc
+	m.Sys = rtm.Sys
+	m.Mallocs = rtm.Mallocs
+	m.Frees = rtm.Frees
+
+	// Live objects = Mallocs - Frees
+	m.LiveObjects = m.Mallocs - m.Frees
+
+	// GC Stats
+	m.PauseTotalNs = rtm.PauseTotalNs
+	m.NumGC = rtm.NumGC
+
+	// Just encode to json and print
+	b, _ := json.Marshal(m)
+	fmt.Println(string(b))
 }
 
 
 func bToMb(b uint64) uint64 {
 	return b / 1024 / 1024
+}
+
+type Monitor struct {
+	Alloc,
+	TotalAlloc,
+	Sys,
+	Mallocs,
+	Frees,
+	LiveObjects,
+	PauseTotalNs uint64
+
+	NumGC        uint32
+	NumGoroutine int
 }
