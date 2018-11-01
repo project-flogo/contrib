@@ -1,4 +1,4 @@
-module github.com/AkshayGadikar/contrib
+module github.com/project-flogo/contrib
 
 require (
 	github.com/carlescere/scheduler v0.0.0-20170109141437-ee74d2f83d82
