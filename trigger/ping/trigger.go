@@ -10,15 +10,28 @@ import (
 	"github.com/project-flogo/core/trigger"
 )
 
-const (
-	// DefaultPort is the default port for Ping service
-	DefaultPort = "9090"
-)
+// DefaultPort is the default port for Ping service
+const DefaultPort = "9090"
 
-var pingTriggerMd = trigger.NewMetadata(&Settings{})
+type Settings struct {
+	Port 		int 	`md:"port,required"`
+	Version 	string 	`md:"version"`
+	AppVersion 	string 	`md:"appversion"`
+	AppDescription 	string 	`md:"appdescription"`
+}
+
+var triggerMd = trigger.NewMetadata(&Settings{})
 
 func init() {
 	trigger.Register(&Trigger{}, &Factory{})
+}
+
+type Factory struct {
+}
+
+// Metadata implements trigger.Factory.Metadata
+func (*Factory) Metadata() *trigger.Metadata {
+	return triggerMd
 }
 
 // Trigger is the ping trigger
@@ -30,54 +43,48 @@ type Trigger struct {
 	logger   log.Logger
 }
 
-// Factory Ping Trigger factory
-type Factory struct {
-}
-
-// Metadata implements trigger.Factory.Metadata
-func (f *Factory) Metadata() *trigger.Metadata {
-	return pingTriggerMd
-}
-
 // New implements trigger.Factory.New
-func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
-	s := &Settings{}
-	err := metadata.MapToStruct(config.Settings, s, true)
-	if err != nil {
-		return nil, err
+func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
+	type PingResponse struct {
+		Version        string
+		Appversion     string
+		Appdescription string
 	}
-	fmt.Println("settings :", s)
-	fmt.Println("config :", config)
-	return &Trigger{metadata: f.Metadata(), config:config}, nil
-}
 
-
-// Initialize start the Ping service
-func (t *Trigger) Initialize(context trigger.InitContext) error {
-	t.logger = context.Logger()
 	response := PingResponse{
-		Version:        "version",
-		Appversion:     "appversion",
-		Appdescription: "appdescription",
-		//Appdescription: t.config.GetSetting("appdescription"),
+		Version:        config.Settings.Version,
+		Appversion:     config.Settings.AppVersion,
+		Appdescription: config.Settings.AppDescription,
 	}
 
 	data, err := json.Marshal(response)
 	if err != nil {
-		t.logger.Errorf("Ping service data formation error")
+		*Trigger.logger.Errorf("Ping service data formation error")
 	}
 
-	port := DefaultPort//t.config.GetSetting("port")
+	port := config.Settings.Port
 	if len(port) == 0 {
 		port = DefaultPort
 	}
 
 	mux := http.NewServeMux()
-	t.response = string(data)
-	t.Server = &http.Server{Addr:    ":" + port, Handler: mux, }
+	trigger := &Trigger{
+		metadata: (*Factory).Metadata(),
+		config:   config,
+		response: string(data),
+		Server: &http.Server{
+			Addr:    ":" + port,
+			Handler: mux,
+		},
+	}
 
-	mux.HandleFunc("/ping", t.PingResponseHandlerShort)
-	mux.HandleFunc("/ping/details", t.PingResponseHandlerDetail)
+	mux.HandleFunc("/ping", trigger.PingResponseHandlerShort)
+	mux.HandleFunc("/ping/details", trigger.PingResponseHandlerDetail)
+	return trigger, nil
+}
+
+// Init implements trigger.Init
+func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 	return nil
 }
 
