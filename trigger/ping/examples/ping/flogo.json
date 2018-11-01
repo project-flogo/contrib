@@ -1,5 +1,5 @@
 {
-  "name": "Ping",
+  "name": "flogo-Ping",
   "type": "flogo:trigger",
   "version": "1.0.0",
   "title": "Ping Trigger",
@@ -7,7 +7,7 @@
   "triggers": [
     {
       "name": "ping",
-      "id": "ping",
+      "id": "flogo-ping",
       "ref": "https://github.com/AkshayGadikar/contrib/trigger/ping",
       "description": "Ping Example",
       "settings": {
