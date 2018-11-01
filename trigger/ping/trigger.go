@@ -38,7 +38,7 @@ type Trigger struct {
 	metadata *trigger.Metadata
 	config   *trigger.Config
 	response string
-	*http.Server
+	Server *http.Server
 	logger   log.Logger
 }
 
