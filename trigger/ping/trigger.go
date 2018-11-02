@@ -9,8 +9,6 @@ import (
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
 	"runtime"
-	"golang.org/x/net/trace"
-	"reflect"
 )
 
 // DefaultPort is the default port for Ping service
@@ -49,15 +47,24 @@ type Trigger struct {
 // New implements trigger.Factory.New
 func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	type PingResponse struct {
-		Version        string
-		Appversion     string
-		Appdescription string
+		Version        	string
+		Appversion     	string
+		Appdescription 	string
+		Endpoint	string
+		NumGoroutine 	int
+		Alloc,
+		TotalAlloc,
+		Sys,
+		Mallocs,
+		Frees,
+		LiveObjects	uint64
+		NumGC		uint32
 	}
 	fmt.Println("config:", config.Settings)
 	response := PingResponse{
 		Version:        config.Settings["version"].(string),
-		Appversion:     "",//config.Settings.AppVersion,
-		Appdescription: "",//config.Settings.AppDescription,
+		Appversion:     config.Settings["appversion"].(string),
+		Appdescription: config.Settings["appdescription"].(string),
 	}
 
 	data, err := json.Marshal(response)
@@ -81,14 +88,9 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		response: string(data),
 		Server: server,
 	}
-	fmt.Println("trigger metadata is :", trigger.metadata)
-	fmt.Println("trigger config is :", trigger.config)
-	fmt.Println("trigger response is :", trigger.response)
-	fmt.Println("trigger server is :", trigger.Server)
 	mux.HandleFunc("/ping", trigger.PingResponseHandlerShort)
 	mux.HandleFunc("/ping/details", trigger.PingResponseHandlerDetail)
-	fmt.Println("After init :")
-	PrintMemUsage()
+	trigger.PrintMemUsage()
 	return trigger, nil
 }
 
@@ -103,21 +105,28 @@ func (t *Trigger) PingResponseHandlerShort(w http.ResponseWriter, req *http.Requ
 
 //PingResponseHandlerDetail handles simple response
 func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Request) {
+	token := req.Header.Get("Authorization")
+	fmt.Println(token)
+	if(valid(token)) {
+		t.response.Endpoint = req.URL.Path
+		io.WriteString(w, t.response + "\n")
+	}else{
+		fmt.Errorf("Invalid token!!!")
+	}
+
+	//Another way to get trace : more details
+	/*
 	tr := trace.New("TraceTest", req.URL.Path)
 	defer tr.Finish()
-	PrintMemUsage()
-	io.WriteString(w, t.response+"\n")
-	tr.LazyPrintf("Details through trace")
 	fmt.Println(reflect.TypeOf(tr).String())
 	fmt.Println("Trace:")
-	//e := reflect.ValueOf(&tr).Elem()
-
-	//for i := 0; i < e.NumField(); i++ {
-	//	fieldName := e.Type().Field(i).Name
-	//		fmt.Printf("%v\n", fieldName)
-	//}
 	fmt.Printf("%+v\n", tr)
-	fmt.Println(tr)
+	fmt.Println(tr)*/
+}
+
+func valid(token string) bool{
+	matched, _ := regexp.MatchString("^Bearer (.*)", token)
+	return matched
 }
 
 // Start implements util.Managed.Start
@@ -147,47 +156,24 @@ func (t *Trigger) Stop() error {
 	return nil
 }
 
-func PrintMemUsage() {
+func (t *Trigger) PrintMemUsage() {
 	var rtm runtime.MemStats
-	var m Monitor
 	runtime.ReadMemStats(&rtm)
 
 	// Number of goroutines
-	m.NumGoroutine = runtime.NumGoroutine()
+	t.NumGoroutine = runtime.NumGoroutine()
 
 	// Misc memory stats
-	m.Alloc = rtm.Alloc
-	m.TotalAlloc = rtm.TotalAlloc
-	m.Sys = rtm.Sys
-	m.Mallocs = rtm.Mallocs
-	m.Frees = rtm.Frees
+	t.Alloc = rtm.Alloc
+	t.TotalAlloc = rtm.TotalAlloc
+	t.Sys = rtm.Sys
+	t.Mallocs = rtm.Mallocs
+	t.Frees = rtm.Frees
 
 	// Live objects = Mallocs - Frees
-	m.LiveObjects = m.Mallocs - m.Frees
+	t.LiveObjects = t.Mallocs - t.Frees
 
-	// GC Stats
-	m.PauseTotalNs = rtm.PauseTotalNs
-	m.NumGC = rtm.NumGC
+	//GC stats
+	t.NumGC = rtm.NumGC
 
-	// Just encode to json and print
-	b, _ := json.Marshal(m)
-	fmt.Println(string(b))
-}
-
-
-func bToMb(b uint64) uint64 {
-	return b / 1024 / 1024
-}
-
-type Monitor struct {
-	Alloc,
-	TotalAlloc,
-	Sys,
-	Mallocs,
-	Frees,
-	LiveObjects,
-	PauseTotalNs uint64
-
-	NumGC        uint32
-	NumGoroutine int
 }

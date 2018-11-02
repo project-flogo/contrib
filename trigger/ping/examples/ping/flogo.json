@@ -12,7 +12,9 @@
       "description": "Ping Example",
       "settings": {
         "port": "9096",
-        "version": "1.1"
+        "version": "1.1",
+        "appversion":"",
+        "appdescription":""
       },
       "handlers": []
     }
