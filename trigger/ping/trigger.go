@@ -9,6 +9,7 @@ import (
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
 	"runtime"
+	"regexp"
 )
 
 // DefaultPort is the default port for Ping service
@@ -51,20 +52,14 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		Appversion     	string
 		Appdescription 	string
 		Endpoint	string
-		NumGoroutine 	int
-		Alloc,
-		TotalAlloc,
-		Sys,
-		Mallocs,
-		Frees,
-		LiveObjects	uint64
-		NumGC		uint32
+		StatsDetails 	MemoryStats
 	}
-	fmt.Println("config:", config.Settings)
 	response := PingResponse{
 		Version:        config.Settings["version"].(string),
 		Appversion:     config.Settings["appversion"].(string),
 		Appdescription: config.Settings["appdescription"].(string),
+		Endpoint:	"",
+		StatsDetails: MemoryStats{},
 	}
 
 	data, err := json.Marshal(response)
@@ -156,15 +151,17 @@ func (t *Trigger) Stop() error {
 	return nil
 }
 
-func (t *Trigger) PrintMemUsage() {
+func (t *Trigger)PrintMemUsage() {
 	var rtm runtime.MemStats
+	//var t MemoryStats
 	runtime.ReadMemStats(&rtm)
 
 	// Number of goroutines
-	t.NumGoroutine = runtime.NumGoroutine()
+	t.response.StatsDetails.NumGoroutine = runtime.NumGoroutine()
+	//t.NumGoroutine = runtime.NumGoroutine()
 
 	// Misc memory stats
-	t.Alloc = rtm.Alloc
+	/*t.Alloc = rtm.Alloc
 	t.TotalAlloc = rtm.TotalAlloc
 	t.Sys = rtm.Sys
 	t.Mallocs = rtm.Mallocs
@@ -174,6 +171,17 @@ func (t *Trigger) PrintMemUsage() {
 	t.LiveObjects = t.Mallocs - t.Frees
 
 	//GC stats
-	t.NumGC = rtm.NumGC
+	t.NumGC = rtm.NumGC*/
 
+}
+
+type MemoryStats struct{
+	NumGoroutine 	int
+	/*Alloc,
+	TotalAlloc,
+	Sys,
+	Mallocs,
+	Frees,
+	LiveObjects	uint64
+	NumGC		uint32*/
 }
