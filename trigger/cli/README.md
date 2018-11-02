@@ -66,14 +66,13 @@ Configure the Trigger to execute one flow
 "triggers": [
     {
       "id": "cli_trigger",
-      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/cli",
+      "ref": "github.com/project-flogo/contrib/trigger/cli",
       "name": "CLI Trigger",
-      "description": "Simple CLI Trigger",
       "settings": {},
       "handlers": [
         {
           "action": {
-            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "ref": "github.com/project-flogo/flow",
             "data": {
               "flowURI": "res://flow:version"
             }
@@ -97,15 +96,14 @@ Configure the Trigger to handle multiple commands
 "triggers": [
     {
       "id": "cli_trigger",
-      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/cli",
+      "ref": "github.com/project-flogo/contrib/trigger/cli",
       "name": "CLI Trigger",
       "description": "Simple CLI Trigger",
-      "settings": {},
       "handlers": [
         {
           "action": {
-            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
-            "data": {
+            "ref": "github.com/project-flogo/flow",
+            "settings": {
               "flowURI": "res://flow:version"
             }
           },
@@ -116,18 +114,12 @@ Configure the Trigger to handle multiple commands
         },
         {
           "action": {
-            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
-            "data": {
+            "ref": "github.com/project-flogo/flow",
+            "settings": {
               "flowURI": "res://flow:search"
             },
-            "mappings": {
-              "input": [
-                {
-                  "mapTo": "commandline",
-                  "type": "assign",
-                  "value": "$.args"
-                }
-              ]
+            "input": {
+              "commandLine":"=$.args"
             }
           },
           "settings": {
@@ -136,20 +128,6 @@ Configure the Trigger to handle multiple commands
           }
         }
       ]
-    }
-  ]
-}
-```
-
-### Map arguments
-To use the _args_ array from the trigger you'll need to specify an input parameter of type array and map the args from the trigger to it.
-```json
-"mappings": {
-  "input": [
-    {
-      "mapTo": "commandline",
-      "type": "assign",
-      "value": "$.args"
     }
   ]
 }

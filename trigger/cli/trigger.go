@@ -7,61 +7,59 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/TIBCOSoftware/flogo-lib/config"
-	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
-	"github.com/TIBCOSoftware/flogo-lib/logger"
+	"github.com/project-flogo/core/data/metadata"
+	"github.com/project-flogo/core/support/log"
+	"github.com/project-flogo/core/trigger"
 )
 
-// log is the default package logger
-var log = logger.GetLogger("trigger-flogo-cli")
+var triggerMd = trigger.NewMetadata(&HandlerSettings{}, &Output{}, &Reply{})
+
+func init() {
+	trigger.Register(&Trigger{}, &Factory{})
+}
+
+type Factory struct {
+}
+
+// Metadata implements trigger.Factory.Metadata
+func (*Factory) Metadata() *trigger.Metadata {
+	return triggerMd
+}
+
+// New implements trigger.Factory.New
+func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
+	singleton = &Trigger{config: config}
+	return singleton, nil
+}
 
 var singleton *Trigger
 
 // Trigger CLI trigger struct
 type Trigger struct {
-	metadata     *trigger.Metadata
 	config       *trigger.Config
 	handlerInfos []*handlerInfo
-	defHandler   *trigger.Handler
+	defHandler   trigger.Handler
+	logger       log.Logger
 }
 
 type handlerInfo struct {
 	Invoke  bool
-	handler *trigger.Handler
-}
-
-//NewFactory create a new Trigger factory
-func NewFactory(md *trigger.Metadata) trigger.Factory {
-	return &CliTriggerFactory{metadata: md}
-}
-
-// CliTriggerFactory CLI Trigger factory
-type CliTriggerFactory struct {
-	metadata *trigger.Metadata
-}
-
-//New Creates a new trigger instance for a given id
-func (t *CliTriggerFactory) New(config *trigger.Config) trigger.Trigger {
-	singleton = &Trigger{metadata: t.metadata, config: config}
-
-	return singleton
+	handler trigger.Handler
 }
 
 // Metadata implements trigger.Trigger.Metadata
 func (t *Trigger) Metadata() *trigger.Metadata {
-	return t.metadata
+	return triggerMd
 }
 
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
-	level, err := logger.GetLevelForName(config.GetLogLevel())
+	t.logger = ctx.Logger()
 
-	if err == nil {
-		log.SetLogLevel(level)
-	}
-
-	//if len(t.config.Settings) == 0 {
-	//	return fmt.Errorf("no Settings found for trigger '%s'", t.config.Id)
+	//level, err := logger.GetLevelForName(config.GetLogLevel())
+	//
+	//if err == nil {
+	//	log.SetLogLevel(level)
 	//}
 
 	if len(ctx.GetHandlers()) == 0 {
@@ -73,21 +71,18 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 	// Init handlers
 	for _, handler := range ctx.GetHandlers() {
 
-		cmdString := "default"
+		s := &HandlerSettings{Command: "default"}
+		err := metadata.MapToStruct(handler.Settings(), s, true)
+		if err != nil {
+			return err
+		}
+
+		if s.Default {
+			t.defHandler = handler
+			hasDefault = true
+		}
 
 		aInfo := &handlerInfo{Invoke: false, handler: handler}
-
-		if cmd, ok := handler.GetSetting("command"); ok && cmd != nil {
-			cmdString = cmd.(string)
-		}
-
-		if cmd, set := handler.GetSetting("default"); set {
-			if def, ok := cmd.(bool); ok && def {
-				t.defHandler = handler
-				hasDefault = true
-			}
-		}
-
 		t.handlerInfos = append(t.handlerInfos, aInfo)
 
 		xv := reflect.ValueOf(aInfo).Elem()
@@ -95,7 +90,7 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
 		switch ptr := addr.(type) {
 		case *bool:
-			flag.BoolVar(ptr, cmdString, false, "")
+			flag.BoolVar(ptr, s.Command, false, "")
 		}
 	}
 
@@ -122,7 +117,7 @@ func Invoke() (string, error) {
 
 	// if we have additional args (after the cmd name and the flow cmd switch)
 	// stuff those into args and pass to Invoke(). The action will only receive the
-	// aditional args that were intending for the action logic.
+	// additional args that were intending for the action logic.
 	if arg := flag.Args(); len(arg) >= 2 {
 		args = flag.Args()[2:]
 	}
@@ -137,9 +132,9 @@ func Invoke() (string, error) {
 	return singleton.Invoke(singleton.defHandler, args)
 }
 
-func (t *Trigger) Invoke(handler *trigger.Handler, args []string) (string, error) {
+func (t *Trigger) Invoke(handler trigger.Handler, args []string) (string, error) {
 
-	log.Infof("invoking handler '%s'", handler)
+	t.logger.Infof("invoking handler '%s'", handler)
 
 	data := map[string]interface{}{
 		"args": args,
@@ -148,18 +143,11 @@ func (t *Trigger) Invoke(handler *trigger.Handler, args []string) (string, error
 	results, err := handler.Handle(context.Background(), data)
 
 	if err != nil {
-		log.Debugf("error: %s", err.Error())
+		t.logger.Debugf("error: %s", err.Error())
 		return "", err
 	}
 
-	var replyData interface{}
-
-	if len(results) != 0 {
-		dataAttr, ok := results["data"]
-		if ok {
-			replyData = dataAttr.Value()
-		}
-	}
+	replyData := results["data"]
 
 	if replyData != nil {
 		data, err := json.Marshal(replyData)
