@@ -81,7 +81,7 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 }
 
 func (t *Trigger) PingResponseHandlerShort(w http.ResponseWriter, req *http.Request) {
-	token := req.Header.Get("Authorization")
+	token := t.config.Settings["password"].(string)
 	if(Valid(token)) {
 		io.WriteString(w, "{\"response\":\"Ping successful\"}\n")
 	}else{
