@@ -91,7 +91,7 @@ func (t *Trigger) PingResponseHandlerShort(w http.ResponseWriter, req *http.Requ
 
 //PingResponseHandlerDetail handles simple response
 func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Request) {
-	token := req.Header.Get("Authorization")
+	token := t.config.Settings["password"].(string)
 	if(Valid(token)) {
 		io.WriteString(w, t.response + "\n")
 		io.WriteString(w, "Details :\n")

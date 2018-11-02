@@ -13,6 +13,7 @@ type Settings struct {
 	Version 	string 	`md:"version"`
 	AppVersion 	string 	`md:"appversion"`
 	AppDescription 	string 	`md:"appdescription"`
+	Password	strings	`md:"password"`
 }
 
 type MemoryStats struct{

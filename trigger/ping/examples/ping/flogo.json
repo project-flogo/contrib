@@ -14,7 +14,8 @@
         "port": "9096",
         "version": "1.1",
         "appversion":"",
-        "appdescription":""
+        "appdescription":"",
+        "password":"Test12345"
       },
       "handlers": []
     }
