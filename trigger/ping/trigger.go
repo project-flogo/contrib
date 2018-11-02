@@ -23,6 +23,7 @@ type Settings struct {
 }
 
 var triggerMd = trigger.NewMetadata(&Settings{})
+var statsResult string
 
 func init() {
 	trigger.Register(&Trigger{}, &Factory{})
@@ -51,15 +52,11 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		Version        	string
 		Appversion     	string
 		Appdescription 	string
-		Endpoint	string
-		StatsDetails 	MemoryStats
 	}
 	response := PingResponse{
 		Version:        config.Settings["version"].(string),
 		Appversion:     config.Settings["appversion"].(string),
 		Appdescription: config.Settings["appdescription"].(string),
-		Endpoint:	"",
-		StatsDetails: MemoryStats{},
 	}
 
 	data, err := json.Marshal(response)
@@ -85,7 +82,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	}
 	mux.HandleFunc("/ping", trigger.PingResponseHandlerShort)
 	mux.HandleFunc("/ping/details", trigger.PingResponseHandlerDetail)
-	trigger.PrintMemUsage()
+	statsResult = PrintMemUsage()
 	return trigger, nil
 }
 
@@ -103,8 +100,9 @@ func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Req
 	token := req.Header.Get("Authorization")
 	fmt.Println(token)
 	if(valid(token)) {
-		t.response.Endpoint = req.URL.Path
 		io.WriteString(w, t.response + "\n")
+		io.WriteString(w, "Details :\n")
+		io.WriteString(w, statsResult + "\n")
 	}else{
 		fmt.Errorf("Invalid token!!!")
 	}
@@ -151,17 +149,15 @@ func (t *Trigger) Stop() error {
 	return nil
 }
 
-func (t *Trigger)PrintMemUsage() {
+func PrintMemUsage() string{
 	var rtm runtime.MemStats
-	//var t MemoryStats
 	runtime.ReadMemStats(&rtm)
+	var t MemoryStats
 
-	// Number of goroutines
-	t.response.StatsDetails.NumGoroutine = runtime.NumGoroutine()
-	//t.NumGoroutine = runtime.NumGoroutine()
+	t.NumGoroutine = runtime.NumGoroutine()
 
 	// Misc memory stats
-	/*t.Alloc = rtm.Alloc
+	t.Alloc = rtm.Alloc
 	t.TotalAlloc = rtm.TotalAlloc
 	t.Sys = rtm.Sys
 	t.Mallocs = rtm.Mallocs
@@ -171,17 +167,19 @@ func (t *Trigger)PrintMemUsage() {
 	t.LiveObjects = t.Mallocs - t.Frees
 
 	//GC stats
-	t.NumGC = rtm.NumGC*/
+	t.NumGC = rtm.NumGC
 
+	result, _ := json.Marshal(t)
+	return string(result)
 }
 
 type MemoryStats struct{
 	NumGoroutine 	int
-	/*Alloc,
+	Alloc,
 	TotalAlloc,
 	Sys,
 	Mallocs,
 	Frees,
 	LiveObjects	uint64
-	NumGC		uint32*/
+	NumGC		uint32
 }
