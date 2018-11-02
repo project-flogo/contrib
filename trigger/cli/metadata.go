@@ -42,7 +42,7 @@ func (r *Reply) ToMap() map[string]interface{} {
 func (r *Reply) FromMap(values map[string]interface{}) error {
 	if val, ok := values["data"]; ok {
 		r.Data = val
-		return fmt.Errorf("data not found in map")
+		return nil
 	}
-	return nil
+	return fmt.Errorf("data not found in map")
 }
