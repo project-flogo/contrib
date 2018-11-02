@@ -46,6 +46,26 @@
       ]
     },
     {
+      "name": "string.float",
+      "description": "convert the string to a float",
+      "args": [
+        {
+          "name ": "str1",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "string.integer",
+      "description": "convert the string to an integer",
+      "args": [
+        {
+          "name ": "str1",
+          "type": "string"
+        }
+      ]
+    },
+    {
       "name": "string.len",
       "description": "get the length of a string",
       "args": [
