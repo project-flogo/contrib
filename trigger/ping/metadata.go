@@ -2,7 +2,6 @@ package ping
 
 import(
 	"runtime"
-	"regexp"
 	"encoding/json"
 	"strings"
 )
