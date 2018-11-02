@@ -4,8 +4,10 @@ import(
 	"runtime"
 	"regexp"
 	"encoding/json"
+	"strings"
 )
 
+const password = "Test12345"
 
 type Settings struct {
 	Port 		int 	`md:"port,required"`
@@ -50,6 +52,8 @@ func PrintMemUsage() string{
 }
 
 func Valid(token string) bool{
-	matched, _ := regexp.MatchString("^Bearer (.*)", token)
-	return matched
+	if strings.Compare(token, password) == 0{
+		return true
+	}
+	return false
 }
