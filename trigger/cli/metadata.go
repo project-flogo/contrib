@@ -1,12 +1,16 @@
 package cli
 
-import "github.com/project-flogo/core/data/coerce"
+import (
+	"fmt"
+
+	"github.com/project-flogo/core/data/coerce"
+)
 
 const ovArgs = "args"
 
 type HandlerSettings struct {
 	Command string `md:"command"`
-	Default bool `md:"default"`
+	Default bool   `md:"default"`
 }
 
 type Output struct {
@@ -36,7 +40,9 @@ func (r *Reply) ToMap() map[string]interface{} {
 }
 
 func (r *Reply) FromMap(values map[string]interface{}) error {
-	var err error
-	r.Data, err = values["data"]
-	return err
+	if val, ok := values["data"]; ok {
+		r.Data = val
+		return fmt.Errorf("data not found in map")
+	}
+	return nil
 }
