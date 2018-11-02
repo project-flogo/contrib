@@ -6,10 +6,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
-	"runtime"
-	"regexp"
 )
 
 // DefaultPort is the default port for Ping service

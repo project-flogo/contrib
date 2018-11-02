@@ -1,5 +1,11 @@
 package ping
 
+import(
+	"runtime"
+	"regexp"
+	"encoding/json"
+)
+
 
 type Settings struct {
 	Port 		int 	`md:"port,required"`
