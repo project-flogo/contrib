@@ -18,7 +18,7 @@ bin/Ping
 
 Then open another terminal and run:
 ```
-curl --request GET http://localhost:9096/ping/details -H "Authorization: Bearer <Token>"
+curl http://localhost:9096/ping/details
 ```
 
 You should then see something like:
@@ -40,7 +40,7 @@ You should then see something like:
 ```
 #####
 ```
-curl --request GET http://localhost:9096/ping -H "Authorization: Bearer <Token>"
+curl http://localhost:9096/ping
 ```
 
 You should then see something like:
