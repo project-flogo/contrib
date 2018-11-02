@@ -110,11 +110,14 @@ func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Req
 	tr.LazyPrintf("Details through trace")
 	fmt.Println(reflect.TypeOf(tr).String())
 	fmt.Println("Trace:")
-	for k, v := range tr {
-		fmt.Print(k)
-		fmt.Println(":", v)
+	e := reflect.ValueOf(&tr).Elem()
+
+	for i := 0; i < e.NumField(); i++ {
+		fieldName := e.Type().Field(i).Name
+		fmt.Printf("%v\n", fieldName)
 	}
 
+	fmt.Println(tr)
 }
 
 // Start implements util.Managed.Start
