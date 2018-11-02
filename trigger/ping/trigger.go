@@ -85,7 +85,7 @@ func (t *Trigger) PingResponseHandlerShort(w http.ResponseWriter, req *http.Requ
 	if(Valid(token)) {
 		io.WriteString(w, "{\"response\":\"Ping successful\"}\n")
 	}else{
-		io.WriteString(w, "Error : Invalid Token")
+		io.WriteString(w, "Error : Invalid Token\n")
 	}
 }
 
@@ -97,7 +97,7 @@ func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Req
 		io.WriteString(w, "Details :\n")
 		io.WriteString(w, statsResult + "\n")
 	}else{
-		io.WriteString(w, "Error : Invalid Token")
+		io.WriteString(w, "Error : Invalid Token\n")
 	}
 
 	//Another way to get trace : more details
