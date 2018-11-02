@@ -18,10 +18,32 @@ bin/Ping
 
 Then open another terminal and run:
 ```
-curl http://localhost:9096/ping/details
+curl --request GET http://localhost:9096/ping/details -H "Authorization: Bearer <Token>"
 ```
 
 You should then see something like:
 ```
-{"Version":"1.1","Appversion":"","Appdescription":""}
+{
+   "Version":"1.1",
+   "Appversion":"",
+   "Appdescription":""
+}Details:{
+   "NumGoroutine":2,
+   "Alloc":762472,
+   "TotalAlloc":762472,
+   "Sys":69926912,
+   "Mallocs":1078,
+   "Frees":101,
+   "LiveObjects":977,
+   "NumGC":0
+}
+```
+#####
+```
+curl --request GET http://localhost:9096/ping -H "Authorization: Bearer <Token>"
+```
+
+You should then see something like:
+```
+{"response":"Ping successful"}
 ```

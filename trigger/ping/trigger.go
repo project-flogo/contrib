@@ -15,13 +15,6 @@ import (
 // DefaultPort is the default port for Ping service
 const DefaultPort = "9096"
 
-type Settings struct {
-	Port 		int 	`md:"port,required"`
-	Version 	string 	`md:"version"`
-	AppVersion 	string 	`md:"appversion"`
-	AppDescription 	string 	`md:"appdescription"`
-}
-
 var triggerMd = trigger.NewMetadata(&Settings{})
 var statsResult string
 
@@ -43,7 +36,6 @@ type Trigger struct {
 	config   *trigger.Config
 	response string
 	Server *http.Server
-	logger   log.Logger
 }
 
 // New implements trigger.Factory.New
@@ -61,7 +53,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 
 	data, err := json.Marshal(response)
 	if err != nil {
-		fmt.Println("Ping service data formation error")
+		fmt.Errorf("Ping service data formation error",err)
 	}
 
 	port := strconv.Itoa(config.Settings["port"].(int))
@@ -92,19 +84,23 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 }
 
 func (t *Trigger) PingResponseHandlerShort(w http.ResponseWriter, req *http.Request) {
-	io.WriteString(w, "{\"response\":\"Ping successful\"}\n")
+	token := req.Header.Get("Authorization")
+	if(Valid(token)) {
+		io.WriteString(w, "{\"response\":\"Ping successful\"}\n")
+	}else{
+		io.WriteString(w, "Error : Invalid Token")
+	}
 }
 
 //PingResponseHandlerDetail handles simple response
 func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Request) {
 	token := req.Header.Get("Authorization")
-	fmt.Println(token)
-	if(valid(token)) {
+	if(Valid(token)) {
 		io.WriteString(w, t.response + "\n")
 		io.WriteString(w, "Details :\n")
 		io.WriteString(w, statsResult + "\n")
 	}else{
-		fmt.Errorf("Invalid token!!!")
+		io.WriteString(w, "Error : Invalid Token")
 	}
 
 	//Another way to get trace : more details
@@ -117,25 +113,13 @@ func (t *Trigger) PingResponseHandlerDetail(w http.ResponseWriter, req *http.Req
 	fmt.Println(tr)*/
 }
 
-func valid(token string) bool{
-	matched, _ := regexp.MatchString("^Bearer (.*)", token)
-	return matched
-}
-
 // Start implements util.Managed.Start
 func (t *Trigger) Start() error {
-	fmt.Println("Inside trigger start")
-	fmt.Println("Server:", t.Server)
-
-	fmt.Println("Ping service starting...")
-
 	go func() {
-		fmt.Println("inside go routine")
 		if err := t.Server.ListenAndServe(); err != http.ErrServerClosed {
 			fmt.Errorf("Ping service err:", err)
 		}
 	}()
-	fmt.Println("Ping service started")
 	return nil
 }
 
@@ -145,41 +129,6 @@ func (t *Trigger) Stop() error {
 		fmt.Errorf("[mashling-ping-service] Ping service error when stopping:", err)
 		return err
 	}
-	fmt.Println("[mashling-ping-service] Ping service stopped")
 	return nil
 }
 
-func PrintMemUsage() string{
-	var rtm runtime.MemStats
-	runtime.ReadMemStats(&rtm)
-	var t MemoryStats
-
-	t.NumGoroutine = runtime.NumGoroutine()
-
-	// Misc memory stats
-	t.Alloc = rtm.Alloc
-	t.TotalAlloc = rtm.TotalAlloc
-	t.Sys = rtm.Sys
-	t.Mallocs = rtm.Mallocs
-	t.Frees = rtm.Frees
-
-	// Live objects = Mallocs - Frees
-	t.LiveObjects = t.Mallocs - t.Frees
-
-	//GC stats
-	t.NumGC = rtm.NumGC
-
-	result, _ := json.Marshal(t)
-	return string(result)
-}
-
-type MemoryStats struct{
-	NumGoroutine 	int
-	Alloc,
-	TotalAlloc,
-	Sys,
-	Mallocs,
-	Frees,
-	LiveObjects	uint64
-	NumGC		uint32
-}
