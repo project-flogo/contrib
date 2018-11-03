@@ -2,11 +2,16 @@ package cli
 
 import (
 	"context"
-	"encoding/json"
 	"flag"
 	"fmt"
-	"reflect"
+	"github.com/project-flogo/core/support"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
 
+	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
@@ -28,7 +33,7 @@ func (*Factory) Metadata() *trigger.Metadata {
 
 // New implements trigger.Factory.New
 func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
-	singleton = &Trigger{config: config}
+	singleton = &Trigger{config: config, commands: make(map[string]*handlerCmd)}
 	return singleton, nil
 }
 
@@ -36,15 +41,17 @@ var singleton *Trigger
 
 // Trigger CLI trigger struct
 type Trigger struct {
-	config       *trigger.Config
-	handlerInfos []*handlerInfo
-	defHandler   trigger.Handler
-	logger       log.Logger
+	config   *trigger.Config
+	logger   log.Logger
+	settings *Settings
+	commands map[string]*handlerCmd
 }
 
-type handlerInfo struct {
-	Invoke  bool
-	handler trigger.Handler
+type handlerCmd struct {
+	handler  trigger.Handler
+	settings *HandlerSettings
+	flagSet  *flag.FlagSet
+	cmdFlags map[string]interface{}
 }
 
 // Metadata implements trigger.Trigger.Metadata
@@ -56,46 +63,70 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
 	t.logger = ctx.Logger()
 
-	//level, err := logger.GetLevelForName(config.GetLogLevel())
-	//
-	//if err == nil {
-	//	log.SetLogLevel(level)
-	//}
-
 	if len(ctx.GetHandlers()) == 0 {
-		return fmt.Errorf("no Handlers found for trigger '%s'", t.config.Id)
+		return fmt.Errorf("no commands found for cli trigger '%s'", t.config.Id)
 	}
 
-	hasDefault := false
+	s := &Settings{}
+	err := metadata.MapToStruct(t.config.Settings, s, true)
+	if err != nil {
+		return err
+	}
+
+	t.settings = s
+
+	unamedHandler := false
 
 	// Init handlers
 	for _, handler := range ctx.GetHandlers() {
 
-		s := &HandlerSettings{Command: "default"}
+		handlerName := handler.Name()
+		if handlerName == "" {
+			if unamedHandler {
+				return fmt.Errorf("at most one handler can be unamed in the cli trigger")
+			} else {
+				unamedHandler = true
+				handlerName = "default"
+			}
+		}
+
+		if _, exists := t.commands[handlerName]; exists {
+			return fmt.Errorf("cannot have duplicate handler names in the cli trigger")
+		}
+		s := &HandlerSettings{}
 		err := metadata.MapToStruct(handler.Settings(), s, true)
 		if err != nil {
 			return err
+
 		}
 
-		if s.Default {
-			t.defHandler = handler
-			hasDefault = true
+		hCmd := &handlerCmd{handler: handler, settings: s, cmdFlags: make(map[string]interface{})}
+
+		// Subcommands
+		cmd := flag.NewFlagSet(handlerName, flag.ContinueOnError)
+		hCmd.flagSet = cmd
+
+		for _, desc := range s.FlagDesc {
+			descParts := strings.Split(desc.(string), "||")
+
+			name := strings.TrimSpace(descParts[0])
+			value := strings.TrimSpace(descParts[1])
+			usage := strings.TrimSpace(descParts[2])
+
+			if strings.EqualFold(value, "true") || strings.EqualFold(value, "false") {
+				tmpVal := strings.ToLower(value)
+				boolVal, _ := strconv.ParseBool(tmpVal)
+				boolPtr := cmd.Bool(name, boolVal, usage)
+				hCmd.cmdFlags[name] = boolPtr
+			} else {
+				strPtr := cmd.String(name, value, usage)
+				hCmd.cmdFlags[name] = strPtr
+			}
 		}
 
-		aInfo := &handlerInfo{Invoke: false, handler: handler}
-		t.handlerInfos = append(t.handlerInfos, aInfo)
+		log.RootLogger().Tracef("Adding command %s", handlerName)
+		t.commands[handlerName] = hCmd
 
-		xv := reflect.ValueOf(aInfo).Elem()
-		addr := xv.FieldByName("Invoke").Addr().Interface()
-
-		switch ptr := addr.(type) {
-		case *bool:
-			flag.BoolVar(ptr, s.Command, false, "")
-		}
-	}
-
-	if !hasDefault && len(t.handlerInfos) > 0 {
-		t.defHandler = t.handlerInfos[0].handler
 	}
 
 	return nil
@@ -112,32 +143,90 @@ func (t *Trigger) Stop() error {
 
 func Invoke() (string, error) {
 
-	var args []string
-	flag.Parse()
+	logger := trigger.GetLogger(support.GetRef(singleton))
 
-	// if we have additional args (after the cmd name and the flow cmd switch)
-	// stuff those into args and pass to Invoke(). The action will only receive the
-	// additional args that were intending for the action logic.
-	if arg := flag.Args(); len(arg) >= 2 {
-		args = flag.Args()[2:]
+
+	lvl := os.Getenv("FLOGO_LOG_LEVEL")
+	if lvl == "" {
+		log.SetLogLevel(log.RootLogger(), log.ErrorLevel)
+		log.SetLogLevel(logger, log.ErrorLevel)
+	} else {
+		log.SetLogLevel(logger, log.ToLogLevel(lvl))
 	}
 
-	for _, info := range singleton.handlerInfos {
+	cliPath, _ := os.Executable()
+	cliName := filepath.Base(cliPath)
 
-		if info.Invoke {
-			return singleton.Invoke(info.handler, args)
+	if singleton.settings.SingleCmd {
+
+	}
+
+	var cmdName string
+
+	if len(os.Args) == 1 {
+
+		if singleton.settings.DefaultCmd == "" {
+			help(cliName, singleton, false)
+			os.Exit(0)
 		}
+
+		cmdName = singleton.settings.DefaultCmd
+	} else {
+		cmdName = os.Args[1]
 	}
 
-	return singleton.Invoke(singleton.defHandler, args)
+	if strings.EqualFold(cmdName, "help") {
+		if len(os.Args) == 2 {
+			help(cliName, singleton, false)
+			return "", nil
+		}
+
+		subCmd := os.Args[2]
+
+		handlerCmd, exists := singleton.commands[subCmd]
+		if !exists {
+			fmt.Fprintf(os.Stderr, "Error: unknown command %#q\n", cmdName)
+			help(cliName, singleton, true)
+			os.Exit(1)
+		}
+
+		helpCmd(cliName, handlerCmd, false)
+		os.Exit(0)
+	}
+
+	handlerCmd, exists := singleton.commands[cmdName]
+	if !exists {
+		fmt.Fprintf(os.Stderr, "Error: unknown command %#q\n", cmdName)
+		help(cliName, singleton, true)
+		os.Exit(1)
+	}
+
+	handlerCmd.flagSet.SetOutput(ioutil.Discard)
+
+	err := handlerCmd.flagSet.Parse(os.Args[2:])
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %s.\n", err.Error())
+		printCmdUsage(cliName, handlerCmd, true)
+		os.Exit(1)
+	}
+
+	flags := make(map[string]interface{})
+
+	for key, value := range handlerCmd.cmdFlags {
+		flags[key] = value
+	}
+	args := handlerCmd.flagSet.Args()
+
+	return singleton.Invoke(handlerCmd.handler, flags, args)
 }
 
-func (t *Trigger) Invoke(handler trigger.Handler, args []string) (string, error) {
+func (t *Trigger) Invoke(handler trigger.Handler, flags map[string]interface{}, args []string) (string, error) {
 
-	t.logger.Infof("invoking handler '%s'", handler)
+	t.logger.Debugf("invoking handler '%s'", handler)
 
 	data := map[string]interface{}{
-		"args": args,
+		"args":  args,
+		"flags": flags,
 	}
 
 	results, err := handler.Handle(context.Background(), data)
@@ -148,14 +237,23 @@ func (t *Trigger) Invoke(handler trigger.Handler, args []string) (string, error)
 	}
 
 	replyData := results["data"]
+	stringData, _ := coerce.ToString(replyData)
 
-	if replyData != nil {
-		data, err := json.Marshal(replyData)
-		if err != nil {
-			return "", err
-		}
-		return string(data), nil
-	}
+	return stringData, nil
 
-	return "", nil
+	//if replyData != nil {
+	//	data, err := json.Marshal(replyData)
+	//	if err != nil {
+	//		return "", err
+	//	}
+	//	return string(data), nil
+	//}
+}
+
+func help(cliName string, t *Trigger, isErr bool) {
+	printMainUsage(cliName, t, isErr)
+}
+
+func helpCmd(cliName string, hc *handlerCmd, isErr bool) {
+	printCmdUsage(cliName, hc, isErr)
 }

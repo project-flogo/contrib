@@ -4,13 +4,24 @@ import "github.com/project-flogo/core/data/coerce"
 
 const ovArgs = "args"
 
+type Settings struct {
+	SingleCmd  bool   `md:"singleCmd"`
+	DefaultCmd string `md:"defaultCmd"`
+	Use        string `md:"use"`   //"flogo [flags] [command]",
+	Short      string `md:"short"` //"flogo cli",
+	Long       string `md:"long"`  //`flogo command line interface for flogo applications`,
+}
+
 type HandlerSettings struct {
-	Command string `md:"command"`
-	Default bool `md:"default"`
+	FlagDesc   []interface{} `md:"flags"`
+	Use        string `md:"use"`   //"flogo [flags] [command]",
+	Short      string `md:"short"` //"flogo cli",
+	Long       string `md:"long"`  //`flogo command line interface for flogo applications`,
 }
 
 type Output struct {
-	Args []interface{} `md:"args"`
+	Args    []interface{} `md:"args"`
+	Flags   map[string]interface{} `md:"flags"`
 }
 
 func (o *Output) ToMap() map[string]interface{} {
@@ -36,7 +47,6 @@ func (r *Reply) ToMap() map[string]interface{} {
 }
 
 func (r *Reply) FromMap(values map[string]interface{}) error {
-	var err error
-	r.Data, err = values["data"]
-	return err
+	r.Data, _ = values["data"]
+	return nil
 }
