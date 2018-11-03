@@ -1,0 +1,130 @@
+{
+  "name": "cli",
+  "description": " ",
+  "version": "1.0.0",
+  "type": "flogo:app",
+  "appModel": "1.0.0",
+  "imports": [
+    "github.com/project-flogo/contrib/trigger/cli",
+    "github.com/project-flogo/flow",
+    "github.com/project-flogo/contrib/activity/log"
+  ],
+  "triggers": [
+    {
+      "id": "cli",
+      "type": "cli",
+      "name": "simple",
+      "description": "Simple CLI Utility",
+      "settings": {
+        "use":"<command>",
+        "long":"A simple cli using flogo"
+      },
+      "handlers": [
+        {
+          "name":"test1",
+          "settings": {
+            "use":"[flags] [args]",
+            "short": "test command",
+            "long": "the test command",
+            "flags": [
+              "flag1||||the first value flag",
+              "flag2||false||the first bool flag"
+            ]
+          },
+          "action": {
+            "type": "flow",
+            "settings": {
+              "flowURI": "res://flow:command1"
+            },
+            "input" :{
+              "flags":"=$.flags",
+              "args":"=$.args"
+            }
+          }
+        },
+        {
+          "name":"test2",
+          "settings": {
+            "use":"[flags] [args]",
+            "short": "test2 command",
+            "long": "the test2 command",
+            "flags": [
+              "flag1||||the first value flag",
+              "flag2||false||the first bool flag"
+            ]
+          },
+          "action": {
+            "type": "flow",
+            "settings": {
+              "flowURI": "res://flow:command2"
+            },
+            "input" :{
+              "flags":"=$.flags",
+              "args":"=$.args"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:command1",
+      "data": {
+        "name": "command1",
+        "metadata": {
+          "input": [
+            {
+              "name": "flags",
+              "type": "object"
+            },
+            {
+              "name": "args",
+              "type": "array"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "log",
+            "activity": {
+              "type": "log",
+              "input": {
+                "message" : "=$flow.args"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow:command2",
+      "data": {
+        "name": "command2",
+        "metadata": {
+          "input": [
+            {
+              "name": "flags",
+              "type": "object"
+            },
+            {
+              "name": "args",
+              "type": "array"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "log",
+            "activity": {
+              "type": "log",
+              "input": {
+                "message" : "=$flow.flags"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
