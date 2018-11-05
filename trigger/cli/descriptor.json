@@ -6,10 +6,48 @@
   "title": "CLI Trigger",
   "description": "Simple CLI Trigger",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/trigger/cli",
+  "settings": [
+    {
+      "name": "singleCmd",
+      "type": "bool"
+    },
+    {
+      "name": "use",
+      "type": "string"
+    },
+    {
+      "name": "long",
+      "type": "string"
+    }
+  ],
+  "handler": {
+    "settings": [
+      {
+        "name": "flags",
+        "type": "array"
+      },
+      {
+        "name": "use",
+        "type": "string"
+      },
+      {
+        "name": "short",
+        "type": "string"
+      },
+      {
+        "name": "long",
+        "type": "string"
+      }
+    ]
+  },
   "output": [
     {
       "name": "args",
       "type": "array"
+    },
+    {
+      "name": "flags",
+      "type": "object"
     }
   ],
   "reply": [
@@ -17,17 +55,5 @@
       "name": "data",
       "type": "any"
     }
-  ],
-  "handler": {
-    "settings": [
-      {
-        "name": "command",
-        "type": "string"
-      },
-      {
-        "name": "default",
-        "type": "boolean"
-      }
-    ]
-  }
+  ]
 }

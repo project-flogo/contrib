@@ -4,8 +4,8 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/TIBCOSoftware/flogo-lib/app"
 	"github.com/project-flogo/core/support"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -165,12 +165,25 @@ func Invoke() (string, error) {
 
 	if len(os.Args) == 1 {
 
-		if singleton.settings.DefaultCmd == "" {
-			help(cliName, singleton, false)
-			os.Exit(0)
+		if singleton.settings.SingleCmd  {
+			//cli is a single command, assumes one handler
+			var hCmd *handlerCmd
+			for _, cmd := range singleton.commands {
+				hCmd = cmd
+				break
+			}
+
+			if hCmd == nil {
+				fmt.Fprintf(os.Stderr, "Error: cli improperly configured, needs at least one handler\n")
+				os.Exit(1)
+			}
+
+			flags, args := getFlagsAndArgs(hCmd, cliName, false)
+			return singleton.Invoke(hCmd.handler, flags, args)
 		}
 
-		cmdName = singleton.settings.DefaultCmd
+		help(cliName, singleton, false)
+		os.Exit(0)
 	} else {
 		cmdName = os.Args[1]
 	}
@@ -178,7 +191,7 @@ func Invoke() (string, error) {
 	if strings.EqualFold(cmdName, "help") {
 		if len(os.Args) == 2 {
 			help(cliName, singleton, false)
-			return "", nil
+			os.Exit(0)
 		}
 
 		subCmd := os.Args[2]
@@ -194,30 +207,22 @@ func Invoke() (string, error) {
 		os.Exit(0)
 	}
 
-	handlerCmd, exists := singleton.commands[cmdName]
+	if strings.EqualFold(cmdName, "version") {
+
+		fmt.Fprintf(os.Stdout, "%s version %s\n", cliName, app.GetVersion())
+		os.Exit(0)
+	}
+
+	hCmd, exists := singleton.commands[cmdName]
 	if !exists {
 		fmt.Fprintf(os.Stderr, "Error: unknown command %#q\n", cmdName)
 		help(cliName, singleton, true)
 		os.Exit(1)
 	}
 
-	handlerCmd.flagSet.SetOutput(ioutil.Discard)
+	flags, args := getFlagsAndArgs(hCmd, cliName, true)
 
-	err := handlerCmd.flagSet.Parse(os.Args[2:])
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %s.\n", err.Error())
-		printCmdUsage(cliName, handlerCmd, true)
-		os.Exit(1)
-	}
-
-	flags := make(map[string]interface{})
-
-	for key, value := range handlerCmd.cmdFlags {
-		flags[key] = value
-	}
-	args := handlerCmd.flagSet.Args()
-
-	return singleton.Invoke(handlerCmd.handler, flags, args)
+	return singleton.Invoke(hCmd.handler, flags, args)
 }
 
 func (t *Trigger) Invoke(handler trigger.Handler, flags map[string]interface{}, args []string) (string, error) {

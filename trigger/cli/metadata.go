@@ -3,20 +3,19 @@ package cli
 import "github.com/project-flogo/core/data/coerce"
 
 const ovArgs = "args"
+const ovFlags = "flags"
 
 type Settings struct {
 	SingleCmd  bool   `md:"singleCmd"`
-	DefaultCmd string `md:"defaultCmd"`
-	Use        string `md:"use"`   //"flogo [flags] [command]",
-	Short      string `md:"short"` //"flogo cli",
-	Long       string `md:"long"`  //`flogo command line interface for flogo applications`,
+	Use        string `md:"use"`
+	Long       string `md:"long"`
 }
 
 type HandlerSettings struct {
 	FlagDesc   []interface{} `md:"flags"`
-	Use        string `md:"use"`   //"flogo [flags] [command]",
-	Short      string `md:"short"` //"flogo cli",
-	Long       string `md:"long"`  //`flogo command line interface for flogo applications`,
+	Use        string `md:"use"`
+	Short      string `md:"short"`
+	Long       string `md:"long"`
 }
 
 type Output struct {
@@ -27,12 +26,14 @@ type Output struct {
 func (o *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
 		ovArgs: o.Args,
+		ovFlags: o.Flags,
 	}
 }
 
 func (o *Output) FromMap(values map[string]interface{}) error {
 	var err error
 	o.Args, err = coerce.ToArray(values[ovArgs])
+	o.Flags, err = coerce.ToObject(values[ovFlags])
 	return err
 }
 

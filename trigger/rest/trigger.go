@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -171,7 +172,7 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 			}
 
 			out.Content = content
-		default:
+		case "application/json":
 			var content interface{}
 			err := json.NewDecoder(r.Body).Decode(&content)
 			if err != nil {
@@ -185,6 +186,13 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 				}
 			}
 			out.Content = content
+		default:
+			b, err := ioutil.ReadAll(r.Body)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+			}
+
+			out.Content = string(b)
 		}
 
 		results, err := handler.Handle(context.Background(), out)

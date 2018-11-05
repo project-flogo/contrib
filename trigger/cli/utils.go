@@ -5,10 +5,37 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"strings"
 	"text/template"
 )
+
+
+func getFlagsAndArgs(hCmd *handlerCmd, cliName string, subCmd bool) (map[string]interface{}, []string) {
+	hCmd.flagSet.SetOutput(ioutil.Discard)
+
+	idx := 1
+	if subCmd {
+		idx = 2
+	}
+
+	err := hCmd.flagSet.Parse(os.Args[idx:])
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %s.\n", err.Error())
+		printCmdUsage(cliName, hCmd, true)
+		os.Exit(1)
+	}
+
+	flags := make(map[string]interface{})
+
+	for key, value := range hCmd.cmdFlags {
+		flags[key] = value
+	}
+	args := hCmd.flagSet.Args()
+
+	return flags, args
+}
 
 func printMainUsage(cliName string, trg *Trigger, isErr bool) {
 
@@ -27,6 +54,7 @@ func printMainUsage(cliName string, trg *Trigger, isErr bool) {
 		data.Cmds = append(data.Cmds, &mainCmdUsageData{Name: name, Short:cmd.settings.Short})
 	}
 	data.Cmds = append(data.Cmds, &mainCmdUsageData{Name: "help", Short:"help on command"})
+	data.Cmds = append(data.Cmds, &mainCmdUsageData{Name: "version", Short:"prints cli version"})
 
 	RenderTemplate(bw, mainUsageTpl, data)
 	bw.Flush()
