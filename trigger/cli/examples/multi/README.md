@@ -2,6 +2,15 @@
 # Multi-Command Example
 This example shows how to configure the CLI trigger to run as a cli with multiple commands. Help and version commands are automatically generated for multi-command CLIs.
 
+To build and run cli example and execute
+```
+flogo create -f flogo-multi-cli.json
+cd cli
+flogo build --shim cli
+./bin/cli
+```
+
+
 ## Configuration
 ```json
 {

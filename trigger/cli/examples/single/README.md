@@ -3,6 +3,14 @@
 This example shows how to configure the CLI trigger to run as a single command.  It assumes
 that there is one handler, which runs by default.
 
+To build and run cli example and execute
+```
+flogo create -f flogo-single-cli.json
+cd cli
+flogo build --shim cli
+./bin/cli
+```
+
 
 ## Configuration
 ```json
