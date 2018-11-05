@@ -4,8 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/TIBCOSoftware/flogo-lib/app"
-	"github.com/project-flogo/core/support"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -13,6 +11,8 @@ import (
 
 	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/metadata"
+	"github.com/project-flogo/core/engine"
+	"github.com/project-flogo/core/support"
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
 )
@@ -145,7 +145,6 @@ func Invoke() (string, error) {
 
 	logger := trigger.GetLogger(support.GetRef(singleton))
 
-
 	lvl := os.Getenv("FLOGO_LOG_LEVEL")
 	if lvl == "" {
 		log.SetLogLevel(log.RootLogger(), log.ErrorLevel)
@@ -165,7 +164,7 @@ func Invoke() (string, error) {
 
 	if len(os.Args) == 1 {
 
-		if singleton.settings.SingleCmd  {
+		if singleton.settings.SingleCmd {
 			//cli is a single command, assumes one handler
 			var hCmd *handlerCmd
 			for _, cmd := range singleton.commands {
@@ -209,7 +208,7 @@ func Invoke() (string, error) {
 
 	if strings.EqualFold(cmdName, "version") {
 
-		fmt.Fprintf(os.Stdout, "%s version %s\n", cliName, app.GetVersion())
+		fmt.Fprintf(os.Stdout, "%s version %s\n", cliName, engine.GetAppVersion())
 		os.Exit(0)
 	}
 
