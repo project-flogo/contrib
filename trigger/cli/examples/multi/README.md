@@ -66,3 +66,29 @@ This example shows how to configure the CLI trigger to run as a cli with multipl
  }
 ```
 
+
+### Help
+General Help: `cli help`
+```
+A simple cli using flogo
+Usage:
+    cli <command>
+
+Commands:
+    test1        test command
+    test2        test2 command
+    help         help on command
+    version      prints cli version
+```
+
+Command Help: `cli help test1`
+
+```
+the test command
+Usage:
+   cli test1 [flags] [args]
+
+Flags: 
+   -flag1 string        the first value flag
+   -flag2               the first bool flag
+```
