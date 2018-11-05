@@ -32,7 +32,7 @@ flogo build --shim cli
              "short": "test command",
              "long": "the test command",
              "flags": [
-               "flag1||||the first value flag",
+               "flag1||defaultValue||the first value flag",
                "flag2||false||the first bool flag"
              ]
            },
@@ -54,7 +54,7 @@ flogo build --shim cli
              "short": "test2 command",
              "long": "the test2 command",
              "flags": [
-               "flag1||||the first value flag",
+               "flag1||defaultValue||the first value flag",
                "flag2||false||the first bool flag"
              ]
            },
