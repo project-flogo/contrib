@@ -24,7 +24,7 @@ type Output struct {
 	QueryParams 	map[string]string 	`md:"queryParams"`
 	Params      	map[string]string 	`md:"params"`
 	Content     	interface{}       	`md:"content"`
-	Tracing	  	map[string]interface{} 	`md:"tracing"`
+	//Tracing	  	map[string]interface{} 	`md:"tracing"`
 
 }
 
@@ -34,25 +34,15 @@ func (o *Output) ToMap() map[string]interface{} {
 		"queryParams": o.QueryParams,
 		"params":     o.Params,
 		"content":     o.Content,
-		"tracing":	o.Tracing,
+		//"tracing":	o.Tracing,
 	}
 }
 
 func (o *Output) FromMap(values map[string]interface{}) error {
-	var err error
-	o.PathParams, err = values["pathParams"].(map[string]string)
-	if err != nil {
-		return err
-	}
-	o.QueryParams, err = values["queryParams"].(map[string]string)
-	if err != nil {
-		return err
-	}
-	o.Params, err = values["params"].(map[string]string)
-	if err != nil {
-		return err
-	}
+	o.PathParams = values["pathParams"].(map[string]string)
+	o.QueryParams = values["queryParams"].(map[string]string)
+	o.Params = values["params"].(map[string]string)
 	o.Content = values["content"].(interface{})
-	o.Tracing = values["tracing"].(map[string]interface{})
+	//o.Tracing = values["tracing"].(map[string]interface{})
 	return nil
 }

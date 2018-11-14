@@ -64,7 +64,7 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 
 // Init implements trigger.Init
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
-	t.runner = *action.Runner
+	//t.runner = *action.Runner
 	t.handlers = t.CreateHandlers()
 	return nil
 }
@@ -74,11 +74,11 @@ func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 	handlers := make(map[string]*OptimizedHandler)
 
 	for _, h := range t.config.Handlers {
-		t := h.Settings[settingDest]
-		if t == nil {
+		tr := h.Settings[settingDest]
+		if tr == nil {
 			continue
 		}
-		dest := t.(string)
+		dest := tr.(string)
 
 		handler := handlers[dest]
 		if handler == nil {
@@ -88,13 +88,13 @@ func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 
 		if condition := h.Settings[util.Flogo_Trigger_Handler_Setting_Condition]; condition != nil {
 			dispatch := &Dispatch{
-				actionID:   h.ActionId,
+				actionID:   t.config.Id,
 				condition:  condition.(string),
 				handlerCfg: h,
 			}
 			handler.dispatches = append(handler.dispatches, dispatch)
 		} else {
-			handler.defaultActionID = h.ActionId
+			handler.defaultActionID = t.config.Id
 			handler.defaultHandlerCfg = h
 		}
 	}
@@ -109,7 +109,7 @@ func (t *Trigger) Start() error {
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: true,
 	}
-	ca := t.config.GetSetting(settingCA)
+	ca := t.config.Settings[settingCA]
 	if ca != "" {
 		certificate, err := ioutil.ReadFile(ca)
 		if err != nil {
@@ -123,9 +123,9 @@ func (t *Trigger) Start() error {
 		}
 	}
 
-	id := t.config.GetSetting(settingID)
-	user := t.config.GetSetting(settingUser)
-	password := t.config.GetSetting(settingPassword)
+	id := t.config.Settings[settingID]
+	user := t.config.Settings[settingUser]
+	password := t.config.Settings[settingPassword]
 	options := &eftl.Options{
 		ClientID:  id,
 		Username:  user,
@@ -133,7 +133,7 @@ func (t *Trigger) Start() error {
 		TLSConfig: tlsConfig,
 	}
 
-	url := t.config.GetSetting(settingURL)
+	url := t.config.Settings[settingURL]
 	errorsChannel := make(chan error, 1)
 	t.connection, err = eftl.Connect(url, options, errorsChannel)
 	if err != nil {
