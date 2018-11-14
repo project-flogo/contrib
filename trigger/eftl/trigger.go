@@ -49,7 +49,6 @@ type Trigger struct {
 	handlers   map[string]*OptimizedHandler
 	connection *eftl.Connection
 	stop       chan bool
-	tracer     *util.Tracer
 }
 
 // New implements trigger.Factory.New
@@ -106,11 +105,6 @@ func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 
 // Start implements ext.Trigger.Start
 func (t *Trigger) Start() error {
-	err := t.tracer.ConfigureTracer(t.config.Settings, GetLocalIP(), t.config.Name)
-	if err != nil {
-		logger.Errorf("configure tracer failed: %s", err)
-		return err
-	}
 
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: true,
@@ -198,7 +192,7 @@ func (t *Trigger) Stop() error {
 	if t.stop != nil {
 		t.stop <- true
 	}
-	return t.tracer.Close()
+	return true
 }
 
 // RunAction starts a new Process Instance
