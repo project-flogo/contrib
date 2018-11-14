@@ -13,9 +13,9 @@ import (
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/support/log"
 
-	condition "github.com/TIBCOSoftware/mashling/lib/conditions"
-	"github.com/TIBCOSoftware/mashling/lib/eftl"
-	"github.com/TIBCOSoftware/mashling/lib/util"
+	condition "github.com/mashling/commons/lib/conditions"
+	"github.com/mashling/commons/lib/eftl"
+	"github.com/mashling/commons/lib/util"
 )
 
 const (

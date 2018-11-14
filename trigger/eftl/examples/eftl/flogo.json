@@ -1,5 +1,5 @@
 {
-  "name": "EFTL_Trigger",
+  "name": "eftl",
   "type": "flogo:app",
   "version": "1.0.0",
   "description": "This is a EFTL Trigger",
@@ -12,7 +12,7 @@
       "ref": "github.com/project-flogo/contrib/trigger/eftl",
       "settings": {
         "tracer": "zipkin",
-        "tracerEndpoint": "http://localhost:9411/api/v1/spans"
+        "tracerEndpoint": "http://localhost:9411/api/v1/spans",
         "url": "ws://localhost:9191/channel",
         "id": "eftl",
         "user": "",
@@ -21,12 +21,12 @@
       "handlers": [
         {
           "settings": {
-            "dest": "GET",
-            "Condition": "/{triggerName}/swagger"
+            "dest": "sample",
+            "Condition": "true"
           },
           "actions": [
             {
-              "id": "swaggertrigger"
+              "id": "sampleService"
             }
           ]
         }
@@ -35,7 +35,7 @@
   ],
   "resources": [
     {
-      "id": "microgateway:jwt",
+      "id": "sampleService",
       "compressed": false,
       "data": {
         "name": "Pets",
@@ -47,15 +47,34 @@
             }
           }
         ],
-        "responses": [],
+        "responses": [
+          {
+            "if": "$.PetStorePets.outputs.result.status != 'available'",
+            "error": true,
+            "output": {
+              "code": 403,
+              "data": {
+                "error": "Failure"
+              }
+            }
+          },
+          {
+            "if": "$.PetStorePets.outputs.result.status == 'available'",
+            "error": false,
+            "output": {
+              "code": 200,
+              "data": "=$.PetStorePets.outputs.result"
+            }
+          }
+        ],
         "services": [
           {
             "name": "PetStorePets",
             "description": "Get pets by ID from the petstore",
             "ref": "github.com/project-flogo/contrib/activity/rest",
             "settings": {
-              "uri": "https://petstore.swagger.io/v2/pet/:petId",
-              "method": "GET"
+              "uri": "http://localhost:8181/a",
+              "method": "POST"
             }
           }
         ]
@@ -66,17 +85,9 @@
     {
       "ref": "github.com/project-flogo/microgateway",
       "settings": {
-        "uri": "microgateway:jwt"
+        "uri": "sampleService"
       },
-      "id": "swaggertrigger",
-      "metadata": null
-    },
-    {
-      "ref": "github.com/project-flogo/microgateway",
-      "settings": {
-        "uri": "microgateway:jwt"
-      },
-      "id": "microgateway:jwt",
+      "id": "sampleService",
       "metadata": null
     }
   ]
