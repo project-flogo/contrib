@@ -6,7 +6,6 @@ import (
 	"crypto/x509"
 	"fmt"
 	"io/ioutil"
-	"net"
 	"os"
 
 	"github.com/project-flogo/core/trigger"
@@ -50,7 +49,7 @@ type Trigger struct {
 	handlers   map[string]*OptimizedHandler
 	connection *eftl.Connection
 	stop       chan bool
-	tracer     util.Tracer
+	tracer     *util.Tracer
 }
 
 // New implements trigger.Factory.New
