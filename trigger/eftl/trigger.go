@@ -11,7 +11,7 @@ import (
 	"github.com/project-flogo/core/trigger"
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/support/log"
-
+	"github.com/project-flogo/core/data/metadata"
 	condition "github.com/mashling/commons/lib/conditions"
 	"github.com/mashling/commons/lib/eftl"
 	"github.com/mashling/commons/lib/util"
@@ -58,7 +58,6 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return &Trigger{}, nil
 }
 
@@ -111,7 +110,7 @@ func (t *Trigger) Start() error {
 	}
 	ca := t.config.Settings[settingCA]
 	if ca != "" {
-		certificate, err := ioutil.ReadFile(ca)
+		certificate, err := ioutil.ReadFile(ca).(string)
 		if err != nil {
 			logger.Errorf("can't open certificate", err)
 			return err
@@ -127,24 +126,24 @@ func (t *Trigger) Start() error {
 	user := t.config.Settings[settingUser]
 	password := t.config.Settings[settingPassword]
 	options := &eftl.Options{
-		ClientID:  id,
-		Username:  user,
-		Password:  password,
-		TLSConfig: tlsConfig,
+		ClientID:  id.(string),
+		Username:  user.(string),
+		Password:  password.(string),
+		TLSConfig: tlsConfig.(string),
 	}
 
 	url := t.config.Settings[settingURL]
 	errorsChannel := make(chan error, 1)
-	t.connection, err = eftl.Connect(url, options, errorsChannel)
+	connectVal, err := eftl.Connect(url.(string), options, errorsChannel)
 	if err != nil {
 		logger.Errorf("connection failed: %s", err)
 		return err
 	}
-
+	t.connection = connectVal
 	messages := make(chan eftl.Message, 1000)
 	for dest := range t.handlers {
 		matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", dest)
-		_, err = t.connection.Subscribe(matcher, "", messages)
+		_, err := t.connection.Subscribe(matcher, "", messages)
 		if err != nil {
 			logger.Errorf("subscription failed: %s", err)
 			return err
