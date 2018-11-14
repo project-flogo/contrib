@@ -15,6 +15,7 @@ import (
 	condition "github.com/mashling/commons/lib/conditions"
 	"github.com/mashling/commons/lib/eftl"
 	"github.com/mashling/commons/lib/util"
+	opentracing "github.com/opentracing/opentracing-go"
 )
 
 const (
@@ -110,7 +111,7 @@ func (t *Trigger) Start() error {
 	}
 	ca := t.config.Settings[settingCA]
 	if ca != "" {
-		certificate, err := ioutil.ReadFile(ca).(string)
+		certificate, err := ioutil.ReadFile(ca.(string))
 		if err != nil {
 			logger.Errorf("can't open certificate", err)
 			return err
@@ -129,7 +130,7 @@ func (t *Trigger) Start() error {
 		ClientID:  id.(string),
 		Username:  user.(string),
 		Password:  password.(string),
-		TLSConfig: tlsConfig.(string),
+		TLSConfig: tlsConfig,
 	}
 
 	url := t.config.Settings[settingURL]
@@ -191,7 +192,7 @@ func (t *Trigger) Stop() error {
 	if t.stop != nil {
 		t.stop <- true
 	}
-	return true
+	return nil
 }
 
 // RunAction starts a new Process Instance
@@ -214,9 +215,17 @@ func (t *Trigger) RunAction(handler *OptimizedHandler, dest string, content []by
 	}
 
 	actionURI, handlerCfg := handler.GetActionID(string(content), span)
-	action := action.Get(actionURI)
-	context := trigger.NewContextWithData(context.Background(), &trigger.ContextData{Attrs: startAttrs, HandlerCfg: handlerCfg})
-	_, replyData, err := t.runner.Run(context, action, actionURI, nil)
+	//action := action.Get(actionURI)
+	var actions = nil
+	actionArray := handlerCfg.Actions
+	for _, act := range actionArray {
+		if (act.Act.Metadata.Id == actionURI){
+			actions = act.Act
+			break
+		}
+	}
+	context := trigger.NewHandlerContext(context.Background(), &trigger.ContextData{Attrs: startAttrs, HandlerCfg: handlerCfg})
+	replyData, err := t.runner.RunAction(context, actions, actionURI)
 	if err != nil {
 		span.Error("Error starting action: %v", err)
 	}
