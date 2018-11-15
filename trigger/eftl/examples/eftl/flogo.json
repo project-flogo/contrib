@@ -11,7 +11,7 @@
       "id": "flogo-eftl",
       "ref": "github.com/project-flogo/contrib/trigger/eftl",
       "settings": {
-        "url": "ws://localhost:9191/channel",
+        "url": "http://localhost:9191/channel",
         "id": "eftl",
         "user": "",
         "password": ""
