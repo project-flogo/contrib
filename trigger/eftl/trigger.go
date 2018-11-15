@@ -462,8 +462,13 @@ func (h *OptimizedHandler) GetActionID(payload string, span Span) (string, *trig
 		fmt.Println("ActionID :", actionID)
 		//logger.Debugf("dispatch not resolved. Continue with default action - %v", actionID)
 	}
-	actionID = "microgateway:Pets"
-	handlerCfg = h.defaultHandlerCfg
+	for _, dispatch := range h.dispatches {
+		actionID = dispatch.actionID
+		handlerCfg = dispatch.handlerCfg
+		fmt.Println("actionID:", actionID)
+	}
+	//actionID = "microgateway:Pets"
+	//handlerCfg = h.defaultHandlerCfg
 	return actionID, handlerCfg
 }
 
