@@ -24,7 +24,7 @@
           },
           "actions": [
             {
-              "id": "sampleService"
+              "id": "microgateway:Pets"
             }
           ]
         }
@@ -33,7 +33,7 @@
   ],
   "resources": [
     {
-      "id": "sampleService",
+      "id": "microgateway:Pets",
       "compressed": false,
       "data": {
         "name": "Pets",
@@ -83,9 +83,9 @@
     {
       "ref": "github.com/project-flogo/microgateway",
       "settings": {
-        "uri": "sampleService"
+        "uri": "microgateway:Pets"
       },
-      "id": "sampleService",
+      "id": "microgateway:Pets",
       "metadata": null
     }
   ]
