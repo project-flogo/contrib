@@ -15,7 +15,7 @@ import (
 	condition "github.com/mashling/commons/lib/conditions"
 	"github.com/mashling/commons/lib/eftl"
 	"github.com/mashling/commons/lib/util"
-	//opentracing "github.com/opentracing/opentracing-go"
+	opentracing "github.com/opentracing/opentracing-go"
 )
 
 const (
