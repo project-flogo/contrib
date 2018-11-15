@@ -104,7 +104,7 @@ func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 
 // Start implements ext.Trigger.Start
 func (t *Trigger) Start() error {
-
+	fmt.Println("Inside start")
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: true,
 	}
@@ -125,6 +125,7 @@ func (t *Trigger) Start() error {
 	id := t.config.Settings[settingID]
 	user := t.config.Settings[settingUser]
 	password := t.config.Settings[settingPassword]
+	fmt.Println("ID : ", id)
 	options := &eftl.Options{
 		ClientID:  id.(string),
 		Username:  user.(string),
@@ -133,6 +134,7 @@ func (t *Trigger) Start() error {
 	}
 
 	url := t.config.Settings[settingURL]
+	fmt.Println("URL : ", url)
 	errorsChannel := make(chan error, 1)
 	connectVal, err := eftl.Connect(url.(string), options, errorsChannel)
 	if err != nil {
@@ -155,6 +157,7 @@ func (t *Trigger) Start() error {
 		for {
 			select {
 			case message := <-messages:
+				fmt.Println("Inside case")
 				value := message["_dest"]
 				dest, ok := value.(string)
 				if !ok {
@@ -176,6 +179,7 @@ func (t *Trigger) Start() error {
 			case err := <-errorsChannel:
 				logger.Errorf("connection error: %s", err)
 			case <-t.stop:
+				fmt.Println("inside stop")
 				return
 			}
 		}
