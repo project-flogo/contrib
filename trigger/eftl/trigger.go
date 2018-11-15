@@ -80,9 +80,11 @@ func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 			continue
 		}
 		actionArray := h.Actions
+		actID := ""
 		for _, act := range actionArray {
 			fmt.Println("action :")
 			fmt.Println("%+v\n", act.Config.Id)
+			actID = act.Config.Id
 		}
 		dest := tr.(string)
 
@@ -95,13 +97,13 @@ func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 		if condition := h.Settings["Condition"]; condition != nil {
 			fmt.Println("Before dispatch")
 			dispatch := &Dispatch{
-				actionID:   "microgateway:Pets",
+				actionID: actID  ,
 				condition:  condition.(string),
 				handlerCfg: h,
 			}
 			handler.dispatches = append(handler.dispatches, dispatch)
 		} else {
-			handler.defaultActionID = t.config.Id
+			handler.defaultActionID = actID
 			handler.defaultHandlerCfg = h
 		}
 	}
