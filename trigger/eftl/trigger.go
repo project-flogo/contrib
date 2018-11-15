@@ -74,6 +74,7 @@ func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 	handlers := make(map[string]*OptimizedHandler)
 	fmt.Println("Handlers : ", t.config.Handlers)
 	for _, h := range t.config.Handlers {
+		fmt.Println("Single handler :", h)
 		tr := h.Settings[settingDest]
 		if tr == nil {
 			continue
@@ -85,10 +86,11 @@ func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 			handler = &OptimizedHandler{}
 			handlers[dest] = handler
 		}
-
-		if condition := h.Settings[util.Flogo_Trigger_Handler_Setting_Condition]; condition != nil {
+					//constant replaced
+		if condition := h.Settings["Condition"]; condition != nil {
+			fmt.Println("Before dispatch")
 			dispatch := &Dispatch{
-				actionID:   t.config.Id,
+				actionID:   h.actions["id"],
 				condition:  condition.(string),
 				handlerCfg: h,
 			}
@@ -98,6 +100,7 @@ func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 			handler.defaultHandlerCfg = h
 		}
 	}
+	fmt.Println("Handlers returning:", handlers)
 	return handlers
 }
 
