@@ -218,7 +218,7 @@ func (t *Trigger) RunAction(handler *OptimizedHandler, dest string, content []by
 	actionURI, handlerCfg := handler.GetActionID(string(content), span)
 	//action := action.Get(actionURI)
 	actionArray := handlerCfg.Actions
-	var actions *action.Action
+	var actions = &action.Action
 	for _, act := range actionArray {
 		if (act.Config.Id == actionURI){
 			actions = act.Act
