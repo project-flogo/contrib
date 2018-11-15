@@ -449,7 +449,8 @@ func (h *OptimizedHandler) GetActionID(payload string, span Span) (string, *trig
 	if actionID == "" {
 		actionID = h.defaultActionID
 		handlerCfg = h.defaultHandlerCfg
-		logger.Debugf("dispatch not resolved. Continue with default action - %v", actionID)
+		fmr.Println("ActionID :", actionID)
+		//logger.Debugf("dispatch not resolved. Continue with default action - %v", actionID)
 	}
 
 	return actionID, handlerCfg
