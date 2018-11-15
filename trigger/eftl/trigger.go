@@ -15,7 +15,7 @@ import (
 	condition "github.com/mashling/commons/lib/conditions"
 	"github.com/mashling/commons/lib/eftl"
 	"github.com/mashling/commons/lib/util"
-	opentracing "github.com/opentracing/opentracing-go"
+	//opentracing "github.com/opentracing/opentracing-go"
 )
 
 const (
@@ -167,6 +167,7 @@ func (t *Trigger) Start() error {
 					continue
 				}
 				value = message["content"]
+				fmt.Println("value :", value)
 				content, ok := value.([]byte)
 				if !ok {
 					content = []byte{}
@@ -202,12 +203,13 @@ func (t *Trigger) RunAction(handler *OptimizedHandler, dest string, content []by
 		Span: opentracing.StartSpan(dest),
 	}
 	defer span.Finish()
-
+	fmt.Println("dest :", dest)
+	fmt.Println("content :", content)
 	span.SetTag("dest", dest)
 	span.SetTag("content", string(content))
 
 	replyTo, data := t.constructStartRequest(content, span)
-
+	fmt.Println("data :", data)
 	//to do :::::
 	//startAttrs, err := t.metadata.Output(data, false)
 	//if err != nil {
