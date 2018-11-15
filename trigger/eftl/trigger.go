@@ -72,7 +72,7 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 // CreateHandlers creates handlers mapped to thier topic
 func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 	handlers := make(map[string]*OptimizedHandler)
-
+	fmt.Println("Handlers : ", t.config.Handlers)
 	for _, h := range t.config.Handlers {
 		tr := h.Settings[settingDest]
 		if tr == nil {
