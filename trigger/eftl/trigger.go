@@ -64,7 +64,7 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 
 // Init implements trigger.Init
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
-	//t.runner = *action.Runner
+	t.runner = *action.Runner
 	t.handlers = t.CreateHandlers()
 	return nil
 }
@@ -218,14 +218,15 @@ func (t *Trigger) RunAction(handler *OptimizedHandler, dest string, content []by
 	actionURI, handlerCfg := handler.GetActionID(string(content), span)
 	//action := action.Get(actionURI)
 	actionArray := handlerCfg.Actions
-	var actions interface{}
+	var actions *action.Action
 	for _, act := range actionArray {
 		if (act.Config.Id == actionURI){
 			actions = act.Act
 			break
 		}
 	}
-	context := trigger.NewHandlerContext(context.Context, handlerCfg)
+
+	context := trigger.NewHandlerContext(context.Background(), handlerCfg)
 	replyData, err := t.runner.RunAction(context, actions, map[string]interface{}{})
 	if err != nil {
 		span.Error("Error starting action: %v", err)
