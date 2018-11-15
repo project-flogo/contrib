@@ -175,6 +175,9 @@ func (t *Trigger) Start() error {
 				if !ok {
 					content = []byte{}
 				}
+				fmt.Println("Handler val:", handler)
+				fmt.Println("Dest val:", dest)
+				fmt.Println("Content val:", content)
 				t.RunAction(handler, dest, content)
 			case err := <-errorsChannel:
 				logger.Errorf("connection error: %s", err)
@@ -201,6 +204,7 @@ func (t *Trigger) Stop() error {
 
 // RunAction starts a new Process Instance
 func (t *Trigger) RunAction(handler *OptimizedHandler, dest string, content []byte) {
+	fmt.Println("Inside Runaction")
 	logger.Infof("EFTL Trigger: Received request for id '%s'", t.config.Id)
 
 	span := Span{
