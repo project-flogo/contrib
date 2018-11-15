@@ -205,7 +205,7 @@ func (t *Trigger) Stop() error {
 // RunAction starts a new Process Instance
 func (t *Trigger) RunAction(handler *OptimizedHandler, dest string, content []byte) {
 	fmt.Println("Inside Runaction")
-	logger.Infof("EFTL Trigger: Received request for id '%s'", t.config.Id)
+	//logger.Infof("EFTL Trigger: Received request for id '%s'", t.config.Id)
 
 	span := Span{
 		Span: opentracing.StartSpan(dest),
