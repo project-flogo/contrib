@@ -206,7 +206,7 @@ func (t *Trigger) RunAction(handler *OptimizedHandler, dest string, content []by
 	span.SetTag("dest", dest)
 	span.SetTag("content", string(content))
 
-	replyTo, /*data*/_ := t.constructStartRequest(content, span)
+	replyTo, data := t.constructStartRequest(content, span)
 
 	//to do :::::
 	//startAttrs, err := t.metadata.Output(data, false)
@@ -226,7 +226,7 @@ func (t *Trigger) RunAction(handler *OptimizedHandler, dest string, content []by
 	}
 
 	context := trigger.NewHandlerContext(context.Background(), handlerCfg)
-	replyData, err := t.runner.RunAction(context, actions, map[string]interface{}{})
+	replyData, err := t.runner.RunAction(context, actions, data)
 	if err != nil {
 		span.Error("Error starting action: %v", err)
 	}
