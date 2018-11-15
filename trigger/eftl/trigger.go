@@ -211,14 +211,14 @@ func (t *Trigger) RunAction(handler *OptimizedHandler, dest string, content []by
 
 	//to do :::::
 	//startAttrs, err := t.metadata.Output(data, false)
-	if err != nil {
-		span.Error("Error setting up attrs: %v", err)
-	}
+	//if err != nil {
+	//	span.Error("Error setting up attrs: %v", err)
+	//}
 
 	actionURI, handlerCfg := handler.GetActionID(string(content), span)
 	//action := action.Get(actionURI)
-	var actions = nil
 	actionArray := handlerCfg.Actions
+	var actions interface{}
 	for _, act := range actionArray {
 		if (act.Config.Id == actionURI){
 			actions = act.Act
