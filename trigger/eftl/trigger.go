@@ -53,18 +53,18 @@ type Trigger struct {
 }
 
 // New implements trigger.Factory.New
-func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
+func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	s := &Settings{}
 	err := metadata.MapToStruct(config.Settings, s, true)
 	if err != nil {
 		return nil, err
 	}
-	return &Trigger{}, nil
+
+	return &Trigger{metadata: f.Metadata(),config: config}, nil
 }
 
 // Init implements trigger.Init
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
-	//t.runner = *action.Runner
 	t.handlers = t.CreateHandlers()
 	return nil
 }
@@ -98,7 +98,6 @@ func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 			handler.defaultHandlerCfg = h
 		}
 	}
-
 	return handlers
 }
 
