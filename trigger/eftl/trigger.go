@@ -207,9 +207,10 @@ func (t *Trigger) RunAction(handler *OptimizedHandler, dest string, content []by
 	span.SetTag("dest", dest)
 	span.SetTag("content", string(content))
 
-	replyTo, data := t.constructStartRequest(content, span)
+	replyTo, /*data*/_ := t.constructStartRequest(content, span)
 
-	startAttrs, err := t.metadata.OutputsToAttrs(data, false)
+	//to do :::::
+	//startAttrs, err := t.metadata.Output(data, false)
 	if err != nil {
 		span.Error("Error setting up attrs: %v", err)
 	}
@@ -219,13 +220,13 @@ func (t *Trigger) RunAction(handler *OptimizedHandler, dest string, content []by
 	var actions = nil
 	actionArray := handlerCfg.Actions
 	for _, act := range actionArray {
-		if (act.Act.Metadata.Id == actionURI){
+		if (act.Config.Id == actionURI){
 			actions = act.Act
 			break
 		}
 	}
-	context := trigger.NewHandlerContext(context.Background(), &trigger.ContextData{Attrs: startAttrs, HandlerCfg: handlerCfg})
-	replyData, err := t.runner.RunAction(context, actions, actionURI)
+	context := trigger.NewHandlerContext(context.Context, handlerCfg)
+	replyData, err := t.runner.RunAction(context, actions, map[string]interface{}{})
 	if err != nil {
 		span.Error("Error starting action: %v", err)
 	}
@@ -353,14 +354,14 @@ func (t *Trigger) constructStartRequest(message []byte, span Span) (string, map[
 		}
 	}
 
-	ctx := opentracing.ContextWithSpan(context.Background(), span)
+	//ctx := opentracing.ContextWithSpan(context.Background(), span)
 
 	data := map[string]interface{}{
 		"params":      pathParams,
 		"pathParams":  pathParams,
 		"queryParams": queryParams,
 		"content":     content,
-		"tracing":     ctx,
+		//"tracing":     ctx,
 	}
 
 	return replyTo, data
