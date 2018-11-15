@@ -14,7 +14,8 @@
         "url": "ws://localhost:9191/channel",
         "id": "eftl",
         "user": "",
-        "password": ""
+        "password": "",
+        "ca":""
       },
       "handlers": [
         {
