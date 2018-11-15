@@ -82,7 +82,7 @@ func (t *Trigger) CreateHandlers() map[string]*OptimizedHandler {
 		actionArray := h.Actions
 		for _, act := range actionArray {
 			fmt.Println("action :")
-			fmt.Println("%+v\n", act)
+			fmt.Println("%+v\n", act.Config.Id)
 		}
 		dest := tr.(string)
 
