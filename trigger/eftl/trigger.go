@@ -187,7 +187,7 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
 
 	replyData, err := handler.Handle(context.Background(), data)
 	if err != nil {
-		t.logger.Errorf("Error starting action: %v", err)
+		t.logger.Errorf("Error starting action: %v", err.Error())
 	}
 
 	if replyTo == "" {
@@ -195,7 +195,7 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
 	}
 	reply, err := util.Marshal(replyData)
 	if err != nil {
-		t.logger.Errorf("failed to marshal reply data: %v", err)
+		t.logger.Errorf("failed to marshal reply data: %v", err.Error())
 		return
 	}
 	err = t.connection.Publish(eftl.Message{
@@ -203,7 +203,7 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
 		"content": reply,
 	})
 	if err != nil {
-		t.logger.Errorf("failed to send reply data: %v", err)
+		t.logger.Errorf("failed to send reply data: %v", err.Error())
 	}
 }
 
