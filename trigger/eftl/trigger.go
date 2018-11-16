@@ -148,7 +148,11 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 				}
 				fmt.Println("Dest val:", dest)
 				fmt.Println("Content val:", content)
-				t.RunAction(content,handler)
+				err = t.RunAction(content,handler)
+				if err != nil{
+					t.logger.Errorf(" RunAction failed: %s", err)
+					return err
+				}
 			case err := <-errorsChannel:
 				t.logger.Errorf("connection error: %s", err)
 			case <-t.stop:
@@ -178,7 +182,7 @@ func (t *Trigger) Stop() error {
 }
 
 // RunAction starts a new Process Instance
-func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
+func (t *Trigger) RunAction(content []byte, handler trigger.Handler) error {
 	fmt.Println("Inside Runaction")
 	fmt.Println("content :", string(content))
 
@@ -187,7 +191,7 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
 
 	replyData, err := handler.Handle(context.Background(), data)
 	if err != nil {
-		t.logger.Errorf("Error starting action: %v", err.Error())
+		t.logger.Errorf("Error starting action: %v", err)
 	}
 
 	if replyTo == "" {
@@ -195,7 +199,7 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
 	}
 	reply, err := util.Marshal(replyData)
 	if err != nil {
-		t.logger.Errorf("failed to marshal reply data: %v", err.Error())
+		t.logger.Errorf("failed to marshal reply data: %v", err)
 		return
 	}
 	fmt.Println("replyTo :", replyTo)
@@ -205,7 +209,7 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
 		"content": reply,
 	})
 	if err != nil {
-		t.logger.Errorf("failed to send reply data: %v", err.Error())
+		t.logger.Errorf("failed to send reply data: %v", err)
 	}
 }
 
