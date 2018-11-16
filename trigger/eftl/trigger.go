@@ -151,7 +151,6 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 				err = t.RunAction(content,handler)
 				if err != nil{
 					t.logger.Errorf(" RunAction failed: %s", err)
-					return err
 				}
 			case err := <-errorsChannel:
 				t.logger.Errorf("connection error: %s", err)
@@ -195,12 +194,13 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) error {
 	}
 
 	if replyTo == "" {
-		return
+		t.logger.Errorf("reply data is empty: %v", err)
+		return err
 	}
 	reply, err := util.Marshal(replyData)
 	if err != nil {
 		t.logger.Errorf("failed to marshal reply data: %v", err)
-		return
+		return err
 	}
 	fmt.Println("replyTo :", replyTo)
 	fmt.Println("reply :", reply)
@@ -211,6 +211,7 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) error {
 	if err != nil {
 		t.logger.Errorf("failed to send reply data: %v", err)
 	}
+	return nil
 }
 
 func (t *Trigger) constructStartRequest(message []byte) (string, *Output) {
