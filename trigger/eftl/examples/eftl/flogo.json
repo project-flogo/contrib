@@ -48,7 +48,7 @@
         ],
         "responses": [
           {
-            "if": "$.PetStorePets.response.outputs.code != 200",
+            "if": "$.PetStorePets.outputs.code != 200",
             "error": true,
             "output": {
               "code": 403,
@@ -58,11 +58,11 @@
             }
           },
           {
-            "if": "$.PetStorePets.response.outputs.code == 200",
+            "if": "$.PetStorePets.outputs.code == 200",
             "error": false,
             "output": {
               "code": 200,
-              "data": "=$.PetStorePets.outputs.result"
+              "data": "=$.PetStorePets.outputs.data"
             }
           }
         ],
