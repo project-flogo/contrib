@@ -75,10 +75,6 @@
     {
       "name": "content",
       "type": "object"
-    },
-    {
-      "name": "tracing",
-      "type": "any"
     }
   ],
   "handler": {

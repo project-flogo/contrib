@@ -6,7 +6,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	"io/ioutil"
-	"os"
+	//"os"
 
 	"github.com/project-flogo/core/trigger"
 	"github.com/project-flogo/core/action"
@@ -71,14 +71,16 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		if err != nil {
 			return err
 		}
-		t.newActionHandler(handler)
-		//router.Handle(method, path, newActionHandler(t, handler))
+		err = t.newActionHandler(handler)
+		if err != nil {
+			return err
+		}
+
 	}
-	//t.handlers = t.CreateHandlers()
 	return nil
 }
 
-func (t *Trigger) newActionHandler(handler trigger.Handler){
+func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 	fmt.Println("Inside Trigger action handler")
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: true,
@@ -117,7 +119,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler){
 	}
 	t.connection = connectVal
 	messages := make(chan eftl.Message, 1000)
-	matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", handler.Settings["dest"])
+	matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", handler.Settings[settingDest])
 	_, err = t.connection.Subscribe(matcher, "", messages)
 	if err != nil {
 		t.logger.Errorf("subscription failed: %s", err)
@@ -154,7 +156,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler){
 			}
 		}
 	}()
-
+	return nil
 }
 
 
@@ -189,7 +191,6 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
 	if err != nil {
 		t.logger.Errorf("Error starting action: %v", err)
 	}
-	t.logger.Debugf("Ran action: [%s]", actionURI)
 
 	if replyTo == "" {
 		return
@@ -210,25 +211,23 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
 
 func (t *Trigger) constructStartRequest(message []byte) (string, map[string]interface{}) {
 
-	out := &Output{}
-	out.Content = map[string]interface{}{}
 	var content map[string]interface{}
-	err := util.Unmarshal("", message, &out.Content)
+	err := util.Unmarshal("", message, &content)
 	if err != nil {
 		t.logger.Errorf("Error unmarshaling message %s", err.Error())
 	}
 
 	replyTo := ""
-	out.PathParams = make(map[string]string)
-	out.QueryParams = make(map[string]string)
+	pathParams := make(map[string]string)
+	queryParams := make(map[string]string)
 
 	mime := ""
-	if value, ok := out.Content[util.MetaMIME].(string); ok {
+	if value, ok := content[util.MetaMIME].(string); ok {
 		mime = value
 	}
 	if mime == util.MIMEApplicationXML {
 		getRoot := func() map[string]interface{} {
-			body := out.Content[util.XMLKeyBody]
+			body := content[util.XMLKeyBody]
 			if body == nil {
 				return nil
 			}
@@ -284,31 +283,38 @@ func (t *Trigger) constructStartRequest(message []byte) (string, map[string]inte
 			replyTo = value
 			delete(root, "replyTo")
 		}
-		fill("pathParams", out.PathParams)
-		fill("queryParams", out.QueryParams)
+		fill("pathParams", pathParams)
+		fill("queryParams", queryParams)
 	} else {
-		if value, ok := out.Content["replyTo"].(string); ok {
+		if value, ok := content["replyTo"].(string); ok {
 			replyTo = value
 			delete(content, "replyTo")
 		}
 
-		if params, ok := out.Content["pathParams"].(map[string]interface{}); ok {
+		if params, ok := content["pathParams"].(map[string]interface{}); ok {
 			for k, v := range params {
 				if param, ok := v.(string); ok {
-					out.PathParams[k] = param
+					pathParams[k] = param
 				}
 			}
 			delete(content, "pathParams")
 		}
 
-		if params, ok := out.Content["queryParams"].(map[string]interface{}); ok {
+		if params, ok := content["queryParams"].(map[string]interface{}); ok {
 			for k, v := range params {
 				if param, ok := v.(string); ok {
-					out.QueryParams[k] = param
+					queryParams[k] = param
 				}
 			}
 			delete(content, "queryParams")
 		}
 	}
+
+	out := &Output{}
+	out.PathParams = pathParams
+	out.Params = pathParams
+	out.QueryParams = queryParams
+	out.Content = content
+
 	return replyTo, out
 }
