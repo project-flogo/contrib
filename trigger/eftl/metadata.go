@@ -46,3 +46,27 @@ func (o *Output) FromMap(values map[string]interface{}) error {
 	//o.Tracing = values["tracing"].(map[string]interface{})
 	return nil
 }
+
+type Reply struct {
+	Code int         `md:"code"`
+	Data interface{} `md:"data"`
+}
+
+func (r *Reply) ToMap() map[string]interface{} {
+	return map[string]interface{}{
+		"code": r.Code,
+		"data": r.Data,
+	}
+}
+
+func (r *Reply) FromMap(values map[string]interface{}) error {
+
+	var err error
+	r.Code, err = coerce.ToInt(values["code"])
+	if err != nil {
+		return err
+	}
+	r.Data, _ = values["data"]
+
+	return nil
+}

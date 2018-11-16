@@ -71,6 +71,42 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		if err != nil {
 			return err
 		}
+		tlsConfig := &tls.Config{
+			InsecureSkipVerify: true,
+		}
+		ca := t.config.Settings[settingCA]
+		if ca != "" {
+			certificate, err := ioutil.ReadFile(ca.(string))
+			if err != nil {
+				t.logger.Errorf("can't open certificate", err)
+				return err
+			}
+			pool := x509.NewCertPool()
+			pool.AppendCertsFromPEM(certificate)
+			tlsConfig = &tls.Config{
+				RootCAs: pool,
+			}
+		}
+		id := t.config.Settings[settingID]
+		user := t.config.Settings[settingUser]
+		password := t.config.Settings[settingPassword]
+		fmt.Println("ID : ", id)
+		options := &eftl.Options{
+			ClientID:  id.(string),
+			Username:  user.(string),
+			Password:  password.(string),
+			TLSConfig: tlsConfig,
+		}
+
+		url := t.config.Settings[settingURL]
+		errorsChannel := make(chan error, 1)
+		connectVal, err := eftl.Connect(url.(string), options, errorsChannel)
+		if err != nil {
+			t.logger.Errorf("connection failed: %s", err)
+			return err
+		}
+		t.connection = connectVal
+
 		err = t.newActionHandler(handler)
 		if err != nil {
 			return err
@@ -80,87 +116,62 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 	return nil
 }
 
-func (t *Trigger) newActionHandler(handler trigger.Handler) error{
-	fmt.Println("Inside Trigger action handler")
-	tlsConfig := &tls.Config{
-		InsecureSkipVerify: true,
-	}
-	ca := t.config.Settings[settingCA]
-	if ca != "" {
-		certificate, err := ioutil.ReadFile(ca.(string))
+func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		fmt.Println("Inside Trigger action handler")
+		messages := make(chan eftl.Message, 1000)
+		dest := handler.Settings()
+		matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", dest[settingDest])
+		_, err = t.connection.Subscribe(matcher, "", messages)
 		if err != nil {
-			t.logger.Errorf("can't open certificate", err)
+			t.logger.Errorf("subscription failed: %s", err)
 			return err
 		}
-		pool := x509.NewCertPool()
-		pool.AppendCertsFromPEM(certificate)
-		tlsConfig = &tls.Config{
-			RootCAs: pool,
-		}
-	}
-	id := t.config.Settings[settingID]
-	user := t.config.Settings[settingUser]
-	password := t.config.Settings[settingPassword]
-	fmt.Println("ID : ", id)
-	options := &eftl.Options{
-		ClientID:  id.(string),
-		Username:  user.(string),
-		Password:  password.(string),
-		TLSConfig: tlsConfig,
-	}
+		t.stop = make(chan bool, 1)
+		go func() {
+			for {
+				select {
+				case _ = <-messages:
+					fmt.Println("Inside case")
 
-	url := t.config.Settings[settingURL]
-	fmt.Println("URL : ", url)
-	errorsChannel := make(chan error, 1)
-	connectVal, err := eftl.Connect(url.(string), options, errorsChannel)
-	if err != nil {
-		t.logger.Errorf("connection failed: %s", err)
-		return err
-	}
-	t.connection = connectVal
-	messages := make(chan eftl.Message, 1000)
-	dest := handler.Settings()
-	matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", dest[settingDest])
-	_, err = t.connection.Subscribe(matcher, "", messages)
-	if err != nil {
-		t.logger.Errorf("subscription failed: %s", err)
-		return err
-	}
+					out := t.constructStartRequest(r, ps)
+					results, err := handler.Handle(context.Background(), out)
+					reply := &Reply{}
+					reply.FromMap(results)
 
-	t.stop = make(chan bool, 1)
-	go func() {
-		for {
-			select {
-			case message := <-messages:
-				fmt.Println("Inside case")
-				value := message["_dest"]
-				dest, ok := value.(string)
-				if !ok {
-					t.logger.Errorf("dest is required for valid message")
-					continue
-				}
+					if err != nil {
+						rt.logger.Debugf("Error: %s", err.Error())
+						http.Error(w, err.Error(), http.StatusBadRequest)
+						return
+					}
 
-				value = message["content"]
-				fmt.Println("value :", value)
-				content, ok := value.([]byte)
-				if !ok {
-					content = []byte{}
+					if reply.Data != nil {
+						w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+						if reply.Code == 0 {
+							reply.Code = 200
+						}
+						w.WriteHeader(reply.Code)
+						if err := json.NewEncoder(w).Encode(reply.Data); err != nil {
+							log.Error(err)
+						}
+						return
+					}
+
+					if reply.Code > 0 {
+						w.WriteHeader(reply.Code)
+					} else {
+						w.WriteHeader(http.StatusOK)
+					}
+				case err := <-errorsChannel:
+					t.logger.Errorf("connection error: %s", err)
+				case <-t.stop:
+					fmt.Println("inside stop")
+					return
 				}
-				fmt.Println("Dest val:", dest)
-				fmt.Println("Content val:", content)
-				err = t.RunAction(content,handler)
-				if err != nil{
-					t.logger.Errorf(" RunAction failed: %s", err)
-				}
-			case err := <-errorsChannel:
-				t.logger.Errorf("connection error: %s", err)
-			case <-t.stop:
-				fmt.Println("inside stop")
-				return
 			}
-		}
-	}()
-	return nil
+		}()
+
+	}
 }
 
 
@@ -181,7 +192,7 @@ func (t *Trigger) Stop() error {
 }
 
 // RunAction starts a new Process Instance
-func (t *Trigger) RunAction(content []byte, handler trigger.Handler) error {
+/*func (t *Trigger) RunAction(content []byte, handler trigger.Handler) error {
 	fmt.Println("Inside Runaction")
 	fmt.Println("content :", string(content))
 
@@ -215,116 +226,59 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) error {
 		t.logger.Errorf("failed to send reply data: %v", err)
 	}
 	return nil
-}
+}*/
 
-func (t *Trigger) constructStartRequest(message []byte) (string, *Output) {
-
-	var content map[string]interface{}
-	err := util.Unmarshal("", message, &content)
-	fmt.Println("content val:",content)
-	if err != nil {
-		t.logger.Errorf("Error unmarshaling message %s", err.Error())
-	}
-
-	replyTo := ""
-	pathParams := make(map[string]string)
-	queryParams := make(map[string]string)
-
-	mime := ""
-	if value, ok := content[util.MetaMIME].(string); ok {
-		mime = value
-	}
-	fmt.Println("Value of mime :", mime)
-	if mime == util.MIMEApplicationXML {
-		getRoot := func() map[string]interface{} {
-			body := content[util.XMLKeyBody]
-			if body == nil {
-				return nil
-			}
-			for _, e := range body.([]interface{}) {
-				element, ok := e.(map[string]interface{})
-				if !ok {
-					continue
-				}
-				name, ok := element[util.XMLKeyType].(string)
-				if !ok || name != util.XMLTypeElement {
-					continue
-				}
-				return element
-			}
-			return nil
-		}
-		root := getRoot()
-		fill := func(target string, params map[string]string) {
-			rootBody, ok := root[util.XMLKeyBody].([]interface{})
-			if !ok {
-				return
-			}
-			for i, e := range rootBody {
-				element, ok := e.(map[string]interface{})
-				if !ok {
-					continue
-				}
-				name, ok := element[util.XMLKeyName].(string)
-				if !ok || name != target {
-					continue
-				}
-				body := element[util.XMLKeyBody]
-				if body == nil {
-					continue
-				}
-				for _, e := range body.([]interface{}) {
-					element, ok := e.(map[string]interface{})
-					if !ok {
-						continue
-					}
-					typ, ok := element[util.XMLKeyType].(string)
-					if !ok || typ != util.XMLTypeElement {
-						continue
-					}
-					params[element["key"].(string)] = element["value"].(string)
-				}
-				root[util.XMLKeyBody] = rootBody[:i+copy(rootBody[i:], rootBody[i+1:])]
-				return
-			}
-		}
-
-		if value, ok := root["replyTo"].(string); ok {
-			replyTo = value
-			delete(root, "replyTo")
-		}
-		fill("pathParams", pathParams)
-		fill("queryParams", queryParams)
-	} else {
-		if value, ok := content["replyTo"].(string); ok {
-			replyTo = value
-			delete(content, "replyTo")
-		}
-
-		if params, ok := content["pathParams"].(map[string]interface{}); ok {
-			for k, v := range params {
-				if param, ok := v.(string); ok {
-					pathParams[k] = param
-				}
-			}
-			delete(content, "pathParams")
-		}
-
-		if params, ok := content["queryParams"].(map[string]interface{}); ok {
-			for k, v := range params {
-				if param, ok := v.(string); ok {
-					queryParams[k] = param
-				}
-			}
-			delete(content, "queryParams")
-		}
-	}
-
+func (t *Trigger) constructStartRequest(r *http.Request, ps httprouter.Params) *Output {
 	out := &Output{}
-	out.PathParams = pathParams
-	out.Params = pathParams
-	out.QueryParams = queryParams
-	out.Content = content
 
-	return replyTo, out
+	out.PathParams = make(map[string]string)
+	for _, param := range ps {
+		out.PathParams[param.Key] = param.Value
+	}
+
+	queryValues := r.URL.Query()
+	out.QueryParams = make(map[string]string, len(queryValues))
+
+	for key, value := range queryValues {
+		out.QueryParams[key] = strings.Join(value, ",")
+	}
+
+	// Check the HTTP Header Content-Type
+	contentType := r.Header.Get("Content-Type")
+	switch contentType {
+	case "application/x-www-form-urlencoded":
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(r.Body)
+		s := buf.String()
+		m, err := url.ParseQuery(s)
+		content := make(map[string]interface{}, 0)
+		if err != nil {
+			t.logger.Errorf("Error while parsing query string: %s", err.Error())
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		}
+		for key, val := range m {
+			if len(val) == 1 {
+				content[key] = val[0]
+			} else {
+				content[key] = val[0]
+			}
+		}
+
+		out.Content = content
+	default:
+		var content interface{}
+		err := json.NewDecoder(r.Body).Decode(&content)
+		if err != nil {
+			switch {
+			case err == io.EOF:
+			// empty body
+			//todo should handler say if content is expected?
+			case err != nil:
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+		}
+		out.Content = content
+	}
+	return out
 }
