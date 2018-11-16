@@ -15,8 +15,6 @@ import (
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/mashling/commons/lib/eftl"
-	"github.com/mashling/commons/lib/util"
-	"github.com/julienschmidt/httprouter"
 )
 
 const (
