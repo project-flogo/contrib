@@ -32,7 +32,7 @@ const (
 	DefaultPort 	= 8181
 )
 
-var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{})
+var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{}, &Reply{})
 var logger log.Logger
 
 func init() {
@@ -54,7 +54,6 @@ type Trigger struct {
 	runner     action.Runner
 	config     *trigger.Config
 	logger     log.Logger
-	//handlers   map[string]*OptimizedHandler
 	connection *eftl.Connection
 	stop       chan bool
 }
@@ -83,17 +82,121 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 			return err
 		}
 
-		//err = t.newActionHandler(handler)
-		//if err != nil {
-		//	return err
-		//}
+		err = t.testActionHandler(handler)
+		if err != nil {
+			return err
+		}
 		router.Handle("GET", "/a", t.newActionHandler(handler))
 	}
 	t.Server = NewServer(addr, router)
 	return nil
 }
 
-func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
+func (t *Trigger) testActionHandler(handler trigger.Handler) error{
+	fmt.Println("Inside Trigger action handler")
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: true,
+	}
+	ca := t.config.Settings[settingCA]
+	if ca != "" {
+		certificate, err := ioutil.ReadFile(ca.(string))
+		if err != nil {
+			t.logger.Errorf("can't open certificate", err)
+			return err
+		}
+		pool := x509.NewCertPool()
+		pool.AppendCertsFromPEM(certificate)
+		tlsConfig = &tls.Config{
+			RootCAs: pool,
+		}
+	}
+	id := t.config.Settings[settingID]
+	user := t.config.Settings[settingUser]
+	password := t.config.Settings[settingPassword]
+	fmt.Println("ID : ", id)
+	options := &eftl.Options{
+		ClientID:  id.(string),
+		Username:  user.(string),
+		Password:  password.(string),
+		TLSConfig: tlsConfig,
+	}
+
+	url := t.config.Settings[settingURL]
+	errorsChannel := make(chan error, 1)
+	connectVal, err := eftl.Connect(url.(string), options, errorsChannel)
+	if err != nil {
+		t.logger.Errorf("connection failed: %s", err)
+		return err
+	}
+	t.connection = connectVal
+
+	messages := make(chan eftl.Message, 1000)
+	dest := handler.Settings()
+	matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", dest[settingDest])
+	_, err = t.connection.Subscribe(matcher, "", messages)
+	if err != nil {
+		t.logger.Errorf("subscription failed: %s", err)
+		return err
+	}
+	t.stop = make(chan bool, 1)
+	go func() {
+		for {
+			select {
+			case message = <-messages:
+				fmt.Println("Inside case")
+				value = message["content"]
+				content, ok := value.([]byte)
+				fmt.Println("Content :", string(content))
+				if !ok {
+					content = []byte{}
+				}
+				var mimeMap map[string]interface{}
+				err := util.Unmarshal("", message, &mimeMap)
+				if err != nil {
+					return err
+				}
+				fmt.Println("Mimemap:", mimeMap)
+				/*out := t.constructStartRequest(w,r, ps,content)
+				//results, err := handler.Handle(context.Background(), out)
+				reply := &Reply{}
+				reply.FromMap(results)
+
+				if err != nil {
+					t.logger.Debugf("Error: %s", err.Error())
+					http.Error(w, err.Error(), http.StatusBadRequest)
+					return
+				}
+
+				if reply.Data != nil {
+					w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+					if reply.Code == 0 {
+						reply.Code = 200
+					}
+					w.WriteHeader(reply.Code)
+					if err := json.NewEncoder(w).Encode(reply.Data); err != nil {
+						log.Error(err)
+					}
+					return
+				}
+
+				if reply.Code > 0 {
+					w.WriteHeader(reply.Code)
+				} else {
+					w.WriteHeader(http.StatusOK)
+				}*/
+			case err := <-errorsChannel:
+				t.logger.Errorf("connection error: %s", err)
+			case <-t.stop:
+				fmt.Println("inside stop")
+				return
+			}
+		}
+	}()
+
+}
+
+
+/*func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		fmt.Println("Inside Trigger action handler")
 		tlsConfig := &tls.Config{
@@ -185,7 +288,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
 		}()
 
 	}
-}
+}*/
 
 
 // Start implements ext.Trigger.Start
@@ -201,42 +304,6 @@ func (t *Trigger) Stop() error {
 	return t.Server.Stop()
 }
 
-// RunAction starts a new Process Instance
-/*func (t *Trigger) RunAction(content []byte, handler trigger.Handler) error {
-	fmt.Println("Inside Runaction")
-	fmt.Println("content :", string(content))
-
-	replyTo, data := t.constructStartRequest(content)
-	fmt.Println("data :", data)
-	fmt.Println("replyto :", replyTo)
-
-	if replyTo == "" {
-		t.logger.Errorf("reply data is empty")
-		return nil
-	}
-
-	replyData, err := handler.Handle(context.Background(), data)
-	if err != nil {
-		t.logger.Errorf("Error starting action: %v", err)
-		return err
-	}
-
-	reply, err := util.Marshal(replyData)
-	if err != nil {
-		t.logger.Errorf("failed to marshal reply data: %v", err)
-		return err
-	}
-	fmt.Println("replyTo :", replyTo)
-	fmt.Println("reply :", reply)
-	err = t.connection.Publish(eftl.Message{
-		"_dest":   replyTo,
-		"content": reply,
-	})
-	if err != nil {
-		t.logger.Errorf("failed to send reply data: %v", err)
-	}
-	return nil
-}*/
 
 func (t *Trigger) constructStartRequest(w http.ResponseWriter,r *http.Request, ps httprouter.Params) *Output {
 	out := &Output{}
