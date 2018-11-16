@@ -180,10 +180,7 @@ func (t *Trigger) Stop() error {
 // RunAction starts a new Process Instance
 func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
 	fmt.Println("Inside Runaction")
-	t.logger.Infof("EFTL Trigger: Received request for id '%s'", t.config.Id)
-
 	fmt.Println("content :", string(content))
-
 
 	replyTo, data := t.constructStartRequest(content)
 	fmt.Println("data :", data)
