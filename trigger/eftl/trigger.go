@@ -154,7 +154,7 @@ func (t *Trigger) testActionHandler(handler trigger.Handler) error{
 				var mimeMap map[string]interface{}
 				err := util.Unmarshal("", message, &mimeMap)
 				if err != nil {
-					return err
+					return
 				}
 				fmt.Println("Mimemap:", mimeMap)
 				/*out := t.constructStartRequest(w,r, ps,content)
