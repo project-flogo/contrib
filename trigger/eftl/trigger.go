@@ -187,6 +187,12 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) error {
 
 	replyTo, data := t.constructStartRequest(content)
 	fmt.Println("data :", data)
+	fmt.Println("replyto :", replyTo)
+
+	if replyTo == "" {
+		t.logger.Errorf("reply data is empty")
+		return nil
+	}
 
 	replyData, err := handler.Handle(context.Background(), data)
 	if err != nil {
@@ -194,10 +200,6 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) error {
 		return err
 	}
 
-	if replyTo == "" {
-		t.logger.Errorf("reply data is empty")
-		return nil
-	}
 	reply, err := util.Marshal(replyData)
 	if err != nil {
 		t.logger.Errorf("failed to marshal reply data: %v", err)
