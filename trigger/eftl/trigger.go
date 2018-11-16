@@ -119,7 +119,8 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 	}
 	t.connection = connectVal
 	messages := make(chan eftl.Message, 1000)
-	matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", handler.Settings[settingDest])
+	dest := handler.Settings[settingDest]
+	matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", dest )
 	_, err = t.connection.Subscribe(matcher, "", messages)
 	if err != nil {
 		t.logger.Errorf("subscription failed: %s", err)
@@ -209,7 +210,7 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
 	}
 }
 
-func (t *Trigger) constructStartRequest(message []byte) (string, map[string]interface{}) {
+func (t *Trigger) constructStartRequest(message []byte) (string, *Output) {
 
 	var content map[string]interface{}
 	err := util.Unmarshal("", message, &content)
