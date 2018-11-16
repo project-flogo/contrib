@@ -82,6 +82,20 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		if err != nil {
 			return err
 		}
+
+		//err = t.newActionHandler(handler)
+		//if err != nil {
+		//	return err
+		//}
+		router.Handle("GET", "/a", t.newActionHandler(handler))
+	}
+	t.Server = NewServer(addr, router)
+	return nil
+}
+
+func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		fmt.Println("Inside Trigger action handler")
 		tlsConfig := &tls.Config{
 			InsecureSkipVerify: true,
 		}
@@ -98,20 +112,6 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 				RootCAs: pool,
 			}
 		}
-
-		//err = t.newActionHandler(handler)
-		//if err != nil {
-		//	return err
-		//}
-		router.Handle("GET", "/a", t.newActionHandler(handler))
-	}
-	t.Server = NewServer(addr, router)
-	return nil
-}
-
-func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
-	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		fmt.Println("Inside Trigger action handler")
 		id := t.config.Settings[settingID]
 		user := t.config.Settings[settingUser]
 		password := t.config.Settings[settingPassword]
@@ -128,7 +128,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
 		connectVal, err := eftl.Connect(url.(string), options, errorsChannel)
 		if err != nil {
 			t.logger.Errorf("connection failed: %s", err)
-			return err
+			return
 		}
 		t.connection = connectVal
 
@@ -285,7 +285,7 @@ func (t *Trigger) constructStartRequest(w http.ResponseWriter,r *http.Request, p
 			//todo should handler say if content is expected?
 			case err != nil:
 				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
+				return err
 			}
 		}
 		out.Content = content
