@@ -6,7 +6,9 @@ import (
 	"crypto/x509"
 	"fmt"
 	"io/ioutil"
-	//"os"
+	"net/http"
+	"net/url"
+	"strconv"
 
 	"github.com/project-flogo/core/trigger"
 	"github.com/project-flogo/core/action"
@@ -14,6 +16,7 @@ import (
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/mashling/commons/lib/eftl"
 	"github.com/mashling/commons/lib/util"
+	"github.com/julienschmidt/httprouter"
 )
 
 const (
@@ -23,6 +26,7 @@ const (
 	settingPassword = "password"
 	settingCA       = "ca"
 	settingDest     = "dest"
+	DefaultPort 	= "8181"
 )
 
 var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{})
@@ -42,6 +46,7 @@ func (*Factory) Metadata() *trigger.Metadata {
 
 // Trigger is a simple EFTL trigger
 type Trigger struct {
+	Server 	   *http.Server
 	metadata   *trigger.Metadata
 	runner     action.Runner
 	config     *trigger.Config
@@ -58,12 +63,20 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	if err != nil {
 		return nil, err
 	}
+	addr := ":" + strconv.Itoa(DefaultPort)
+
 
 	return &Trigger{metadata: f.Metadata(),config: config}, nil
 }
 
 // Init implements trigger.Init
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
+	mux := http.NewServeMux()
+	server := &http.Server{
+		Addr:    addr,
+		Handler: mux,
+	}
+	t.Server = server
 	for _, handler := range ctx.GetHandlers() {
 
 		s := &HandlerSettings{}
@@ -111,8 +124,9 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		if err != nil {
 			return err
 		}
-
+		mux.HandleFunc("/a", newActionHandler(t, handler))
 	}
+
 	return nil
 }
 
@@ -122,7 +136,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
 		messages := make(chan eftl.Message, 1000)
 		dest := handler.Settings()
 		matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", dest[settingDest])
-		_, err = t.connection.Subscribe(matcher, "", messages)
+		_, err := t.connection.Subscribe(matcher, "", messages)
 		if err != nil {
 			t.logger.Errorf("subscription failed: %s", err)
 			return err
