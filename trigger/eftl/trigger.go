@@ -9,7 +9,9 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"encoding/json"
 
+	"github.com/julienschmidt/httprouter"
 	"github.com/project-flogo/core/trigger"
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/support/log"
@@ -24,7 +26,7 @@ const (
 	settingPassword = "password"
 	settingCA       = "ca"
 	settingDest     = "dest"
-	DefaultPort 	= "8181"
+	DefaultPort 	= 8181
 )
 
 var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{})
@@ -61,20 +63,15 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 	if err != nil {
 		return nil, err
 	}
-	addr := ":" + strconv.Itoa(DefaultPort)
-
 
 	return &Trigger{metadata: f.Metadata(),config: config}, nil
 }
 
 // Init implements trigger.Init
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
-	mux := http.NewServeMux()
-	server := &http.Server{
-		Addr:    addr,
-		Handler: mux,
-	}
-	t.Server = server
+	addr := ":" + strconv.Itoa(DefaultPort)
+	router := httprouter.New()
+
 	for _, handler := range ctx.GetHandlers() {
 
 		s := &HandlerSettings{}
@@ -122,9 +119,9 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		if err != nil {
 			return err
 		}
-		mux.HandleFunc("/a", newActionHandler(t, handler))
+		router.Handle("GET", "/a", t.newActionHandler(handler))
 	}
-
+	t.Server = NewServer(addr, router)
 	return nil
 }
 
@@ -137,7 +134,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
 		_, err := t.connection.Subscribe(matcher, "", messages)
 		if err != nil {
 			t.logger.Errorf("subscription failed: %s", err)
-			return err
+			return
 		}
 		t.stop = make(chan bool, 1)
 		go func() {
@@ -152,7 +149,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
 					reply.FromMap(results)
 
 					if err != nil {
-						rt.logger.Debugf("Error: %s", err.Error())
+						t.logger.Debugf("Error: %s", err.Error())
 						http.Error(w, err.Error(), http.StatusBadRequest)
 						return
 					}
@@ -189,7 +186,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
 
 // Start implements ext.Trigger.Start
 func (t *Trigger) Start() error {
-	return nil
+	return t.Server.Start()
 }
 
 // Stop implements ext.Trigger.Stop
@@ -197,10 +194,7 @@ func (t *Trigger) Stop() error {
 	if t.connection != nil {
 		t.connection.Disconnect()
 	}
-	if t.stop != nil {
-		t.stop <- true
-	}
-	return nil
+	return t.Server.Stop()
 }
 
 // RunAction starts a new Process Instance

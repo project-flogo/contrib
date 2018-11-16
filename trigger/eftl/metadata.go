@@ -1,5 +1,9 @@
 package eftl
 
+import (
+	"github.com/project-flogo/core/data/coerce"
+)
+
 type Settings struct {
 	URL 		string `md:"url"`
 	Id 		string `md:"id"`
