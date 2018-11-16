@@ -104,7 +104,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
 			certificate, err := ioutil.ReadFile(ca.(string))
 			if err != nil {
 				t.logger.Errorf("can't open certificate", err)
-				return err
+				return
 			}
 			pool := x509.NewCertPool()
 			pool.AppendCertsFromPEM(certificate)
@@ -285,7 +285,6 @@ func (t *Trigger) constructStartRequest(w http.ResponseWriter,r *http.Request, p
 			//todo should handler say if content is expected?
 			case err != nil:
 				http.Error(w, err.Error(), http.StatusBadRequest)
-				return err
 			}
 		}
 		out.Content = content
