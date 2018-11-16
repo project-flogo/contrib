@@ -191,11 +191,12 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) error {
 	replyData, err := handler.Handle(context.Background(), data)
 	if err != nil {
 		t.logger.Errorf("Error starting action: %v", err)
+		return err
 	}
 
 	if replyTo == "" {
-		t.logger.Errorf("reply data is empty: %v", err)
-		return err
+		t.logger.Errorf("reply data is empty")
+		return nil
 	}
 	reply, err := util.Marshal(replyData)
 	if err != nil {
