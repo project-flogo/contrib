@@ -30,10 +30,9 @@ const (
 	settingPassword = "password"
 	settingCA       = "ca"
 	settingDest     = "dest"
-	DefaultPort 	= 8181
 )
 
-var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{}, &Reply{})
+var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{})
 var logger log.Logger
 
 func init() {
@@ -50,7 +49,6 @@ func (*Factory) Metadata() *trigger.Metadata {
 
 // Trigger is a simple EFTL trigger
 type Trigger struct {
-	Server 	   *Server
 	metadata   *trigger.Metadata
 	runner     action.Runner
 	config     *trigger.Config
@@ -72,8 +70,6 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 
 // Init implements trigger.Init
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
-	addr := ":" + strconv.Itoa(DefaultPort)
-	router := httprouter.New()
 
 	for _, handler := range ctx.GetHandlers() {
 
@@ -83,17 +79,15 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 			return err
 		}
 
-		err = t.testActionHandler(handler)
+		err = t.newActionHandler(handler)
 		if err != nil {
 			return err
 		}
-		//router.Handle("GET", "/a", t.newActionHandler(handler))
 	}
-	t.Server = NewServer(addr, router)
 	return nil
 }
 
-func (t *Trigger) testActionHandler(handler trigger.Handler) error{
+func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 	fmt.Println("Inside Trigger action handler")
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: true,
@@ -151,40 +145,36 @@ func (t *Trigger) testActionHandler(handler trigger.Handler) error{
 				if !ok {
 					content = []byte{}
 				}
-				var mimeMap map[string]interface{}
-				err := util.Unmarshal("", content, &mimeMap)
+				replyTo := ""
+				var js map[string]interface{}
+				if(json.Unmarshal(content, &js) == nil){
+					replyTo = "json"
+				}else{
+					replyTo = "jsonString"
+				}
+				out := &Output{}
+				out.QueryParams = make(map[string]string)
+				out.PathParams = make(map[string]string)
+				out.Params = make(map[string]string)
+				out.Content = content
+
+				results, err := handler.Handle(context.Background(), out)
 				if err != nil {
+					t.logger.Errorf("failed to get new handler data: %v", err)
 					return
 				}
-				fmt.Println("Mimemap:", mimeMap)
-				/*out := t.constructStartRequest(w,r, ps,content)
-				//results, err := handler.Handle(context.Background(), out)
-				reply := &Reply{}
-				reply.FromMap(results)
-
+				reply, err := util.Marshal(results)
 				if err != nil {
-					t.logger.Debugf("Error: %s", err.Error())
-					http.Error(w, err.Error(), http.StatusBadRequest)
+					t.logger.Errorf("failed to marshal reply data: %v", err)
 					return
 				}
-
-				if reply.Data != nil {
-					w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-					if reply.Code == 0 {
-						reply.Code = 200
-					}
-					w.WriteHeader(reply.Code)
-					if err := json.NewEncoder(w).Encode(reply.Data); err != nil {
-						log.Error(err)
-					}
-					return
+				err = t.connection.Publish(eftl.Message{
+					"_dest":   replyTo,
+					"content": reply,
+				})
+				if err != nil {
+					t.logger.Errorf("failed to send reply data: %v", err)
 				}
-
-				if reply.Code > 0 {
-					w.WriteHeader(reply.Code)
-				} else {
-					w.WriteHeader(http.StatusOK)
-				}*/
 			case err := <-errorsChannel:
 				t.logger.Errorf("connection error: %s", err)
 			case <-t.stop:
@@ -196,105 +186,9 @@ func (t *Trigger) testActionHandler(handler trigger.Handler) error{
 	return nil
 }
 
-
-/*func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
-	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		fmt.Println("Inside Trigger action handler")
-		tlsConfig := &tls.Config{
-			InsecureSkipVerify: true,
-		}
-		ca := t.config.Settings[settingCA]
-		if ca != "" {
-			certificate, err := ioutil.ReadFile(ca.(string))
-			if err != nil {
-				t.logger.Errorf("can't open certificate", err)
-				return
-			}
-			pool := x509.NewCertPool()
-			pool.AppendCertsFromPEM(certificate)
-			tlsConfig = &tls.Config{
-				RootCAs: pool,
-			}
-		}
-		id := t.config.Settings[settingID]
-		user := t.config.Settings[settingUser]
-		password := t.config.Settings[settingPassword]
-		fmt.Println("ID : ", id)
-		options := &eftl.Options{
-			ClientID:  id.(string),
-			Username:  user.(string),
-			Password:  password.(string),
-			TLSConfig: tlsConfig,
-		}
-
-		url := t.config.Settings[settingURL]
-		errorsChannel := make(chan error, 1)
-		connectVal, err := eftl.Connect(url.(string), options, errorsChannel)
-		if err != nil {
-			t.logger.Errorf("connection failed: %s", err)
-			return
-		}
-		t.connection = connectVal
-
-		messages := make(chan eftl.Message, 1000)
-		dest := handler.Settings()
-		matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", dest[settingDest])
-		_, err = t.connection.Subscribe(matcher, "", messages)
-		if err != nil {
-			t.logger.Errorf("subscription failed: %s", err)
-			return
-		}
-		t.stop = make(chan bool, 1)
-		go func() {
-			for {
-				select {
-				case _ = <-messages:
-					fmt.Println("Inside case")
-
-					out := t.constructStartRequest(w,r, ps)
-					results, err := handler.Handle(context.Background(), out)
-					reply := &Reply{}
-					reply.FromMap(results)
-
-					if err != nil {
-						t.logger.Debugf("Error: %s", err.Error())
-						http.Error(w, err.Error(), http.StatusBadRequest)
-						return
-					}
-
-					if reply.Data != nil {
-						w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-						if reply.Code == 0 {
-							reply.Code = 200
-						}
-						w.WriteHeader(reply.Code)
-						if err := json.NewEncoder(w).Encode(reply.Data); err != nil {
-							log.Error(err)
-						}
-						return
-					}
-
-					if reply.Code > 0 {
-						w.WriteHeader(reply.Code)
-					} else {
-						w.WriteHeader(http.StatusOK)
-					}
-				case err := <-errorsChannel:
-					t.logger.Errorf("connection error: %s", err)
-				case <-t.stop:
-					fmt.Println("inside stop")
-					return
-				}
-			}
-		}()
-
-	}
-}*/
-
-
 // Start implements ext.Trigger.Start
 func (t *Trigger) Start() error {
-	return t.Server.Start()
+	return nil
 }
 
 // Stop implements ext.Trigger.Stop
@@ -303,59 +197,4 @@ func (t *Trigger) Stop() error {
 		t.connection.Disconnect()
 	}
 	return t.Server.Stop()
-}
-
-
-func (t *Trigger) constructStartRequest(w http.ResponseWriter,r *http.Request, ps httprouter.Params) *Output {
-	out := &Output{}
-
-	out.PathParams = make(map[string]string)
-	for _, param := range ps {
-		out.PathParams[param.Key] = param.Value
-	}
-
-	queryValues := r.URL.Query()
-	out.QueryParams = make(map[string]string, len(queryValues))
-
-	for key, value := range queryValues {
-		out.QueryParams[key] = strings.Join(value, ",")
-	}
-
-	// Check the HTTP Header Content-Type
-	contentType := r.Header.Get("Content-Type")
-	switch contentType {
-	case "application/x-www-form-urlencoded":
-		buf := new(bytes.Buffer)
-		buf.ReadFrom(r.Body)
-		s := buf.String()
-		m, err := url.ParseQuery(s)
-		content := make(map[string]interface{}, 0)
-		if err != nil {
-			t.logger.Errorf("Error while parsing query string: %s", err.Error())
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		}
-		for key, val := range m {
-			if len(val) == 1 {
-				content[key] = val[0]
-			} else {
-				content[key] = val[0]
-			}
-		}
-
-		out.Content = content
-	default:
-		var content interface{}
-		err := json.NewDecoder(r.Body).Decode(&content)
-		if err != nil {
-			switch {
-			case err == io.EOF:
-			// empty body
-			//todo should handler say if content is expected?
-			case err != nil:
-				http.Error(w, err.Error(), http.StatusBadRequest)
-			}
-		}
-		out.Content = content
-	}
-	return out
 }
