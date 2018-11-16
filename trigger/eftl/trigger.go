@@ -1,20 +1,13 @@
 package eftl
 
 import (
-	//"context"
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
 	"io/ioutil"
-	"io"
-	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
-	"bytes"
 	"encoding/json"
 
-	"github.com/julienschmidt/httprouter"
 	"github.com/project-flogo/core/trigger"
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/support/log"
@@ -196,5 +189,8 @@ func (t *Trigger) Stop() error {
 	if t.connection != nil {
 		t.connection.Disconnect()
 	}
-	return t.Server.Stop()
+	if t.stop != nil {
+		t.stop <- true
+	}
+	return nil
 }
