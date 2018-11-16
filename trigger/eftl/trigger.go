@@ -152,7 +152,7 @@ func (t *Trigger) testActionHandler(handler trigger.Handler) error{
 					content = []byte{}
 				}
 				var mimeMap map[string]interface{}
-				err := util.Unmarshal("", message, &mimeMap)
+				err := util.Unmarshal("", content, &mimeMap)
 				if err != nil {
 					return
 				}
