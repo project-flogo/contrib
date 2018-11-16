@@ -198,6 +198,8 @@ func (t *Trigger) RunAction(content []byte, handler trigger.Handler) {
 		t.logger.Errorf("failed to marshal reply data: %v", err.Error())
 		return
 	}
+	fmt.Println("replyTo :", replyTo)
+	fmt.Println("reply :", reply)
 	err = t.connection.Publish(eftl.Message{
 		"_dest":   replyTo,
 		"content": reply,

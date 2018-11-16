@@ -42,7 +42,7 @@
           {
             "service": "PetStorePets",
             "input": {
-              "pathParams.petId": "1"
+              "pathParams.petId": "4"
             }
           }
         ],
@@ -73,7 +73,7 @@
             "ref": "github.com/project-flogo/contrib/activity/rest",
             "settings": {
               "uri": "http://localhost:8181/a",
-              "method": "POST"
+              "method": "GET"
             }
           }
         ]
