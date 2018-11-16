@@ -6,9 +6,12 @@ import (
 	"crypto/x509"
 	"fmt"
 	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
+	"bytes"
 	"encoding/json"
 
 	"github.com/julienschmidt/httprouter"
@@ -46,7 +49,7 @@ func (*Factory) Metadata() *trigger.Metadata {
 
 // Trigger is a simple EFTL trigger
 type Trigger struct {
-	Server 	   *http.Server
+	Server 	   *Server
 	metadata   *trigger.Metadata
 	runner     action.Runner
 	config     *trigger.Config
@@ -95,6 +98,20 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 				RootCAs: pool,
 			}
 		}
+
+		//err = t.newActionHandler(handler)
+		//if err != nil {
+		//	return err
+		//}
+		router.Handle("GET", "/a", t.newActionHandler(handler))
+	}
+	t.Server = NewServer(addr, router)
+	return nil
+}
+
+func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		fmt.Println("Inside Trigger action handler")
 		id := t.config.Settings[settingID]
 		user := t.config.Settings[settingUser]
 		password := t.config.Settings[settingPassword]
@@ -115,23 +132,10 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		}
 		t.connection = connectVal
 
-		err = t.newActionHandler(handler)
-		if err != nil {
-			return err
-		}
-		router.Handle("GET", "/a", t.newActionHandler(handler))
-	}
-	t.Server = NewServer(addr, router)
-	return nil
-}
-
-func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
-	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		fmt.Println("Inside Trigger action handler")
 		messages := make(chan eftl.Message, 1000)
 		dest := handler.Settings()
 		matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", dest[settingDest])
-		_, err := t.connection.Subscribe(matcher, "", messages)
+		_, err = t.connection.Subscribe(matcher, "", messages)
 		if err != nil {
 			t.logger.Errorf("subscription failed: %s", err)
 			return
@@ -143,7 +147,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) httprouter.Handle{
 				case _ = <-messages:
 					fmt.Println("Inside case")
 
-					out := t.constructStartRequest(r, ps)
+					out := t.constructStartRequest(w,r, ps)
 					results, err := handler.Handle(context.Background(), out)
 					reply := &Reply{}
 					reply.FromMap(results)
@@ -234,7 +238,7 @@ func (t *Trigger) Stop() error {
 	return nil
 }*/
 
-func (t *Trigger) constructStartRequest(r *http.Request, ps httprouter.Params) *Output {
+func (t *Trigger) constructStartRequest(w http.ResponseWriter,r *http.Request, ps httprouter.Params) *Output {
 	out := &Output{}
 
 	out.PathParams = make(map[string]string)
