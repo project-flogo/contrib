@@ -221,6 +221,7 @@ func (t *Trigger) constructStartRequest(message []byte) (string, *Output) {
 
 	var content map[string]interface{}
 	err := util.Unmarshal("", message, &content)
+	fmt.Println("content val:",content)
 	if err != nil {
 		t.logger.Errorf("Error unmarshaling message %s", err.Error())
 	}
@@ -233,6 +234,7 @@ func (t *Trigger) constructStartRequest(message []byte) (string, *Output) {
 	if value, ok := content[util.MetaMIME].(string); ok {
 		mime = value
 	}
+	fmt.Println("Value of mime :", mime)
 	if mime == util.MIMEApplicationXML {
 		getRoot := func() map[string]interface{} {
 			body := content[util.XMLKeyBody]
