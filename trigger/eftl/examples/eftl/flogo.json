@@ -84,7 +84,7 @@
     {
       "ref": "github.com/project-flogo/microgateway",
       "settings": {
-        "uri": "microgateway:Pets"
+        "uri": "https://petstore.swagger.io/v2/pet/:petId"
       },
       "id": "microgateway:Pets",
       "metadata": null
