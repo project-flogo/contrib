@@ -1,7 +1,7 @@
 package eftl
 
 import (
-	"context"
+	//"context"
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
@@ -20,6 +20,7 @@ import (
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/mashling/commons/lib/eftl"
+	"github.com/mashling/commons/lib/util"
 )
 
 const (
@@ -86,7 +87,7 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		if err != nil {
 			return err
 		}
-		router.Handle("GET", "/a", t.newActionHandler(handler))
+		//router.Handle("GET", "/a", t.newActionHandler(handler))
 	}
 	t.Server = NewServer(addr, router)
 	return nil
@@ -142,9 +143,9 @@ func (t *Trigger) testActionHandler(handler trigger.Handler) error{
 	go func() {
 		for {
 			select {
-			case message = <-messages:
+			case message := <-messages:
 				fmt.Println("Inside case")
-				value = message["content"]
+				value := message["content"]
 				content, ok := value.([]byte)
 				fmt.Println("Content :", string(content))
 				if !ok {
@@ -192,7 +193,7 @@ func (t *Trigger) testActionHandler(handler trigger.Handler) error{
 			}
 		}
 	}()
-
+	return nil
 }
 
 
