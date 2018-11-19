@@ -156,9 +156,6 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error {
 					"_dest":   replyTo,
 					"content": results,
 				})
-				if err != nil {
-					t.logger.Errorf("failed to send reply data: %v", err)
-				}
 			case err := <-errorsChannel:
 				t.logger.Errorf("connection error: %s", err)
 			case <-t.stop:
