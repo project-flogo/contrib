@@ -156,6 +156,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 					t.logger.Errorf("failed to get new handler data: %v", err)
 					return
 				}
+				fmt.Println("results :", results)
 				reply, err := util.Marshal(results)
 				if err != nil {
 					t.logger.Errorf("failed to marshal reply data: %v", err)
