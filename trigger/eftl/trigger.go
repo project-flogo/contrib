@@ -145,11 +145,17 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 				}else{
 					replyTo = "jsonString"
 				}
+				var contentNew interface{}
+				err := json.NewDecoder(content).Decode(&contentNew)
+				if err != nil {
+					return
+
+				}
 				out := &Output{}
 				out.QueryParams = make(map[string]string)
 				out.PathParams = make(map[string]string)
 				out.Params = make(map[string]string)
-				out.Content = content
+				out.Content = contentNew
 
 				results, err := handler.Handle(context.Background(), out)
 				if err != nil {
