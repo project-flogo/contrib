@@ -118,7 +118,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error {
 	messages := make(chan eftlHelpers.Message, 1000)
 	dest := handler.Settings()
 	matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", dest[settingDest])
-	_, err := t.connection.Subscribe(matcher, "", messages)
+	_, err = t.connection.Subscribe(matcher, "", messages)
 	if err != nil {
 		t.logger.Errorf("subscription failed: %s", err)
 		return err
