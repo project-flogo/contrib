@@ -1,30 +1,20 @@
 package main
 
 import (
-	"crypto/tls"
-	"encoding/base64"
-	"encoding/json"
-	"errors"
-	"fmt"
-	"net/url"
-	"strconv"
-	"sync"
-	"time"
-
-	"github.com/gorilla/websocket"
+	"github.com/project-flogo/contrib/trigger/eftl/eftlHelpers"
 )
 
 func main() {
 	errChannel := make(chan error, 1)
-	options := &Options{
+	options := &eftlHelpers.Options{
 		ClientID: "test",
 	}
-	connection, err := Connect("ws://localhost:9191/channel", options, errChannel)
+	connection, err := eftlHelpers.Connect("ws://localhost:9191/channel", options, errChannel)
 	if err != nil {
 		panic(err)
 	}
 	defer connection.Disconnect()
-	connection.Publish(Message{
+	connection.Publish(eftlHelpers.Message{
 		"_dest":   "sample",
 		"content": []byte(`{"message": "hello world"}`),
 	})
