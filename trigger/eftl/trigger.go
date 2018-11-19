@@ -134,7 +134,6 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 				fmt.Println("Inside case")
 				value := message["content"]
 				content, ok := value.([]byte)
-				fmt.Println("Content :", string(content))
 				if !ok {
 					content = []byte{}
 				}
@@ -145,17 +144,12 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 				}else{
 					replyTo = "jsonString"
 				}
-				var contentNew interface{}
-				err := json.NewDecoder(content).Decode(&contentNew)
-				if err != nil {
-					return
-
-				}
+				fmt.Println("Content :", string(content))
 				out := &Output{}
 				out.QueryParams = make(map[string]string)
 				out.PathParams = make(map[string]string)
 				out.Params = make(map[string]string)
-				out.Content = contentNew
+				out.Content = content
 
 				results, err := handler.Handle(context.Background(), out)
 				if err != nil {
