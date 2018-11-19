@@ -144,6 +144,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 				}else{
 					replyTo = "jsonString"
 				}
+				fmt.Println("js:", js)
 				fmt.Println("Content :", string(content))
 				out := &Output{}
 				out.QueryParams = make(map[string]string)
