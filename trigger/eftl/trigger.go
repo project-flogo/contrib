@@ -99,7 +99,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error {
 	id := t.config.Settings[settingID]
 	user := t.config.Settings[settingUser]
 	password := t.config.Settings[settingPassword]
-	options := *eftlHelpers.Options{
+	options := eftlHelpers.Options{
 		ClientID:  id.(string),
 		Username:  user.(string),
 		Password:  password.(string),
@@ -108,17 +108,17 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error {
 
 	url := t.config.Settings[settingURL]
 	errorsChannel := make(chan error, 1)
-	t.connection = *eftlHelpers.Connect(url.(string), options, errorsChannel)
-	/*if err != nil {
+	connectVal, _ := eftlHelpers.Connect(url.(string), options, errorsChannel)
+	if err != nil {
 		t.logger.Errorf("connection failed: %s", err)
 		return err
 	}
-	t.connection = connectVal*/
+	t.connection = connectVal
 
-	messages := make(chan *eftlHelpers.Message, 1000)
+	messages := make(chan eftlHelpers.Message, 1000)
 	dest := handler.Settings()
 	matcher := fmt.Sprintf("{\"_dest\":\"%s\"}", dest[settingDest])
-	_, err = t.connection.Subscribe(matcher, "", messages)
+	_, err := t.connection.Subscribe(matcher, "", messages)
 	if err != nil {
 		t.logger.Errorf("subscription failed: %s", err)
 		return err
@@ -152,7 +152,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error {
 					return
 				}
 
-				err = t.connection.Publish(*eftlHelpers.Message{
+				err = t.connection.Publish(eftlHelpers.Message{
 					"_dest":   replyTo,
 					"content": results,
 				})

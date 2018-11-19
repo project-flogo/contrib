@@ -12,6 +12,10 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+
+// Version of eFTL Go client.
+const Version = "3.3.0"
+
 // Errors
 var (
 	ErrTimeout          = errors.New("operation timed out")
