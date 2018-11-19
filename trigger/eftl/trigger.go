@@ -150,7 +150,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 				out.QueryParams = make(map[string]string)
 				out.PathParams = make(map[string]string)
 				out.Params = make(map[string]string)
-				out.Content = content
+				out.Content = js
 
 				results, err := handler.Handle(context.Background(), out)
 				if err != nil {
