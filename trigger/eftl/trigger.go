@@ -12,6 +12,7 @@ import (
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
+	"github.com/project-flogo/core/trigger/eftl/eftlHelpers"
 )
 
 const (
@@ -44,7 +45,7 @@ type Trigger struct {
 	runner     action.Runner
 	config     *trigger.Config
 	logger     log.Logger
-	connection &Connection
+	connection *Connection
 	stop       chan bool
 }
 
