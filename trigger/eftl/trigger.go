@@ -44,7 +44,7 @@ type Trigger struct {
 	runner     action.Runner
 	config     *trigger.Config
 	logger     log.Logger
-	connection Connection
+	connection *Connection
 	stop       chan bool
 }
 
