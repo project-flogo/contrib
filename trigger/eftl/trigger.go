@@ -4,16 +4,14 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"encoding/json"
 
-	"github.com/project-flogo/core/trigger"
 	"github.com/project-flogo/core/action"
-	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/data/metadata"
-	"github.com/mashling/commons/lib/eftl"
-	"github.com/mashling/commons/lib/util"
+	"github.com/project-flogo/core/support/log"
+	"github.com/project-flogo/core/trigger"
 )
 
 const (
@@ -46,7 +44,7 @@ type Trigger struct {
 	runner     action.Runner
 	config     *trigger.Config
 	logger     log.Logger
-	connection *eftl.Connection
+	connection Connection
 	stop       chan bool
 }
 
@@ -58,7 +56,7 @@ func (f *Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		return nil, err
 	}
 
-	return &Trigger{metadata: f.Metadata(),config: config}, nil
+	return &Trigger{metadata: f.Metadata(), config: config}, nil
 }
 
 // Init implements trigger.Init
@@ -80,8 +78,7 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 	return nil
 }
 
-func (t *Trigger) newActionHandler(handler trigger.Handler) error{
-	fmt.Println("Inside Trigger action handler")
+func (t *Trigger) newActionHandler(handler trigger.Handler) error {
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: true,
 	}
@@ -101,8 +98,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 	id := t.config.Settings[settingID]
 	user := t.config.Settings[settingUser]
 	password := t.config.Settings[settingPassword]
-	fmt.Println("ID : ", id)
-	options := &eftl.Options{
+	options := &Options{
 		ClientID:  id.(string),
 		Username:  user.(string),
 		Password:  password.(string),
@@ -111,7 +107,7 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 
 	url := t.config.Settings[settingURL]
 	errorsChannel := make(chan error, 1)
-	connectVal, err := eftl.Connect(url.(string), options, errorsChannel)
+	connectVal, err := Connect(url.(string), options, errorsChannel)
 	if err != nil {
 		t.logger.Errorf("connection failed: %s", err)
 		return err
@@ -131,7 +127,6 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 		for {
 			select {
 			case message := <-messages:
-				fmt.Println("Inside case")
 				value := message["content"]
 				content, ok := value.([]byte)
 				if !ok {
@@ -139,13 +134,11 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 				}
 				replyTo := ""
 				var js map[string]interface{}
-				if(json.Unmarshal(content, &js) == nil){
+				if json.Unmarshal(content, &js) == nil {
 					replyTo = "json"
-				}else{
+				} else {
 					replyTo = "jsonString"
 				}
-				fmt.Println("js:", js)
-				fmt.Println("Content :", string(content))
 				out := &Output{}
 				out.QueryParams = make(map[string]string)
 				out.PathParams = make(map[string]string)
@@ -157,16 +150,10 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 					t.logger.Errorf("failed to get new handler data: %v", err)
 					return
 				}
-				fmt.Println("results :", results)
-				reply, err := util.Marshal(results)
-				if err != nil {
-					t.logger.Errorf("failed to marshal reply data: %v", err)
-					return
-				}
-				fmt.Println("content result :", string(reply))
+
 				err = t.connection.Publish(eftl.Message{
 					"_dest":   replyTo,
-					"content": reply,
+					"content": results,
 				})
 				if err != nil {
 					t.logger.Errorf("failed to send reply data: %v", err)
@@ -174,7 +161,6 @@ func (t *Trigger) newActionHandler(handler trigger.Handler) error{
 			case err := <-errorsChannel:
 				t.logger.Errorf("connection error: %s", err)
 			case <-t.stop:
-				fmt.Println("inside stop")
 				return
 			}
 		}
