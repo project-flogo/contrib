@@ -1,0 +1,38 @@
+{
+  "name": "flogo-loader",
+  "type": "flogo:trigger",
+  "version": "0.0.1",
+  "title": "Test Loader",
+  "description": "Simple Test Loader",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/trigger/loader",
+  "settings": [
+    {
+      "name": "concurrency",
+      "type": "int"
+    },
+    {
+      "name": "duration",
+      "type": "int"
+    },
+    {
+      "name": "data",
+      "type": "any"
+    },
+    {
+      "name": "handler",
+      "type": "string"
+    }
+  ],
+  "output": [
+    {
+      "name": "data",
+      "type": "any"
+    }
+  ],
+  "reply": [
+  ],
+  "handler": {
+    "settings": [
+    ]
+  }
+}
