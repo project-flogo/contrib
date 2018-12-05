@@ -1,56 +1,28 @@
 <!--
-title: Log
+title: No-Op
 weight: 4615
 -->
 
-# Log
-This activity allows you to write log messages.
+# No-Op
+This activity is a simple No-Op that can be used for testing.
 
 ## Installation
 ### Flogo Web
 This activity comes out of the box with the Flogo Web UI
 ### Flogo CLI
 ```bash
-flogo install github.com/project-flogo/contrib/activity/log
+flogo install github.com/project-flogo/contrib/activity/noop
 ```
-
-## Metadata
-```json
-{
-  "input":[
-    {
-      "name": "message",
-      "type": "string",
-      "value": ""
-    },
-    {
-      "name": "addDetails",
-      "type": "boolean",
-      "value": "false"
-    }
-  ]
-}
-```
-### Details
-#### Input:
-| Name     | Required | Description |
-|:------------|:---------|:------------|
-| message     | false    | The message to log |
-| addDetails    | false    | If set to true this will append the  execution information to the log message |
 
 ## Examples
-The below example logs a message 'test message':
+Configuration of a No-Op activity
 
 ```json
 {
-  "id": "log_message",
-  "name": "Log Message",
+  "id": "noop",
+  "name": "NoOp",
   "activity": {
-    "ref": "github.com/project-flogo/contrib/activity/log",
-    "input": {
-      "message": "test message",
-      "addDetails": "false"
-    }
+    "ref": "github.com/project-flogo/contrib/activity/noop"
   }
 }
 ```

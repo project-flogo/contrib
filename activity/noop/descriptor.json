@@ -1,20 +1,8 @@
 {
-  "name": "flogo-log",
+  "name": "flogo-noop",
   "type": "flogo:activity",
   "version": "0.0.2",
-  "title": "Log",
-  "description": "Logs a message",
-  "homepage": "https://github.com/prject-flogo/contrib/tree/master/activity/log",
-  "input":[
-    {
-      "name": "message",
-      "type": "string",
-      "value": ""
-    },
-    {
-      "name": "addDetails",
-      "type": "boolean",
-      "value": "false"
-    }
-  ]
+  "title": "No-Op",
+  "description": "No-Op",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/activity/noop"
 }
