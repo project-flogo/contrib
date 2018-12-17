@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
@@ -36,7 +37,13 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	act := &Activity{settings: s}
 	act.containsParam = strings.Index(s.Uri, "/:") > -1
 
-	httpTransportSettings := http.Transport{}
+	client := &http.Client{}
+
+	httpTransportSettings := &http.Transport{}
+
+	if s.Timeout > 0 {
+		httpTransportSettings.ResponseHeaderTimeout = time.Second * time.Duration(s.Timeout)
+	}
 
 	logger := ctx.Logger()
 
@@ -57,7 +64,8 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		httpTransportSettings.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	}
 
-	act.client = http.Client{Transport: &httpTransportSettings}
+	client.Transport = httpTransportSettings
+	act.client = client
 
 	return act, nil
 }
@@ -69,7 +77,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 type Activity struct {
 	settings      *Settings
 	containsParam bool
-	client        http.Client
+	client        *http.Client
 }
 
 func (a *Activity) Metadata() *activity.Metadata {
@@ -113,8 +121,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	var reqBody io.Reader
 
 	contentType := "application/json; charset=UTF-8"
+	method := a.settings.Method
 
-	if a.settings.Method == methodPOST || a.settings.Method == methodPUT || a.settings.Method == methodPATCH {
+	if method == methodPOST || method == methodPUT || method == methodPATCH {
 
 		contentType = getContentType(input.Content)
 
@@ -130,7 +139,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		reqBody = nil
 	}
 
-	req, err := http.NewRequest(a.settings.Method, uri, reqBody)
+	req, err := http.NewRequest(method, uri, reqBody)
 
 	if err != nil {
 		return false, err
@@ -163,25 +172,53 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	if err != nil {
 		return false, err
 	}
-	defer resp.Body.Close()
 
-	logger.Debug("response Status:", resp.Status)
-	respBody, _ := ioutil.ReadAll(resp.Body)
+	if resp == nil {
+		logger.Debug("empty response")
+		return true, nil
+	}
+
+	defer func() {
+		if resp.Body != nil {
+			resp.Body.Close()
+		}
+	}()
+
+	if logger.DebugEnabled() {
+		logger.Debug("response Status:", resp.Status)
+	}
 
 	var result interface{}
 
-	d := json.NewDecoder(bytes.NewReader(respBody))
-	d.UseNumber()
-	err = d.Decode(&result)
+	// Check the HTTP Header Content-Type
+	respContentType := resp.Header.Get("Content-Type")
+	switch respContentType {
+	case "application/json":
+		d := json.NewDecoder(resp.Body)
+		d.UseNumber()
+		err = d.Decode(&result)
+		if err != nil {
+			switch {
+			case err == io.EOF:
+				// empty body
+			case err != nil:
+				return false, err
+			}
+		}
+	default:
+		b, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return false, err
+		}
 
-	//json.Unmarshal(respBody, &result)
+		result = string(b)
+	}
 
 	if logger.DebugEnabled() {
 		logger.Debug("response body:", result)
 	}
 
 	output := &Output{Status: resp.StatusCode, Data: result}
-
 	ctx.SetOutputObject(output)
 
 	return true, nil

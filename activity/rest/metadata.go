@@ -10,6 +10,7 @@ type Settings struct {
 	Headers map[string]string `md:"headers"`
 	Proxy   string            `md:"proxy"`
 	SkipSSL bool              `md:"skipSSL"`
+	Timeout int               `md:"timeout"`
 }
 
 type Input struct {
