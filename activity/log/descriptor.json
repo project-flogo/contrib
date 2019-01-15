@@ -14,7 +14,7 @@
     {
       "name": "addDetails",
       "type": "boolean",
-      "value": "false"
+      "value": false
     }
   ]
 }
