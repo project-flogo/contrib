@@ -1,10 +1,10 @@
 {
-  "name": "strings",
+  "name": "number",
   "type": "flogo:function",
   "version": "0.0.1",
-  "title": "String Functions",
-  "description": "String Functions",
-  "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/string",
+  "title": "Number Functions",
+  "description": "Number Functions",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/number",
   "functions": [
     {
       "name": "number.random",
@@ -12,7 +12,7 @@
       "varArgs": true,
       "args": [
         {
-          "name ": "limit",
+          "name": "limit",
           "type": "int"
         }
       ]
