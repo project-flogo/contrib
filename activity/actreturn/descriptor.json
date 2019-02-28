@@ -5,7 +5,7 @@
   "title": "Return",
   "description": "Return Activity",
   "homepage": "https://github.com/prject-flogo/contrib/tree/master/activity/actreturn",
-  "return":true,
+  "reply":true,
   "settings":[
     {
       "name": "mappings",

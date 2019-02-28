@@ -5,7 +5,7 @@
   "title": "Reply To Trigger",
   "description": "Replies to Trigger",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/actreply",
-  "return":true,
+  "reply":true,
   "settings":[
     {
       "name": "mappings",
