@@ -1,10 +1,10 @@
 {
-  "name": "strings",
+  "name": "string",
   "type": "flogo:function",
   "version": "0.0.1",
   "title": "String Functions",
   "description": "String Functions",
-  "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/string",
+  "homepage": "https://github.com/project-flogo/contrib/tree/master/function/string",
   "functions": [
     {
       "name": "string.concat",
@@ -12,7 +12,7 @@
       "varArgs": true,
       "args": [
         {
-          "name ": "str",
+          "name": "str",
           "type": "string"
         }
       ]
@@ -22,11 +22,11 @@
       "description": "check if two strings are equal",
       "args": [
         {
-          "name ": "str1",
+          "name": "str1",
           "type": "string"
         },
         {
-          "name ": "str2",
+          "name": "str2",
           "type": "string"
         }
       ]
@@ -36,11 +36,11 @@
       "description": "check if two strings are equal ignoring case",
       "args": [
         {
-          "name ": "str1",
+          "name": "str1",
           "type": "string"
         },
         {
-          "name ": "str2",
+          "name": "str2",
           "type": "string"
         }
       ]
@@ -50,7 +50,7 @@
       "description": "convert the string to a float",
       "args": [
         {
-          "name ": "str1",
+          "name": "str1",
           "type": "string"
         }
       ]
@@ -60,7 +60,7 @@
       "description": "convert the string to an integer",
       "args": [
         {
-          "name ": "str1",
+          "name": "str1",
           "type": "string"
         }
       ]
@@ -70,7 +70,7 @@
       "description": "get the length of a string",
       "args": [
         {
-          "name ": "str1",
+          "name": "str1",
           "type": "string"
         }
       ]
@@ -80,15 +80,15 @@
       "description": "get a substring from a string",
       "args": [
         {
-          "name ": "str",
+          "name": "str",
           "type": "string"
         },
         {
-          "name ": "start",
+          "name": "start",
           "type": "string"
         },
         {
-          "name ": "end",
+          "name": "end",
           "type": "string"
         }
       ]

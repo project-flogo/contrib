@@ -11,11 +11,11 @@
       "description": "apply a json path to an object",
       "args": [
         {
-          "name ": "path",
+          "name": "path",
           "type": "string"
         },
         {
-          "name ": "object",
+          "name": "object",
           "type": "any"
         }
       ]
