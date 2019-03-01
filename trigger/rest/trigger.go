@@ -194,6 +194,16 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 				r.ParseMultipartForm(5 * 1024 * 1024)
 				file, header, err := r.FormFile(hanlderSettings.File)
 
+				buf := bytes.NewBuffer(nil)
+				
+				if _, err := io.Copy(buf, file); err != nil {
+					http.Error(w, err.Error(), http.StatusBadRequest)
+					return
+				}
+
+				out.Content = buf.Bytes()
+
+				/*
 				//Save the file
 				f, err := os.OpenFile(header.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 				if err != nil {
@@ -203,8 +213,8 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 				defer f.Close()
 				io.Copy(f, file)
 
-				//Pass the fileName so that we can read the file later on
-				out.Content = header.Filename
+				Pass the fileName so that we can read the file later on
+				out.Content = header.Filename*/
 
 			} else {
 				b, err := ioutil.ReadAll(r.Body)
