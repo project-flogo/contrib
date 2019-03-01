@@ -43,6 +43,7 @@ func TestSimpleReply(t *testing.T) {
 	act, err := New(iCtx)
 	assert.Nil(t, err)
 
+	
 	ac := newActionContext()
 	tc := test.NewActivityContextWithAction(act.Metadata(), ac)
 
@@ -50,7 +51,7 @@ func TestSimpleReply(t *testing.T) {
 	done, err := act.Eval(tc)
 	assert.Nil(t, err)
 	assert.True(t, done)
-
+	
 	assert.Nil(t, ac.ReplyErr)
 	o1, exists1 := ac.ReplyData["Output1"]
 	assert.True(t, exists1, "Output1 not set")
@@ -66,7 +67,7 @@ func TestSimpleReply(t *testing.T) {
 
 func newActionContext() *test.TestActivityHost {
 	input := map[string]data.TypedValue{"Input1": data.NewTypedValue(data.TypeString, "")}
-	output := map[string]data.TypedValue{"Output1": data.NewTypedValue(data.TypeString, ""), "Output2": data.NewTypedValue(data.TypeInt, "")}
+	output := map[string]data.TypedValue{"Output1": data.NewTypedValue(data.TypeString, "1"), "Output2": data.NewTypedValue(data.TypeInt, "2")}
 
 	ac := &test.TestActivityHost{
 		HostId:     "1",

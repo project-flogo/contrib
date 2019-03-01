@@ -6,7 +6,11 @@
   "description": "Return Activity",
   "homepage": "https://github.com/prject-flogo/contrib/tree/master/activity/actreturn",
   "return":true,
+<<<<<<< Updated upstream
   "settings":[
+=======
+  "setting":[
+>>>>>>> Stashed changes
     {
       "name": "mappings",
       "type": "object",
