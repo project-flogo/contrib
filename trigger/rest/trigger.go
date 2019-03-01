@@ -191,11 +191,16 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 			if strings.Contains(contentType, "multipart/form-data") && hanlderSettings.File != "" {
 
 				r.ParseMultipartForm(5 * 1024 * 1024)
-				file, header, err := r.FormFile(hanlderSettings.File)
+				file, _, err := r.FormFile(hanlderSettings.File)
+
+				if err!= nil{
+					http.Error(w, err.Error(), http.StatusBadRequest)
+					return
+				}
 
 				buf := bytes.NewBuffer(nil)
 				
-				if _, err := io.Copy(buf, file); err != nil {
+				if _, err = io.Copy(buf, file); err != nil {
 					http.Error(w, err.Error(), http.StatusBadRequest)
 					return
 				}
