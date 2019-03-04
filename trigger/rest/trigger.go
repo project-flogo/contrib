@@ -198,6 +198,8 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 					return
 				}
 
+				out.Content = file
+				/*
 				buf := bytes.NewBuffer(nil)
 				
 				if _, err = io.Copy(buf, file); err != nil {
@@ -207,7 +209,7 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 
 				out.Content = buf.Bytes()
 
-				/*
+				
 				//Save the file
 				f, err := os.OpenFile(header.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 				if err != nil {
