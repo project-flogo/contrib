@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"mime/multipart"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/project-flogo/contrib/trigger/rest/cors"
@@ -191,14 +192,16 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 			if strings.Contains(contentType, "multipart/form-data") && hanlderSettings.File != "" {
 
 				r.ParseMultipartForm(5 * 1024 * 1024)
-				file, _, err := r.FormFile(hanlderSettings.File)
+				file, header, err := r.FormFile(hanlderSettings.File)
 
 				if err!= nil{
 					http.Error(w, err.Error(), http.StatusBadRequest)
 					return
 				}
-
-				out.Content = file
+				result := make(map[*multipart.FileHeader]multipart.File)
+				result[header] = file
+				
+				out.Content = result
 				/*
 				buf := bytes.NewBuffer(nil)
 				
