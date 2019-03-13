@@ -35,8 +35,8 @@ func TestSimpleMapper(t *testing.T) {
 	}
 
 	settings := map[string]interface{}{"mappings": mappings}
-
 	act, err := New(settings)
+
 	assert.Nil(t, err)
 
 	ah := newActivityHost()

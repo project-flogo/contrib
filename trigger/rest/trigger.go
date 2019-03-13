@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 
@@ -23,6 +24,7 @@ const (
 )
 
 var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{}, &Reply{})
+var hanlderSettings *HandlerSettings
 
 func init() {
 	trigger.Register(&Trigger{}, &Factory{})
@@ -69,15 +71,14 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
 	// Init handlers
 	for _, handler := range ctx.GetHandlers() {
-
-		s := &HandlerSettings{}
-		err := metadata.MapToStruct(handler.Settings(), s, true)
+		hanlderSettings = &HandlerSettings{}
+		err := metadata.MapToStruct(handler.Settings(), hanlderSettings, true)
 		if err != nil {
 			return err
 		}
 
-		method := s.Method
-		path := s.Path
+		method := hanlderSettings.Method
+		path := hanlderSettings.Path
 
 		t.logger.Debugf("Registering handler [%s: %s]", method, path)
 
@@ -187,12 +188,33 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 			}
 			out.Content = content
 		default:
-			b, err := ioutil.ReadAll(r.Body)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
+
+			if strings.Contains(contentType, "multipart/form-data") && hanlderSettings.File != "" {
+
+				r.ParseMultipartForm(5 * 1024 * 1024)
+				file, header, err := r.FormFile(hanlderSettings.File)
+
+				//Save the file
+				f, err := os.OpenFile(header.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusBadRequest)
+					return
+				}
+				defer f.Close()
+				io.Copy(f, file)
+
+				//Pass the fileName so that we can read the file later on
+				out.Content = header.Filename
+
+			} else {
+				b, err := ioutil.ReadAll(r.Body)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusBadRequest)
+				}
+
+				out.Content = string(b)
 			}
 
-			out.Content = string(b)
 		}
 
 		results, err := handler.Handle(context.Background(), out)
