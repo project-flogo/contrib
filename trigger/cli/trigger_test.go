@@ -7,7 +7,7 @@ import (
 var jsonTestMetadata = getTestJsonMetadata()
 
 func getTestJsonMetadata() string {
-	jsonMetadataBytes, err := ioutil.ReadFile("./examples/single/flogo-single-cli.json")
+	jsonMetadataBytes, err := ioutil.ReadFile("trigger.json")
 	if err != nil {
 		panic("No Json Metadata found for trigger.json path")
 	}
