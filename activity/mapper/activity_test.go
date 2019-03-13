@@ -3,6 +3,7 @@ package activity_mapper
 import (
 	"encoding/json"
 	"testing"
+
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/metadata"
@@ -35,7 +36,7 @@ func TestSimpleMapper(t *testing.T) {
 
 	settings := map[string]interface{}{"mappings": mappings}
 	act, err := New(settings)
-	
+
 	assert.Nil(t, err)
 
 	ah := newActivityHost()
@@ -63,7 +64,7 @@ func newActivityHost() *test.TestActivityHost {
 
 	ac := &test.TestActivityHost{
 		HostId:     "1",
-		HostRef:    "github.com/TIBCOSoftware/flogo-contrib/flow",
+		HostRef:    "github.com/TIBCOSoftware/flogo-contrib/action/flow",
 		IoMetadata: &metadata.IOMetadata{Input: input, Output: output},
 		HostData:   data.NewSimpleScope(nil, nil),
 	}
