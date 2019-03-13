@@ -187,12 +187,56 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 			}
 			out.Content = content
 		default:
-			b, err := ioutil.ReadAll(r.Body)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-			}
+			if strings.Contains(contentType, "multipart/form-data") {
+				// need to still extract the body, only handling the multipart data for now...
 
-			out.Content = string(b)
+				if err := r.ParseMultipartForm(32); err != nil {
+					http.Error(w, err.Error(), http.StatusBadRequest)
+				}
+
+				var files []map[string]interface{}
+
+				for k, fh := range r.MultipartForm.File {
+					for _, header := range fh {
+						file, err := header.Open()
+						if err != nil {
+							rt.logger.Errorf("Error opening attached file: %s", err.Error())
+							http.Error(w, err.Error(), http.StatusBadRequest)
+						}
+
+						defer file.Close()
+
+						buf := bytes.NewBuffer(nil)
+						if _, err := io.Copy(buf, file); err != nil {
+							rt.logger.Errorf("Copying file to buffer: %s", err.Error())
+							http.Error(w, err.Error(), http.StatusBadRequest)
+						}
+
+						fileDetails := map[string]interface{}{
+							"key":      k,
+							"fileName": header.Filename,
+							"fileType": header.Header.Get("Content-Type"),
+							"size":     header.Size,
+							"file":     buf.Bytes(),
+						}
+						files = append(files, fileDetails)
+					}
+				}
+
+				// The content output from the trigger
+				content := map[string]interface{}{
+					"body":  nil,
+					"files": files,
+				}
+				out.Content = content
+			} else {
+				b, err := ioutil.ReadAll(r.Body)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusBadRequest)
+				}
+
+				out.Content = string(b)
+			}
 		}
 
 		results, err := handler.Handle(context.Background(), out)
