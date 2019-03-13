@@ -1,9 +1,10 @@
 package rest
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
-	"net/http"
+
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/mapper"
 	"github.com/project-flogo/core/data/resolve"
@@ -64,11 +65,14 @@ func TestSimplePost(t *testing.T) {
 
 	//eval
 	act.Eval(tc)
-	output := &Output{}
-	tc.GetOutputObject(output)
+	val := tc.GetOutput("result")
 
-	assert.Equal(t, http.StatusOK, output.Status)
+	fmt.Printf("result: %v\n", val)
 
+	res := val.(map[string]interface{})
+
+	petID = res["id"].(json.Number).String()
+	fmt.Println("petID:", petID)
 }
 
 func TestSimpleGet(t *testing.T) {
@@ -84,9 +88,9 @@ func TestSimpleGet(t *testing.T) {
 
 	//eval
 	act.Eval(tc)
-	output := &Output{}
-	tc.GetOutputObject(output)
-	assert.Equal(t, http.StatusNotFound, output.Status)
+
+	val := tc.GetOutput("result")
+	fmt.Printf("result: %v\n", val)
 }
 
 func TestSimpleGetWithHeaders(t *testing.T) {
@@ -107,9 +111,8 @@ func TestSimpleGetWithHeaders(t *testing.T) {
 	//eval
 	act.Eval(tc)
 
-	output := &Output{}
-	tc.GetOutputObject(output)
-	assert.Equal(t, http.StatusOK, output.Status)
+	val := tc.GetOutput("result")
+	fmt.Printf("result: %v\n", val)
 }
 
 func TestParamGet(t *testing.T) {
@@ -131,9 +134,8 @@ func TestParamGet(t *testing.T) {
 	//eval
 	act.Eval(tc)
 
-	output := &Output{}
-	tc.GetOutputObject(output)
-	//assert.Equal(t, 200, output.Status)
+	val := tc.GetOutput("result")
+	fmt.Printf("result: %v\n", val)
 }
 
 //func TestSimpleGetWithProxy(t *testing.T) {
