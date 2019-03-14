@@ -7,7 +7,7 @@
   "homepage": "https://github.com/project-flogo/contrib/tree/master/function/string",
   "functions": [
     {
-      "name": "string.concat",
+      "name": "concat",
       "description": "concatenate a set of string",
       "varArgs": true,
       "args": [
@@ -18,7 +18,7 @@
       ]
     },
     {
-      "name": "string.equals",
+      "name": "equals",
       "description": "check if two strings are equal",
       "args": [
         {
@@ -32,7 +32,7 @@
       ]
     },
     {
-      "name": "string.equalsIgnoreCase",
+      "name": "equalsIgnoreCase",
       "description": "check if two strings are equal ignoring case",
       "args": [
         {
@@ -46,7 +46,7 @@
       ]
     },
     {
-      "name": "string.contains",
+      "name": "contains",
       "description": "check if str2 is within str1",
       "args": [
         {
@@ -60,7 +60,7 @@
       ]
     },
     {
-      "name": "string.float",
+      "name": "float",
       "description": "convert the string to a float",
       "args": [
         {
@@ -70,7 +70,7 @@
       ]
     },
     {
-      "name": "string.integer",
+      "name": "integer",
       "description": "convert the string to an integer",
       "args": [
         {
@@ -80,7 +80,7 @@
       ]
     },
     {
-      "name": "string.len",
+      "name": "len",
       "description": "get the length of a string",
       "args": [
         {
@@ -90,7 +90,7 @@
       ]
     },
     {
-      "name": "string.substring",
+      "name": "substring",
       "description": "get a substring from a string",
       "args": [
         {
