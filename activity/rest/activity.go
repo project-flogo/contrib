@@ -3,9 +3,11 @@ package rest
 import (
 	"bytes"
 	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -62,6 +64,34 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	// Skip ssl validation
 	if s.SkipSSL {
 		httpTransportSettings.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	}
+	if s.TLS {
+		cert, err := tls.LoadX509KeyPair(s.CertPm, s.KeyPm)
+		if err != nil {
+			log.Fatal(err)
+		}
+		caCert, err := ioutil.ReadFile(s.CAPm)
+		if err != nil {
+			log.Fatal(err)
+		}
+		caCertPool := x509.NewCertPool()
+		caCertPool.AppendCertsFromPEM(caCert)
+
+		// Setup HTTPS client
+		tlsConfig := &tls.Config{
+			Certificates: []tls.Certificate{cert},
+			RootCAs:      caCertPool,
+		}
+		tlsConfig.BuildNameToCertificate()
+
+		transport := &http.Transport{TLSClientConfig: tlsConfig}
+
+		client = &http.Client{Transport: transport}
+		if err != nil {
+			panic("failed to connect: " + err.Error())
+		}
+		act.client = client
+		return act, nil
 	}
 
 	client.Transport = httpTransportSettings

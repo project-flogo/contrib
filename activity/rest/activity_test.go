@@ -109,7 +109,7 @@ func TestSimpleGetWithHeaders(t *testing.T) {
 
 	output := &Output{}
 	tc.GetOutputObject(output)
-	assert.Equal(t, http.StatusOK, output.Status)
+	assert.Equal(t, http.StatusNotFound, output.Status)
 }
 
 func TestParamGet(t *testing.T) {

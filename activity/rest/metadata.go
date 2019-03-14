@@ -13,7 +13,8 @@ type Settings struct {
 	Timeout int               `md:"timeout"`
 	TLS     bool              `md:"tls"`
 	CertPm  string            `md:"certpem"`
-	KeyPm   string            `md:"keypem"`
+	CAPm    string            `md:"capem"`
+	KeyPm   string            `md:"keypm"`
 }
 
 type Input struct {
