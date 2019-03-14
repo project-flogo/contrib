@@ -15,7 +15,7 @@ type fnPath struct {
 
 // Name returns the name of the function
 func (fnPath) Name() string {
-	return "json.path"
+	return "path"
 }
 
 // Sig returns the function signature

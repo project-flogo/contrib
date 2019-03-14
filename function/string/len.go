@@ -13,7 +13,7 @@ type fnLen struct {
 }
 
 func (fnLen) Name() string {
-	return "string.len"
+	return "len"
 }
 
 func (fnLen) Sig() (paramTypes []data.Type, isVariadic bool) {

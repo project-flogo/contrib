@@ -7,7 +7,7 @@
   "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/json",
   "functions": [
     {
-      "name": "json.path",
+      "name": "path",
       "description": "apply a json path to an object",
       "args": [
         {
