@@ -15,7 +15,7 @@ func init() {
 }
 
 func (s *fnContains) Name() string {
-	return "string.contains"
+	return "contains"
 }
 
 func (fnContains) Sig() (paramTypes []data.Type, isVariadic bool) {
