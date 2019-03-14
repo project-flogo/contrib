@@ -63,7 +63,7 @@ func myApp() *api.App {
 
 	app := api.NewApp()
 
-	trg := app.NewTrigger(&Trigger{}, &Settings{Port: 5050, TLS: true, CertPm: "/Users/skothari-tibco/Desktop/cert.pem", KeyPm: "/Users/skothari-tibco/Desktop/key.pem"})
+	trg := app.NewTrigger(&Trigger{}, &Settings{Port: 5050, TLS: true, CertPm: "/cert.pem", KeyPm: "/key.pem"})
 
 	h, _ := trg.NewHandler(&HandlerSettings{Method: "GET", Path: "/test"})
 

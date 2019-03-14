@@ -6,26 +6,26 @@ const ovArgs = "args"
 const ovFlags = "flags"
 
 type Settings struct {
-	SingleCmd  bool   `md:"singleCmd"`
-	Use        string `md:"use"`
-	Long       string `md:"long"`
+	SingleCmd bool   `md:"singleCmd"`
+	Use       string `md:"use"`
+	Long      string `md:"long"`
 }
 
 type HandlerSettings struct {
-	FlagDesc   []interface{} `md:"flags"`
-	Use        string `md:"use"`
-	Short      string `md:"short"`
-	Long       string `md:"long"`
+	FlagDesc []interface{} `md:"flags"`
+	Use      string        `md:"use"`
+	Short    string        `md:"short"`
+	Long     string        `md:"long"`
 }
 
 type Output struct {
-	Args    []interface{} `md:"args"`
-	Flags   map[string]interface{} `md:"flags"`
+	Args  []interface{}          `md:"args"`
+	Flags map[string]interface{} `md:"flags"`
 }
 
 func (o *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		ovArgs: o.Args,
+		ovArgs:  o.Args,
 		ovFlags: o.Flags,
 	}
 }
