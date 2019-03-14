@@ -2,8 +2,10 @@ package rest
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
-	"net/http"
+	"os"
 	"sync"
 	"testing"
 	"time"
@@ -21,7 +23,6 @@ func TestTrigger_Register(t *testing.T) {
 	f := trigger.GetFactory(ref)
 	assert.NotNil(t, f)
 }
-
 func Test_App(t *testing.T) {
 	var wg sync.WaitGroup
 	app := myApp()
@@ -39,12 +40,20 @@ func Test_App(t *testing.T) {
 
 	go func() {
 		time.Sleep(5 * time.Second)
-		resp, err := http.Get("http://localhost:5050/test")
+		roots := x509.NewCertPool()
+
+		conn, err := tls.Dial("tcp", "localhost:5050", &tls.Config{
+			RootCAs: roots,
+		})
+		if err != nil {
+			panic("failed to connect: " + err.Error())
+		}
+		conn.Close()
 		if err != nil {
 			assert.NotNil(t, err)
 			wg.Done()
 		}
-		assert.Equal(t, "text/plain; charset=UTF-8", resp.Header.Get("Content-type"),)
+		//assert.Equal(t, "text/plain; charset=UTF-8", resp.Header.Get("Content-type"))
 		wg.Done()
 	}()
 	wg.Wait()
@@ -54,7 +63,7 @@ func myApp() *api.App {
 
 	app := api.NewApp()
 
-	trg := app.NewTrigger(&Trigger{}, &Settings{Port: 5050})
+	trg := app.NewTrigger(&Trigger{}, &Settings{Port: 5050, TLS: true, CertPm: "/Users/skothari-tibco/Desktop/cert.pem", KeyPm: "/Users/skothari-tibco/Desktop/key.pem"})
 
 	h, _ := trg.NewHandler(&HandlerSettings{Method: "GET", Path: "/test"})
 

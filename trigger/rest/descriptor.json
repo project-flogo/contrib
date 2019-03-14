@@ -10,6 +10,19 @@
       "name": "port",
       "type": "int",
       "required": true
+    },
+    {
+      "name":"tls",
+      "type":"boolean"
+    },
+    {
+      "name": "certs",
+      "type":"string"
+    },
+    {
+      "name": "key",
+      "type":"string"
+
     }
   ],
   "output": [

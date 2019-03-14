@@ -11,6 +11,9 @@ type Settings struct {
 	Proxy   string            `md:"proxy"`
 	SkipSSL bool              `md:"skipSSL"`
 	Timeout int               `md:"timeout"`
+	TLS     bool              `md:"tls"`
+	CertPm  string            `md:"certpem"`
+	KeyPm   string            `md:"keypem"`
 }
 
 type Input struct {

@@ -2,6 +2,7 @@ package rest
 
 import (
 	"crypto/md5"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"net"
@@ -16,9 +17,9 @@ import (
 
 // NewServer create a new server instance
 //param server - is a instance of http.Server, can be nil and a default one will be created
-func NewServer(addr string, handler http.Handler) *Server {
+func NewServer(addr string, handler http.Handler, tls *tls.Config) *Server {
 	srv := &Server{}
-	srv.Server = &http.Server{Addr: addr, Handler: handler}
+	srv.Server = &http.Server{Addr: addr, Handler: handler, TLSConfig: tls}
 
 	return srv
 }
@@ -54,8 +55,14 @@ func (s *Server) Start() error {
 	if addr == "" {
 		addr = ":http"
 	}
+	var listener net.Listener
+	var err error
+	if s.TLSConfig != nil {
+		listener, err = tls.Listen("tcp", addr, s.TLSConfig)
+	} else {
+		listener, err = net.Listen("tcp", addr)
+	}
 
-	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		return err
 	}
