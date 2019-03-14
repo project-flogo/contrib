@@ -16,7 +16,7 @@ type fnConcat struct {
 }
 
 func (fnConcat) Name() string {
-	return "string.concat"
+	return "concat"
 }
 
 func (fnConcat) Sig() (paramTypes []data.Type, isVariadic bool) {
