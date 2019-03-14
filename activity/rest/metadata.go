@@ -12,8 +12,8 @@ type Settings struct {
 	SkipSSL bool              `md:"skipSSL"`
 	Timeout int               `md:"timeout"`
 	TLS     bool              `md:"tls"`
-	CertPm  string            `md:"certpem"`
-	CAPm    string            `md:"capem"`
+	CertPm  string            `md:"certpm"`
+	CAPm    string            `md:"capm"`
 	KeyPm   string            `md:"keypm"`
 }
 
