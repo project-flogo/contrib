@@ -46,6 +46,20 @@
       ]
     },
     {
+      "name": "contains",
+      "description": "check if str2 is within str1",
+      "args": [
+        {
+          "name": "str1",
+          "type": "string"
+        },
+        {
+          "name": "str2",
+          "type": "string"
+        }
+      ]
+    },
+    {
       "name": "float",
       "description": "convert the string to a float",
       "args": [
