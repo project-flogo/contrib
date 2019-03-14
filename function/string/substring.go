@@ -15,7 +15,7 @@ type fnSubstring struct {
 }
 
 func (fnSubstring) Name() string {
-	return "string.substring"
+	return "substring"
 }
 
 func (fnSubstring) Sig() (paramTypes []data.Type, isVariadic bool) {

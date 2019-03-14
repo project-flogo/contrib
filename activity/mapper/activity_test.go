@@ -36,9 +36,8 @@ func TestSimpleMapper(t *testing.T) {
 	}
 
 	settings := map[string]interface{}{"mappings": mappings}
-	mf := mapper.NewFactory(resolve.GetBasicResolver())
-	iCtx := test.NewActivityInitContext(settings, mf)
-	act, err := New(iCtx)
+
+	act, err := New(settings)
 	assert.Nil(t, err)
 
 	ah := newActivityHost()
@@ -56,7 +55,7 @@ func TestSimpleMapper(t *testing.T) {
 	o2, exists2 := ah.HostData.GetValue("Output2")
 	assert.True(t, exists2, "Output2 not set")
 	if exists2 {
-		assert.Equal(t, 2.0, o2)
+		assert.Equal(t, 2, o2)
 	}
 }
 
@@ -66,7 +65,7 @@ func newActivityHost() *test.TestActivityHost {
 
 	ac := &test.TestActivityHost{
 		HostId:     "1",
-		HostRef:    "github.com/project-flogo/flow",
+		HostRef:    "github.com/TIBCOSoftware/flogo-contrib/action/flow",
 		IoMetadata: &metadata.IOMetadata{Input: input, Output: output},
 		HostData:   data.NewSimpleScope(nil, nil),
 	}

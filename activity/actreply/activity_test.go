@@ -66,7 +66,7 @@ func TestSimpleReply(t *testing.T) {
 
 func newActionContext() *test.TestActivityHost {
 	input := map[string]data.TypedValue{"Input1": data.NewTypedValue(data.TypeString, "")}
-	output := map[string]data.TypedValue{"Output1": data.NewTypedValue(data.TypeString, "1"), "Output2": data.NewTypedValue(data.TypeInt, "2")}
+	output := map[string]data.TypedValue{"Output1": data.NewTypedValue(data.TypeString, ""), "Output2": data.NewTypedValue(data.TypeInt, "")}
 
 	ac := &test.TestActivityHost{
 		HostId:     "1",

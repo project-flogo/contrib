@@ -10,7 +10,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
 	"strconv"
 	"strings"
 
@@ -26,7 +25,6 @@ const (
 )
 
 var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{}, &Reply{})
-var hanlderSettings *HandlerSettings
 
 func init() {
 	trigger.Register(&Trigger{}, &Factory{})
@@ -73,14 +71,15 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
 	// Init handlers
 	for _, handler := range ctx.GetHandlers() {
-		hanlderSettings = &HandlerSettings{}
-		err := metadata.MapToStruct(handler.Settings(), hanlderSettings, true)
+
+		s := &HandlerSettings{}
+		err := metadata.MapToStruct(handler.Settings(), s, true)
 		if err != nil {
 			return err
 		}
 
-		method := hanlderSettings.Method
-		path := hanlderSettings.Path
+		method := s.Method
+		path := s.Path
 
 		t.logger.Debugf("Registering handler [%s: %s]", method, path)
 
@@ -204,24 +203,48 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 			}
 			out.Content = content
 		default:
+			if strings.Contains(contentType, "multipart/form-data") {
+				// need to still extract the body, only handling the multipart data for now...
 
-			if strings.Contains(contentType, "multipart/form-data") && hanlderSettings.File != "" {
-
-				r.ParseMultipartForm(5 * 1024 * 1024)
-				file, header, err := r.FormFile(hanlderSettings.File)
-
-				//Save the file
-				f, err := os.OpenFile(header.Filename, os.O_WRONLY|os.O_CREATE, 0666)
-				if err != nil {
+				if err := r.ParseMultipartForm(32); err != nil {
 					http.Error(w, err.Error(), http.StatusBadRequest)
-					return
 				}
-				defer f.Close()
-				io.Copy(f, file)
 
-				//Pass the fileName so that we can read the file later on
-				out.Content = header.Filename
+				var files []map[string]interface{}
 
+				for k, fh := range r.MultipartForm.File {
+					for _, header := range fh {
+						file, err := header.Open()
+						if err != nil {
+							rt.logger.Errorf("Error opening attached file: %s", err.Error())
+							http.Error(w, err.Error(), http.StatusBadRequest)
+						}
+
+						defer file.Close()
+
+						buf := bytes.NewBuffer(nil)
+						if _, err := io.Copy(buf, file); err != nil {
+							rt.logger.Errorf("Copying file to buffer: %s", err.Error())
+							http.Error(w, err.Error(), http.StatusBadRequest)
+						}
+
+						fileDetails := map[string]interface{}{
+							"key":      k,
+							"fileName": header.Filename,
+							"fileType": header.Header.Get("Content-Type"),
+							"size":     header.Size,
+							"file":     buf.Bytes(),
+						}
+						files = append(files, fileDetails)
+					}
+				}
+
+				// The content output from the trigger
+				content := map[string]interface{}{
+					"body":  nil,
+					"files": files,
+				}
+				out.Content = content
 			} else {
 				b, err := ioutil.ReadAll(r.Body)
 				if err != nil {
@@ -230,7 +253,6 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 
 				out.Content = string(b)
 			}
-
 		}
 
 		results, err := handler.Handle(context.Background(), out)
