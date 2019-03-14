@@ -16,7 +16,7 @@ type fnFloat struct {
 
 // Name returns the name of the function
 func (fnFloat) Name() string {
-	return "string.float"
+	return "float"
 }
 
 // Sig returns the function signature

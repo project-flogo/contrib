@@ -13,7 +13,7 @@ type fnEquals struct {
 }
 
 func (fnEquals) Name() string {
-	return "string.equals"
+	return "equals"
 }
 
 func (fnEquals) Sig() (paramTypes []data.Type, isVariadic bool) {
