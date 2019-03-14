@@ -16,7 +16,7 @@ type fnInteger struct {
 
 // Name returns the name of the function
 func (fnInteger) Name() string {
-	return "string.integer"
+	return "integer"
 }
 
 // Sig returns the function signature

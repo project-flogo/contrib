@@ -15,7 +15,7 @@ func init() {
 }
 
 func (s *fnEqualsIgnoreCase) Name() string {
-	return "string.equalsIgnoreCase"
+	return "equalsIgnoreCase"
 }
 
 func (fnEqualsIgnoreCase) Sig() (paramTypes []data.Type, isVariadic bool) {
