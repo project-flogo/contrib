@@ -1,1 +1,1 @@
-module github.com/fm-tibco/contrib
+module github.com/project-flogo/contrib

@@ -1,4 +1,4 @@
-module github.com/project-flogo/contrib/activity/counter
+module github.com/project-flogo/contrib/activity/channel
 
 require (
 	github.com/project-flogo/core v0.9.0-alpha.6
