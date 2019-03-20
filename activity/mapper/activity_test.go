@@ -2,14 +2,14 @@ package activity_mapper
 
 import (
 	"encoding/json"
-	"testing"
-	"github.com/project-flogo/core/data/mapper"
 	"github.com/project-flogo/core/activity"
-	"github.com/project-flogo/core/data/resolve"
 	"github.com/project-flogo/core/data"
+	"github.com/project-flogo/core/data/mapper"
 	"github.com/project-flogo/core/data/metadata"
+	"github.com/project-flogo/core/data/resolve"
 	"github.com/project-flogo/core/support/test"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestRegister(t *testing.T) {

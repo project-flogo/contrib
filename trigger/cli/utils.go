@@ -11,7 +11,6 @@ import (
 	"text/template"
 )
 
-
 func getFlagsAndArgs(hCmd *handlerCmd, cliName string, subCmd bool) (map[string]interface{}, []string) {
 	hCmd.flagSet.SetOutput(ioutil.Discard)
 
@@ -39,7 +38,7 @@ func getFlagsAndArgs(hCmd *handlerCmd, cliName string, subCmd bool) (map[string]
 
 func printMainUsage(cliName string, trg *Trigger, isErr bool) {
 
-	w:= os.Stderr
+	w := os.Stderr
 
 	if !isErr {
 		w = os.Stdout
@@ -48,13 +47,13 @@ func printMainUsage(cliName string, trg *Trigger, isErr bool) {
 
 	bw := bufio.NewWriter(w)
 
-	data := &mainUsageData{Name: cliName, Use:trg.settings.Use, Long:trg.settings.Long}
+	data := &mainUsageData{Name: cliName, Use: trg.settings.Use, Long: trg.settings.Long}
 
 	for name, cmd := range trg.commands {
-		data.Cmds = append(data.Cmds, &mainCmdUsageData{Name: name, Short:cmd.settings.Short})
+		data.Cmds = append(data.Cmds, &mainCmdUsageData{Name: name, Short: cmd.settings.Short})
 	}
-	data.Cmds = append(data.Cmds, &mainCmdUsageData{Name: "help", Short:"help on command"})
-	data.Cmds = append(data.Cmds, &mainCmdUsageData{Name: "version", Short:"prints cli version"})
+	data.Cmds = append(data.Cmds, &mainCmdUsageData{Name: "help", Short: "help on command"})
+	data.Cmds = append(data.Cmds, &mainCmdUsageData{Name: "version", Short: "prints cli version"})
 
 	RenderTemplate(bw, mainUsageTpl, data)
 	bw.Flush()
@@ -62,7 +61,7 @@ func printMainUsage(cliName string, trg *Trigger, isErr bool) {
 
 func printCmdUsage(cliName string, cmd *handlerCmd, isErr bool) {
 
-	w:= os.Stderr
+	w := os.Stderr
 
 	if !isErr {
 		w = os.Stdout
@@ -71,15 +70,15 @@ func printCmdUsage(cliName string, cmd *handlerCmd, isErr bool) {
 
 	bw := bufio.NewWriter(w)
 
-	data := &cmdUsageData{CliName: cliName, Name: cmd.handler.Name(), Use:cmd.settings.Use, Long:cmd.settings.Long}
+	data := &cmdUsageData{CliName: cliName, Name: cmd.handler.Name(), Use: cmd.settings.Use, Long: cmd.settings.Long}
 
 	flags := GetFlags(cmd.flagSet)
 
 	for _, flg := range flags {
-		n, _:= flag.UnquoteUsage(flg)
+		n, _ := flag.UnquoteUsage(flg)
 
 		usage := "-" + flg.Name + " " + n
-		data.Flags = append(data.Flags, &cmdFlagUsageData{Usage:usage, Short:flg.Usage})
+		data.Flags = append(data.Flags, &cmdFlagUsageData{Usage: usage, Short: flg.Usage})
 	}
 
 	RenderTemplate(bw, cmdUsageTpl, data)
@@ -88,12 +87,12 @@ func printCmdUsage(cliName string, cmd *handlerCmd, isErr bool) {
 
 type mainUsageData struct {
 	Name string
-	Use string
+	Use  string
 	Long string
 	Cmds []*mainCmdUsageData
 }
 type mainCmdUsageData struct {
-	Name string
+	Name  string
 	Short string
 }
 
@@ -106,10 +105,10 @@ Commands:{{range .Cmds}}
 
 type cmdUsageData struct {
 	CliName string
-	Name string
-	Use string
-	Long string
-	Flags []*cmdFlagUsageData
+	Name    string
+	Use     string
+	Long    string
+	Flags   []*cmdFlagUsageData
 }
 type cmdFlagUsageData struct {
 	Usage string
@@ -133,7 +132,7 @@ func RenderTemplate(w io.Writer, text string, data interface{}) {
 	}
 }
 
-func  GetFlags(fs *flag.FlagSet) []*flag.Flag{
+func GetFlags(fs *flag.FlagSet) []*flag.Flag {
 
 	var flags []*flag.Flag
 

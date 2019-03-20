@@ -43,7 +43,6 @@ func TestSimpleReply(t *testing.T) {
 	act, err := New(iCtx)
 	assert.Nil(t, err)
 
-	
 	ac := newActionContext()
 	tc := test.NewActivityContextWithAction(act.Metadata(), ac)
 
@@ -51,7 +50,7 @@ func TestSimpleReply(t *testing.T) {
 	done, err := act.Eval(tc)
 	assert.Nil(t, err)
 	assert.True(t, done)
-	
+
 	assert.Nil(t, ac.ReplyErr)
 	o1, exists1 := ac.ReplyData["Output1"]
 	assert.True(t, exists1, "Output1 not set")
