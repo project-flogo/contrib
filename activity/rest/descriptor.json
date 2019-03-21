@@ -1,5 +1,5 @@
 {
-  "name": "tibco-rest",
+  "name": "flogo-rest",
   "type": "flogo:activity",
   "version": "0.0.2",
   "title": "REST Invoke",
@@ -10,67 +10,84 @@
       "name": "method",
       "type": "string",
       "required": true,
-      "allowed": [ "GET", "POST", "PUT", "PATCH", "DELETE" ]
+      "allowed": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "description" : "The HTTP method to invoke"
     },
     {
       "name": "uri",
       "type": "string",
-      "required": true
-    },
-    {
-      "name": "proxy",
-      "type": "string"
+      "required": true,
+      "description" : "The URI of the service to invoke"
     },
     {
       "name": "headers",
-      "type": "params"
+      "type": "params",
+      "description" : "The HTTP header parameters"
     },
     {
-      "name": "skipSSL",
+      "name": "proxy",
+      "type": "string",
+      "description" : "The address of the proxy server to be use"
+    },
+    {
+      "name": "timeout",
+      "type": "int",
+      "description" : "The request timeout in seconds"
+    },
+    {
+      "name": "skipSSLVerify",
       "type": "boolean",
-      "value": "false"
+      "value": "false",
+      "description" : "Skip SSL validation"
     },
     {
       "name": "certFile",
-      "type":"string"
+      "type":"string",
+      "description" : "Path to PEM encoded client certificate"
     },
     {
       "name": "keyFile",
-      "type":"string"
-
+      "type":"string",
+      "description" : "Path to PEM encoded client key"
     },
     {
       "name": "caFile",
-      "type":"string"
-
+      "type":"string",
+      "description" : "Path to PEM encoded root certificates file"
     }
   ],
   "input": [
     {
       "name": "pathParams",
-      "type": "params"
+      "type": "params",
+      "description" : "The path parameters (e.g., 'id' in http://.../pet/:id/name )"
     },
     {
       "name": "queryParams",
-      "type": "params"
+      "type": "params",
+      "description" : "The query parameters (e.g., 'id' in http://.../pet?id=someValue )"
     },
     {
       "name": "headers",
-      "type": "params"
+      "type": "params",
+      "description" : "The HTTP header parameters"
     },
     {
       "name": "content",
-      "type": "any"
+      "type": "any",
+      "description" : "The message content to send. This is only used in POST, PUT, and PATCH"
     }
   ],
   "output": [
     {
-      "name": "result",
-      "type": "any"
+      "name": "status",
+      "type": "int",
+      "description" : "The HTTP status code"
     },
     {
-      "name": "status",
-      "type": "int"
+      "name": "result",
+      "type": "any",
+      "description" : "The HTTP response data"
     }
   ]
 }

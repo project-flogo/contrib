@@ -130,7 +130,10 @@ func (a *Activity) Metadata() *activity.Metadata {
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	input := &Input{}
-	ctx.GetInputObject(input)
+	err = ctx.GetInputObject(input)
+	if err != nil {
+		return false, err
+	}
 
 	uri := a.settings.Uri
 
@@ -203,8 +206,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			logger.Debug("Setting HTTP request headers...")
 		}
 		for key, value := range headers {
-			if logger.DebugEnabled() {
-				logger.Debugf("%s: %s", key, value)
+			if logger.TraceEnabled() {
+				logger.Trace("%s: %s", key, value)
 			}
 			req.Header.Set(key, value)
 		}
@@ -216,7 +219,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	if resp == nil {
-		logger.Debug("empty response")
+		logger.Trace("Empty response")
 		return true, nil
 	}
 
@@ -227,7 +230,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}()
 
 	if logger.DebugEnabled() {
-		logger.Debug("response Status:", resp.Status)
+		logger.Debug("Response status:", resp.Status)
 	}
 
 	var result interface{}
@@ -256,12 +259,15 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		result = string(b)
 	}
 
-	if logger.DebugEnabled() {
-		logger.Debug("response body:", result)
+	if logger.TraceEnabled() {
+		logger.Trace("Response body:", result)
 	}
 
 	output := &Output{Status: resp.StatusCode, Data: result}
-	ctx.SetOutputObject(output)
+	err = ctx.SetOutputObject(output)
+	if err != nil {
+		return false, err
+	}
 
 	return true, nil
 }
