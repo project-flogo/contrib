@@ -120,7 +120,7 @@ var cmdUsageTpl = `Usage:
 
 Flags: {{range .Flags}}
     {{.Usage | printf "%-20s"}} {{.Short}}{{end}}
-    
+
 `
 
 func RenderTemplate(w io.Writer, text string, data interface{}) {
