@@ -3,6 +3,7 @@ package rest
 import (
 	"bytes"
 	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -59,9 +60,50 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		httpTransportSettings.Proxy = http.ProxyURL(proxyURL)
 	}
 
-	// Skip ssl validation
-	if s.SkipSSL {
-		httpTransportSettings.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	if strings.HasPrefix(s.Uri, "https") {
+
+		tlsConfig := &tls.Config{
+			MinVersion:         tls.VersionTLS12,
+			InsecureSkipVerify: s.SkipSSLVerify,
+		}
+
+		if !s.SkipSSLVerify {
+
+			var caCertPool *x509.CertPool
+			if s.CAFile != "" {
+
+				caCert, err := ioutil.ReadFile(s.CAFile)
+				if err != nil {
+					logger.Errorf("unable to read CA file '%s': %v", s.CAFile, err)
+					return nil, err
+				}
+				caCertPool = x509.NewCertPool()
+				caCertPool.AppendCertsFromPEM(caCert)
+			} else {
+
+				caCertPool, _ = x509.SystemCertPool()
+				if caCertPool == nil {
+					logger.Debugf("unable to get system cert pool, using empty pool")
+					caCertPool = x509.NewCertPool()
+				} else {
+					logger.Debugf("using system cert pool")
+				}
+			}
+
+			tlsConfig.RootCAs = caCertPool
+
+			if s.CertFile != "" && s.KeyFile != "" {
+				cert, err := tls.LoadX509KeyPair(s.CertFile, s.KeyFile)
+				if err != nil {
+					logger.Errorf("unable to load key pair from certFile:'%s', keyFile: %v", s.CertFile, s.KeyFile)
+					return nil, err
+				}
+
+				tlsConfig.Certificates = []tls.Certificate{cert}
+			}
+		}
+
+		httpTransportSettings.TLSClientConfig = tlsConfig
 	}
 
 	client.Transport = httpTransportSettings

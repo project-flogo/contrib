@@ -5,7 +5,10 @@ import (
 )
 
 type Settings struct {
-	Port int `md:"port,required"`
+	Port     int    `md:"port,required"`
+	TLS      bool   `md:"useTLS"`
+	CertFile string `md:"certFile"`
+	KeyFile  string `md:"keyFile"`
 }
 
 type HandlerSettings struct {

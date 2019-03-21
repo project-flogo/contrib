@@ -10,6 +10,19 @@
       "name": "port",
       "type": "int",
       "required": true
+    },
+    {
+      "name":"useTLS",
+      "type":"boolean"
+    },
+    {
+      "name": "certFile",
+      "type":"string"
+    },
+    {
+      "name": "keyFile",
+      "type":"string"
+
     }
   ],
   "output": [

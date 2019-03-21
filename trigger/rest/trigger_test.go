@@ -2,8 +2,9 @@ package rest
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
-	"net/http"
 	"sync"
 	"testing"
 	"time"
@@ -21,7 +22,6 @@ func TestTrigger_Register(t *testing.T) {
 	f := trigger.GetFactory(ref)
 	assert.NotNil(t, f)
 }
-
 func Test_App(t *testing.T) {
 	var wg sync.WaitGroup
 	app := myApp()
@@ -39,7 +39,15 @@ func Test_App(t *testing.T) {
 
 	go func() {
 		time.Sleep(5 * time.Second)
-		resp, err := http.Get("http://localhost:5050/test")
+		roots := x509.NewCertPool()
+
+		conn, err := tls.Dial("tcp", "localhost:5050", &tls.Config{
+			RootCAs: roots,
+		})
+		if err != nil {
+			panic("failed to connect: " + err.Error())
+		}
+		conn.Close()
 		if err != nil {
 			assert.NotNil(t, err)
 			wg.Done()
@@ -54,7 +62,7 @@ func myApp() *api.App {
 
 	app := api.NewApp()
 
-	trg := app.NewTrigger(&Trigger{}, &Settings{Port: 5050})
+	trg := app.NewTrigger(&Trigger{}, &Settings{Port: 5050, TLS: true, CertFile: "/cert.pem", KeyFile: "/key.pem"})
 
 	h, _ := trg.NewHandler(&HandlerSettings{Method: "GET", Path: "/test"})
 

@@ -111,8 +111,10 @@ func TestSimpleGetWithHeaders(t *testing.T) {
 	//eval
 	act.Eval(tc)
 
-	val := tc.GetOutput("result")
-	fmt.Printf("result: %v\n", val)
+	output := &Output{}
+	tc.GetOutputObject(output)
+	assert.Equal(t, http.StatusNotFound, output.Status)
+
 }
 
 func TestParamGet(t *testing.T) {

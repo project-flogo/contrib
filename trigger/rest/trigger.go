@@ -3,7 +3,9 @@ package rest
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -91,7 +93,21 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 	}
 
 	t.logger.Debugf("Configured on port %d", t.settings.Port)
-	t.server = NewServer(addr, router)
+
+	if t.settings.TLS {
+		if t.settings.CertFile != "" && t.settings.KeyFile != "" {
+			cert, err := tls.LoadX509KeyPair(t.settings.CertFile, t.settings.KeyFile)
+			if err != nil {
+				return err
+			}
+			cfg := &tls.Config{Certificates: []tls.Certificate{cert}}
+			t.server = NewServer(addr, router, cfg)
+			return nil
+		}
+		return errors.New("Tls Set true but certificates not speified")
+	}
+
+	t.server = NewServer(addr, router, nil)
 
 	return nil
 }

@@ -5,12 +5,15 @@ import (
 )
 
 type Settings struct {
-	Method  string            `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"`
-	Uri     string            `md:"uri,required"`
-	Headers map[string]string `md:"headers"`
-	Proxy   string            `md:"proxy"`
-	SkipSSL bool              `md:"skipSSL"`
-	Timeout int               `md:"timeout"`
+	Method        string            `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"`
+	Uri           string            `md:"uri,required"`
+	Headers       map[string]string `md:"headers"`
+	Proxy         string            `md:"proxy"`
+	SkipSSLVerify bool              `md:"skipSSL"`
+	Timeout       int               `md:"timeout"`
+	CertFile      string            `md:"certFile"`
+	CAFile        string            `md:"caFile"`
+	KeyFile       string            `md:"keyFile"`
 }
 
 type Input struct {
