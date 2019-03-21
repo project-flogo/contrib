@@ -2,6 +2,8 @@ github.com/julienschmidt/httprouter v1.2.0 h1:TDTW5Yz1mjftljbcKqRcrYhd4XeOoI98t+
 github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
 github.com/project-flogo/contrib/activity/rest v0.0.0-20190321021334-8574217fbdf8 h1:3RPIb/B/5tW3bCn1xfIY218PqEZF1GuWwPBbpAc9goM=
 github.com/project-flogo/contrib/activity/rest v0.0.0-20190321021334-8574217fbdf8/go.mod h1:er/hLSql054TeyhED80XCFpBXum9zwlxJWCDyrYyMXg=
+github.com/project-flogo/contrib/trigger/cli v0.0.0-20190321021334-8574217fbdf8 h1:+qSvr7Wx4hWvbcEsgb/JUQyms2DSooihtE7TzTvErvQ=
+github.com/project-flogo/contrib/trigger/cli v0.0.0-20190321021334-8574217fbdf8/go.mod h1:/gBC41fwvjEDWbPrr0RM/OxtPo/qyeMspPObbpnDAac=
 github.com/project-flogo/contrib/trigger/rest v0.0.0-20190321021334-8574217fbdf8 h1:oc09lM1exucb3EuLT4PnE1edQyP1ersfcYiuVro/wlc=
 github.com/project-flogo/contrib/trigger/rest v0.0.0-20190321021334-8574217fbdf8/go.mod h1:k0U1vznzbRJ4A4NLoYVl+UQDoxIl/ANqfbtRjSO7xP0=
 github.com/project-flogo/core v0.9.0-alpha.6 h1:ugQmmE1WQ75gzHwFpIv7Wbt1wTqNmWj94J8t6sKdKPw=

@@ -98,9 +98,9 @@ type mainCmdUsageData struct {
 
 var mainUsageTpl = `Usage:
 	{{.Name}} {{.Use}}
-	
+
 Commands:{{range .Cmds}}
-    {{.Name | printf "%-12s"}} {{.Short}}{{end}}
+	{{.Name | printf "%-12s"}} {{.Short}}{{end}}
 `
 
 type cmdUsageData struct {
@@ -119,8 +119,8 @@ var cmdUsageTpl = `Usage:
 	{{.CliName}} {{.Name}} {{.Use}}
 	
 Flags: {{range .Flags}}
-
     {{.Usage | printf "%-20s"}} {{.Short}}{{end}}
+
 `
 
 func RenderTemplate(w io.Writer, text string, data interface{}) {
