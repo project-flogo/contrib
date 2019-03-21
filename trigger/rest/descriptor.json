@@ -12,15 +12,15 @@
       "required": true
     },
     {
-      "name":"tls",
+      "name":"useTLS",
       "type":"boolean"
     },
     {
-      "name": "certs",
+      "name": "certFile",
       "type":"string"
     },
     {
-      "name": "key",
+      "name": "keyFile",
       "type":"string"
 
     }

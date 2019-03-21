@@ -66,11 +66,11 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		httpTransportSettings.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	}
 	if s.TLS {
-		cert, err := tls.LoadX509KeyPair(s.CertPm, s.KeyPm)
+		cert, err := tls.LoadX509KeyPair(s.CertFile, s.KeyFile)
 		if err != nil {
 			log.Fatal(err)
 		}
-		caCert, err := ioutil.ReadFile(s.CAPm)
+		caCert, err := ioutil.ReadFile(s.CAFile)
 		if err != nil {
 			log.Fatal(err)
 		}

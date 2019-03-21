@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"os"
 	"sync"
 	"testing"
 	"time"
@@ -63,7 +62,7 @@ func myApp() *api.App {
 
 	app := api.NewApp()
 
-	trg := app.NewTrigger(&Trigger{}, &Settings{Port: 5050, TLS: true, CertPm: "/cert.pem", KeyPm: "/key.pem"})
+	trg := app.NewTrigger(&Trigger{}, &Settings{Port: 5050, TLS: true, CertFile: "/cert.pem", KeyFile: "/key.pem"})
 
 	h, _ := trg.NewHandler(&HandlerSettings{Method: "GET", Path: "/test"})
 

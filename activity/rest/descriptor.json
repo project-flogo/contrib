@@ -29,6 +29,24 @@
       "name": "skipSSL",
       "type": "boolean",
       "value": "false"
+    },
+    {
+      "name":"useTLS",
+      "type":"boolean"
+    },
+    {
+      "name": "certFile",
+      "type":"string"
+    },
+    {
+      "name": "keyFile",
+      "type":"string"
+
+    },
+    {
+      "name": "caFile",
+      "type":"string"
+
     }
   ],
   "input": [

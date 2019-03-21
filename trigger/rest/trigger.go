@@ -95,8 +95,8 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 	t.logger.Debugf("Configured on port %d", t.settings.Port)
 
 	if t.settings.TLS {
-		if t.settings.CertPm != "" && t.settings.KeyPm != "" {
-			cert, err := tls.LoadX509KeyPair(t.settings.CertPm, t.settings.KeyPm)
+		if t.settings.CertFile != "" && t.settings.KeyFile != "" {
+			cert, err := tls.LoadX509KeyPair(t.settings.CertFile, t.settings.KeyFile)
 			if err != nil {
 				return err
 			}
