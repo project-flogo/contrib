@@ -11,7 +11,6 @@ type Settings struct {
 	Proxy         string            `md:"proxy"`
 	SkipSSLVerify bool              `md:"skipSSL"`
 	Timeout       int               `md:"timeout"`
-	TLS           bool              `md:"useTLS"`
 	CertFile      string            `md:"certFile"`
 	CAFile        string            `md:"caFile"`
 	KeyFile       string            `md:"keyFile"`

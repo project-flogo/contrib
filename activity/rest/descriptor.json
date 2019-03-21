@@ -31,10 +31,6 @@
       "value": "false"
     },
     {
-      "name":"useTLS",
-      "type":"boolean"
-    },
-    {
       "name": "certFile",
       "type":"string"
     },

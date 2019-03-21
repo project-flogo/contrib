@@ -97,7 +97,8 @@ type mainCmdUsageData struct {
 }
 
 var mainUsageTpl = `Usage:
-    {{.Name}} {{.Use}}
+	{{.Name}} {{.Use}}
+	
 Commands:{{range .Cmds}}
     {{.Name | printf "%-12s"}} {{.Short}}{{end}}
 `
@@ -115,8 +116,10 @@ type cmdFlagUsageData struct {
 }
 
 var cmdUsageTpl = `Usage:
-    {{.CliName}} {{.Name}} {{.Use}}
+	{{.CliName}} {{.Name}} {{.Use}}
+	
 Flags: {{range .Flags}}
+
     {{.Usage | printf "%-20s"}} {{.Short}}{{end}}
 `
 
