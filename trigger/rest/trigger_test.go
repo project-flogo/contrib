@@ -44,7 +44,7 @@ func Test_App(t *testing.T) {
 			assert.NotNil(t, err)
 			wg.Done()
 		}
-		assert.Equal(t, "text/plain; charset=UTF-8", resp.Header.Get("Content-type"),)
+		assert.Equal(t, "text/plain; charset=UTF-8", resp.Header.Get("Content-type"))
 		wg.Done()
 	}()
 	wg.Wait()

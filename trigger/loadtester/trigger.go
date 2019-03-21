@@ -91,7 +91,7 @@ func (t *Trigger) runLoadTest() {
 	fmt.Printf("Starting load test in %d seconds\n", t.settings.StartDelay)
 	time.Sleep(time.Duration(t.settings.StartDelay) * time.Second)
 
-	data := &Output{Data:t.settings.Data}
+	data := &Output{Data: t.settings.Data}
 
 	lt := NewLoadTest(t.settings.Duration, t.settings.Concurrency)
 	lt.Run(t.handler, data)
