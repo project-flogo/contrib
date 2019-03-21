@@ -1,0 +1,134 @@
+{
+  "name": "coerce",
+  "type": "flogo:function",
+  "version": "0.0.1",
+  "title": "Coerce Type Functions",
+  "description": "Function for type coercion/conversion",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/coerce",
+  "functions": [
+    {
+      "name": "toType",
+      "description": "convert value to specified type",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "toString",
+      "description": "convert value to a string",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "toInt",
+      "description": "convert value to an int",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "toInt32",
+      "description": "convert value to an int32",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "toInt64",
+      "description": "convert value to a int64",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "toFloat32",
+      "description": "convert value to a float32",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "toFloat64",
+      "description": "convert value to a float64",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "toBool",
+      "description": "convert value to a bool",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "toBytes",
+      "description": "convert value to bytes",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "toParams",
+      "description": "convert value to params",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "toObject",
+      "description": "convert value to an object",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "toArray",
+      "description": "convert value to an array",
+      "args": [
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ]
+    }
+  ]
+}
