@@ -47,7 +47,7 @@ func printMainUsage(cliName string, trg *Trigger, isErr bool) {
 
 	bw := bufio.NewWriter(w)
 
-	data := &mainUsageData{Name: cliName, Use: trg.settings.Use, Long: trg.settings.Long}
+	data := &mainUsageData{Name: cliName, Use: trg.settings.Usage, Long: trg.settings.Long}
 
 	for name, cmd := range trg.commands {
 		data.Cmds = append(data.Cmds, &mainCmdUsageData{Name: name, Short: cmd.settings.Short})
@@ -70,7 +70,7 @@ func printCmdUsage(cliName string, cmd *handlerCmd, isErr bool) {
 
 	bw := bufio.NewWriter(w)
 
-	data := &cmdUsageData{CliName: cliName, Name: cmd.handler.Name(), Use: cmd.settings.Use, Long: cmd.settings.Long}
+	data := &cmdUsageData{CliName: cliName, Name: cmd.handler.Name(), Use: cmd.settings.Usage, Long: cmd.settings.Long}
 
 	flags := GetFlags(cmd.flagSet)
 

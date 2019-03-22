@@ -11,30 +11,13 @@ This trigger provides your flogo application the ability to schedule an action
 flogo install github.com/project-flogo/contrib/trigger/timer
 ```
 
-## Metadata
-```json
-{
-  "handler": {
-    "settings": [
-      {
-        "name": "startDelay",
-        "type": "string"
-      },
-      {
-        "name": "repeatInterval",
-        "type": "string"
-      }
-    ]
-  }
-}
-```
-### Details
+## Configuration
 
-#### Handler Settings:
-| Setting  | Required | Description |
-|:---------|:---------|:------------|
-| startDelay   | false     | the start delay (ex. 1m, 1h, etc.), immediate if not specified
-| repeatInterval | false     | the repeat interval (ex. 1m, 1h, etc.), doesn't repeat if not specified
+### Handler Settings:
+| Name           | Type   | Description
+|:---            | :---   | :---     
+| startDelay     | string | The start delay (ex. 1m, 1h, etc.), immediate if not specified
+| repeatInterval | string | The repeat interval (ex. 1m, 1h, etc.), doesn't repeat if not specified
 
 
 ## Example Configurations
@@ -53,7 +36,7 @@ Configure the Trigger to run a flow immediately
       "handlers": [
         {
           "action": {
-            "ref": "github.com/project-flogo/flow",
+            "ref": "#flow",
             "settings": {
               "flowURI": "res://flow:myflow"
             }
@@ -80,7 +63,7 @@ Configure the Trigger to run a flow once with a delay of one minute.  "startDela
             "startDelay": "1m"
           },
           "action": {
-            "ref": "github.com/project-flogo/flow",
+            "ref": "#flow",
             "settings": {
               "flowURI": "res://flow:myflow"
             }

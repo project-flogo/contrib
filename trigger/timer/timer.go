@@ -12,14 +12,14 @@ import (
 )
 
 type HandlerSettings struct {
-	StartInterval  string `md:"startDelay"`
-	RepeatInterval string `md:"repeatInterval"`
+	StartInterval  string `md:"startDelay"`      // The start delay (ex. 1m, 1h, etc.), immediate if not specified
+	RepeatInterval string `md:"repeatInterval"`  // The repeat interval (ex. 1m, 1h, etc.), doesn't repeat if not specified
 }
 
 var triggerMd = trigger.NewMetadata(&HandlerSettings{})
 
 func init() {
-	trigger.Register(&Trigger{}, &Factory{})
+	_ = trigger.Register(&Trigger{}, &Factory{})
 }
 
 type Factory struct {
@@ -64,9 +64,15 @@ func (t *Trigger) Start() error {
 		}
 
 		if s.RepeatInterval == "" {
-			t.scheduleOnce(handler, s)
+			err = t.scheduleOnce(handler, s)
+			if err != nil {
+				return err
+			}
 		} else {
-			t.scheduleRepeating(handler, s)
+			err = t.scheduleRepeating(handler, s)
+			if err != nil {
+				return err
+			}
 		}
 	}
 

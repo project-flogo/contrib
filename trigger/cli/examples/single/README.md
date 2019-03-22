@@ -18,17 +18,17 @@ flogo build --shim cli
   "triggers": [
     {
       "id": "cli",
-      "type": "cli",
+      "ref": "#cli",
       "name": "simple",
       "description": "Simple CLI Utility",
       "settings": {
-        "singleCmd":true
+        "singleCmd": true
       },
       "handlers": [
         {
-          "name":"test1",
+          "name": "test1",
           "settings": {
-            "use":"[flags] [args]",
+            "usage": "[flags] [args]",
             "short": "test command",
             "long": "the test command",
             "flags": [
@@ -37,13 +37,13 @@ flogo build --shim cli
             ]
           },
           "action": {
-            "type": "flow",
+            "ref": "#flow",
             "settings": {
               "flowURI": "res://flow:command1"
             },
-            "input" :{
-              "flags":"=$.flags",
-              "args":"=$.args"
+            "input": {
+              "flags": "=$.flags",
+              "args": "=$.args"
             }
           }
         }

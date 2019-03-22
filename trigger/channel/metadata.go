@@ -3,11 +3,11 @@ package channel
 const ovData = "data"
 
 type HandlerSettings struct {
-	Channel string `md:"channel,required"`
+	Channel string `md:"channel,required"` // The internal engine channel
 }
 
 type Output struct {
-	Data interface{} `md:"data"`
+	Data interface{} `md:"data"` // The data pulled from the channel
 }
 
 func (o *Output) ToMap() map[string]interface{} {

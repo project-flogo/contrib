@@ -9,18 +9,21 @@
     {
       "name": "counterName",
       "type": "string",
-      "required": true
+      "required": true,
+      "description": "The name of the counter"
     },
     {
       "name": "op",
       "type": "string",
-      "allowed" : ["get", "increment", "reset"]
+      "allowed" : ["get", "increment", "reset"],
+      "description": "The counter operation, 'get' is the default operation"
     }
   ],
   "output": [
     {
       "name": "value",
-      "type": "integer"
+      "type": "int",
+      "description": "The result of the counter operation"
     }
   ]
 }

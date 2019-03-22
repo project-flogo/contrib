@@ -4,36 +4,22 @@ weight: 4603
 -->
 
 # Channel
-This activity allows you to put a data on a named channel in the flogo engine.
+This activity allows you to put a data on a named channel in the flogo engine.  Channels are
+essentially an internal communication channel in the engine.
 
 
 ## Installation
+
 ### Flogo CLI
 ```bash
 flogo install github.com/project-flogo/contrib/activity/channel
 ```
 
-## Metadata
-```json
-{
-  "input":[
-    {
-      "name": "channel",
-      "type": "string",
-      "required": true
-    },
-    {
-      "name": "data",
-      "type": "interface{}",
-      "required": true  
-    }
-  ]
-}
-```
-### Details
-#### Input:
-| Name     | Required | Description |
-|:------------|:---------|:------------|
-| channel    | true     | The channel to put the value on |
-| data    | true     | The data to put on the channel |
+## Configuration
+
+### Input:
+| Name     | Type   | Description
+|:---      | :---   | :---    
+| channel  | string | The name of channel to use - **REQUIRED**
+| value    | any    | The data to put on the channel
 

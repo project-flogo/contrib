@@ -14,7 +14,8 @@
         "name": "Mapper",
         "type": "mapper",
         "mapperOutputScope" : "action"
-      }
+      },
+      "description": "Set of mappings to execute"
     }
   ]
 }

@@ -9,48 +9,57 @@
     {
       "name": "port",
       "type": "int",
-      "required": true
+      "required": true,
+      "description": "The port to listen on"
     },
     {
-      "name":"useTLS",
-      "type":"boolean"
+      "name":"enableTLS",
+      "type":"boolean",
+      "description": "Enable TLS on the server"
     },
     {
       "name": "certFile",
-      "type":"string"
+      "type":"string",
+      "description": "The path to PEM encoded server certificate"
     },
     {
       "name": "keyFile",
-      "type":"string"
-
+      "type":"string",
+      "description": "The path to PEM encoded server key"
     }
   ],
   "output": [
     {
       "name": "pathParams",
-      "type": "params"
+      "type": "params",
+      "description": "The path parameters (e.g., 'id' in http://.../pet/:id/name )"
     },
     {
       "name": "queryParams",
-      "type": "params"
+      "type": "params",
+      "description": "The query parameters (e.g., 'id' in http://.../pet?id=someValue )"
     },
     {
       "name": "headers",
-      "type": "params"
+      "type": "params",
+      "description": "The HTTP header parameters"
     },
     {
       "name": "content",
-      "type": "any"
+      "type": "any",
+      "description": "The content of the request"
     }
   ],
   "reply": [
     {
       "name": "code",
-      "type": "int"
+      "type": "int",
+      "description": "The http code to reply with"
     },
     {
       "name": "data",
-      "type": "any"
+      "type": "any",
+      "description": "The data to reply with"
     }
   ],
   "handler": {
@@ -59,12 +68,14 @@
         "name": "method",
         "type": "string",
         "required" : true,
-        "allowed" : ["GET", "POST", "PUT", "PATCH", "DELETE"]
+        "allowed" : ["GET", "POST", "PUT", "PATCH", "DELETE"],
+        "description": "The HTTP method (ie. GET,POST,PUT,PATCH or DELETE)"
       },
       {
         "name": "path",
         "type": "string",
-        "required" : true
+        "required" : true,
+        "description": "The resource path"
       }
     ]
   }

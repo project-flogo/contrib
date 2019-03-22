@@ -7,21 +7,24 @@ weight: 4618
 This activity allows you to invoke a REST service.
 
 ## Installation
+
 ### Flogo Web
 This activity comes out of the box with the Flogo Web UI
+
 ### Flogo CLI
 ```bash
 flogo install github.com/project-flogo/contrib/activity/rest
 ```
 
 ## Configuration
+
 ### Settings:
-| Name     | Type | Description |
-|:------------|:---------|:------------|
-| method        | string | The HTTP method to invoke (Allowed values are GET, POST, PUT, DELETE, and PATCH) - **REQUIRED** |
-| uri           | string | The URI of the service to invoke - **REQUIRED** |
-| headers       | params | The HTTP header parameters |
-| proxy         | string | The address of the proxy server to be used |
+| Name          | Type   | Description
+|:---           | :---   | :---     
+| method        | string | The HTTP method to invoke (Allowed values are GET, POST, PUT, DELETE, and PATCH) - **REQUIRED**
+| uri           | string | The URI of the service to invoke - **REQUIRED**
+| headers       | params | The HTTP header parameters
+| proxy         | string | The address of the proxy server to be used
 | timeout       | int    | The request timeout in seconds
 | skipSSLVerify | bool   | Skip SSL validation, defaults to false
 | certFile      | string | The path to PEM encoded client certificate
@@ -29,18 +32,18 @@ flogo install github.com/project-flogo/contrib/activity/rest
 | CAFile        | string | The path to PEM encoded root certificates file
 
 ### Input:
-| Name     | Type | Description |
-|:------------|:---------|:------------|
-| pathParams  | params | The path parameters (e.g., 'id' in http://.../pet/:id/name ) |
-| queryParams | params | The query parameters (e.g., 'id' in http://.../pet?id=someValue ) |
-| headers     | params | The HTTP header parameters |
-| content     | any    | The message content to send. This is only used in POST, PUT, and PATCH |
+| Name        | Type   | Description
+|:---         | :---   | :---     
+| pathParams  | params | The path parameters (e.g., 'id' in http://.../pet/:id/name )
+| queryParams | params | The query parameters (e.g., 'id' in http://.../pet?id=someValue )
+| headers     | params | The HTTP header parameters
+| content     | any    | The message content to send. This is only used in POST, PUT, and PATCH
 
 ### Output:
-|Name   | Type | Description |
-|:--------|:---------|:------------|
-| status  | int | The HTTP status code |
-| data    | any | The HTTP response data |
+| Name   | Type | Description
+|:---    | :--- | :---     
+| status | int  | The HTTP status code
+| data   | any  | The HTTP response data
 
 
 ## Examples

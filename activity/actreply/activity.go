@@ -11,7 +11,7 @@ func init() {
 }
 
 type Settings struct {
-	Mappings map[string]interface{} `md:"mappings,required"`
+	Mappings map[string]interface{} `md:"mappings,required"` // Set of mappings to execute when the activity runs
 }
 
 var activityMd = activity.ToMetadata(&Settings{})

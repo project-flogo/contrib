@@ -1,6 +1,3 @@
-// Copyright (c) 2015 TIBCO Software Inc.
-// All Rights Reserved.
-
 //Cors package to validate CORS requests and provide the correct headers in the response
 package cors
 
