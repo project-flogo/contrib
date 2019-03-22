@@ -1,6 +1,3 @@
-// Copyright (c) 2015 TIBCO Software Inc.
-// All Rights Reserved.
-
 package cors
 
 import (

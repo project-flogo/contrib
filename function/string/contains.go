@@ -7,11 +7,11 @@ import (
 	"github.com/project-flogo/core/data/expression/function"
 )
 
-type fnContains struct {
+func init() {
+	_ = function.Register(&fnContains{})
 }
 
-func init() {
-	function.Register(&fnContains{})
+type fnContains struct {
 }
 
 func (s *fnContains) Name() string {

@@ -6,9 +6,9 @@ import (
 )
 
 func init() {
-	function.Register(&fnToParams{})
-	function.Register(&fnToObject{})
-	function.Register(&fnToArray{})
+	_ = function.Register(&fnToParams{})
+	_ = function.Register(&fnToObject{})
+	_ = function.Register(&fnToArray{})
 }
 
 type fnToParams struct {

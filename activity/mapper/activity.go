@@ -11,7 +11,7 @@ func init() {
 }
 
 type Settings struct {
-	Mappings map[string]interface{} `md:"mappings,required"`
+	Mappings map[string]interface{} `md:"mappings,required"` // Set of mappings to execute
 }
 
 var activityMd = activity.ToMetadata(&Settings{})
@@ -66,7 +66,10 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	for name, value := range results {
-		actionCtx.Scope().SetValue(name, value)
+		err = actionCtx.Scope().SetValue(name, value)
+		if err != nil {
+			return false, err
+		}
 	}
 
 	return true, nil

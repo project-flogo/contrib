@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	function.Register(&fnInteger{})
+	_ = function.Register(&fnInteger{})
 }
 
 type fnInteger struct {

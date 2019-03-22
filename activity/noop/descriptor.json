@@ -3,6 +3,6 @@
   "type": "flogo:activity",
   "version": "0.0.2",
   "title": "No-Op",
-  "description": "No-Op",
+  "description": "No-Op Activity",
   "homepage": "https://github.com/prject-flogo/contrib/tree/master/activity/noop"
 }

@@ -9,12 +9,14 @@
     {
       "name": "message",
       "type": "string",
-      "value": ""
+      "value": "",
+      "description": "The message to log"
     },
     {
       "name": "addDetails",
       "type": "boolean",
-      "value": false
+      "value": false,
+      "description": "Append contextual execution information to the log message"
     }
   ]
 }

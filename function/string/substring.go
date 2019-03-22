@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	function.Register(&fnSubstring{})
+	_ = function.Register(&fnSubstring{})
 }
 
 type fnSubstring struct {

@@ -7,49 +7,30 @@ weight: 4609
 This activity allows you to use a global counter.
 
 ## Installation
+
 ### Flogo Web
 This activity comes out of the box with the Flogo Web UI
+
 ### Flogo CLI
 ```bash
 flogo install github.com/project-flogo/contrib/activity/counter
 ```
 
-## Metadata
-```json
-{
-  "settings":[
-    {
-      "name": "counterName",
-      "type": "string",
-      "required": true
-    },
-    {
-      "name": "op",
-      "type": "string",
-      "allowed" : ["get", "increment", "reset"]
-    }
-  ],
-  "output": [
-    {
-      "name": "value",
-      "type": "integer"
-    }
-  ]
-}
-```
-### Details
-#### Settings:
-| Setting     | Required | Description |
-|:------------|:---------|:------------|
-| counterName | true     | The name of the counter |         
-| op          | false    | Counter operation, 'get' is the default operation|
+## Configuration
 
-#### Output:
-|Name   | Description |
-|:--------|:------------|
-| value  | the result of the counter operation
+### Settings:
+| Name        | Type   | Description
+|:---         | :---   | :---    
+| counterName | string | The name of the counter - **REQUIRED**         
+| op          | string | The counter operation, 'get' is the default operation
+
+### Output:
+| Name  | Type | Description
+|:---   | :--- | :---    
+| value | int  |  The result of the counter operation
 
 ## Examples
+
 ### Increment
 The below example increments a 'messages' counter:
 

@@ -2,37 +2,41 @@
   "name": "flogo-loader",
   "type": "flogo:trigger",
   "version": "0.0.1",
-  "title": "Test Loader",
-  "description": "Simple Test Loader",
-  "homepage": "https://github.com/prject-flogo/contrib/tree/master/trigger/loader",
+  "title": "Load Tester",
+  "description": "Simple Load Tester",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/trigger/loadtester",
   "settings": [
     {
+      "name": "startDelay",
+      "type": "int",
+      "description": "The start delay of the test in seconds, default: 30"
+    },
+    {
       "name": "concurrency",
-      "type": "int"
+      "type": "int",
+      "description": "The level of concurrency, default: 5"
     },
     {
       "name": "duration",
-      "type": "int"
+      "type": "int",
+      "description": "The duration of the test in seconds, default: 60"
     },
     {
       "name": "data",
-      "type": "any"
+      "type": "any",
+      "description": "Optional data to pass along to the action"
     },
     {
       "name": "handler",
-      "type": "string"
+      "type": "string",
+      "description": "The named handler to test, defaults to the first handler"
     }
   ],
   "output": [
     {
       "name": "data",
-      "type": "any"
+      "type": "any",
+      "description": "The data from the settings to pass along"
     }
-  ],
-  "reply": [
-  ],
-  "handler": {
-    "settings": [
-    ]
-  }
+  ]
 }

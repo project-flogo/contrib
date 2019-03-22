@@ -65,7 +65,7 @@ func newActivityHost() *test.TestActivityHost {
 
 	ac := &test.TestActivityHost{
 		HostId:     "1",
-		HostRef:    "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+		HostRef:    "github.com/project-flogo/flow",
 		IoMetadata: &metadata.IOMetadata{Input: input, Output: output},
 		HostData:   data.NewSimpleScope(nil, nil),
 	}

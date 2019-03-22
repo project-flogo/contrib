@@ -16,7 +16,7 @@ func getTestJsonMetadata() string {
 
 const testConfig string = `{
   "id": "flogo-cli",
-  "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/cli",
+  "ref": "github.com/project-flogo/contrib/trigger/cli",
   "handlers": [
     {
       "actionId": "",

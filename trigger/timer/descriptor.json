@@ -9,11 +9,13 @@
     "settings": [
       {
         "name": "startDelay",
-        "type": "string"
+        "type": "string",
+        "description": "The start delay (ex. 1m, 1h, etc.), immediate if not specified"
       },
       {
         "name": "repeatInterval",
-        "type": "string"
+        "type": "string",
+        "description": "The repeat interval (ex. 1m, 1h, etc.), doesn't repeat if not specified"
       }
     ]
   }

@@ -9,11 +9,13 @@
     {
       "name": "channel",
       "type": "string",
-      "required": true
+      "required": true,
+      "description": "The name of channel to use"
     },
     {
       "name": "value",
-      "type": "any"
+      "type": "any",
+      "description": "The data to put on the channel"
     }
   ]
 }
