@@ -14,88 +14,33 @@ This activity comes out of the box with the Flogo Web UI
 flogo install github.com/project-flogo/contrib/activity/rest
 ```
 
-## Metadata
-```json
-{
-  "settings":[
-    {
-      "name": "method",
-      "type": "string",
-      "required": true,
-      "allowed" : ["GET", "POST", "PUT", "PATCH", "DELETE"]
-    },
-    {
-      "name": "uri",
-      "type": "string",
-      "required": true
-    },
-    {
-      "name": "proxy",
-      "type": "string",
-    },
-    {
-      "name": "headers",
-      "type": "params"
-    },
-    {
-      "name": "skipSSL",
-      "type": "boolean",
-      "value": "false"
-    }
-  ],
-  "input":[
-    {
-      "name": "pathParams",
-      "type": "params"
-    },
-    {
-      "name": "queryParams",
-      "type": "params"
-    },
-    {
-      "name": "headers",
-      "type": "params"
-    },
-    {
-      "name": "content",
-      "type": "any"
-    }
-  ],
-  "output": [
-    {
-      "name": "data",
-      "type": "any"
-    },
-    {
-      "name": "status",
-      "type": "int"
-    }
-  ]
-}
-```
-### Details
-#### Settings:
-| Setting     | Required | Description |
+## Configuration
+### Settings:
+| Name     | Type | Description |
 |:------------|:---------|:------------|
-| method      | true     | The HTTP method to invoke (Allowed values are GET, POST, PUT, DELETE, and PATCH) |         
-| uri         | true     | The URI of the service to invoke |
-| proxy       | false    | The address of the proxy server to be used |
-| headers     | false    | The header parameters |
-| skipSSL     | false    | If set to true, skips the SSL validation (defaults to false)
+| method        | string | The HTTP method to invoke (Allowed values are GET, POST, PUT, DELETE, and PATCH) - **REQUIRED** |
+| uri           | string | The URI of the service to invoke - **REQUIRED** |
+| headers       | params | The HTTP header parameters |
+| proxy         | string | The address of the proxy server to be used |
+| timeout       | int    | The request timeout in seconds
+| skipSSLVerify | bool   | Skip SSL validation, defaults to false
+| certFile      | string | The path to PEM encoded client certificate
+| keyFile       | string | The path to PEM encoded client key
+| CAFile        | string | The path to PEM encoded root certificates file
 
-#### Input:
-| Name     | Required | Description |
+### Input:
+| Name     | Type | Description |
 |:------------|:---------|:------------|
-| pathParams  | false    | The path parameters. This field is only required if you have params in your URI (for example http://.../pet/:id) |
-| queryParams | false    | The query parameters |
-| headers     | false    | The header parameters |
-| content     | false    | The message content you want to send. This field is only used in POST, PUT, and PATCH |
+| pathParams  | params | The path parameters (e.g., 'id' in http://.../pet/:id/name ) |
+| queryParams | params | The query parameters (e.g., 'id' in http://.../pet?id=someValue ) |
+| headers     | params | The HTTP header parameters |
+| content     | any    | The message content to send. This is only used in POST, PUT, and PATCH |
 
-#### Output:
-|Name   | Description |
-|:--------|:------------|
-| status  | The http status code
-| data  | The http data
+### Output:
+|Name   | Type | Description |
+|:--------|:---------|:------------|
+| status  | int | The HTTP status code |
+| data    | any | The HTTP response data |
 
 
 ## Examples
@@ -104,11 +49,10 @@ The below example retrieves a pet with number '1234' from the [swagger petstore]
 
 ```json
 {
-  "id": "rest_2",
-  "name": "Invoke REST Service",
-  "description": "Simple REST Activity",
+  "id": "rest_activity",
+  "name": "REST Activity",
   "activity": {
-    "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/rest",
+    "ref": "github.com/project-flogo/contrib/activity/rest",
     "settings": {
       "method": "GET",
       "uri": "http://petstore.swagger.io/v2/pet/1234"
@@ -122,8 +66,8 @@ The below example is the same as above, it retrieves a pet with number '1234' fr
 
 ```json
 {
-  "id": "rest_2",
-  "name": "Rest 2",
+  "id": "rest_activity",
+  "name": "REST Activity",
   "activity": {
     "ref": "github.com/project-flogo/contrib/activity/rest",
     "settings": {
