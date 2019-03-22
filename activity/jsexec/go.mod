@@ -1,4 +1,4 @@
-module github.com/project-flogo/jsexec
+module github.com/project-flogo/contrib/activity/jsexec
 
 require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
