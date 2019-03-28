@@ -15,7 +15,8 @@
         "name": "Mapper",
         "type": "mapper",
         "mapperOutputScope" : "action.output"
-      }
+      },
+      "description": "Set of mappings to execute when the activity runs"
     }
   ]
 }

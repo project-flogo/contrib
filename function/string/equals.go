@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	function.Register(&fnEquals{})
+	_ = function.Register(&fnEquals{})
 }
 
 type fnEquals struct {

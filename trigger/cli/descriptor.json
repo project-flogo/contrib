@@ -9,51 +9,61 @@
   "settings": [
     {
       "name": "singleCmd",
-      "type": "bool"
+      "type": "bool",
+      "description": "Indicates that this CLI runs only one command/handler"
     },
     {
-      "name": "use",
-      "type": "string"
+      "name": "usage",
+      "type": "string",
+      "description": "The usage details of the CLI"
     },
     {
       "name": "long",
-      "type": "string"
+      "type": "string",
+      "description": "The description of the CLI"
     }
   ],
   "handler": {
     "settings": [
       {
         "name": "flags",
-        "type": "array"
+        "type": "array",
+        "description": ""
       },
       {
-        "name": "use",
-        "type": "string"
+        "name": "usage",
+        "type": "string",
+        "description": "The usage details of the command"
       },
       {
         "name": "short",
-        "type": "string"
+        "type": "string",
+        "description": "A short description of the command"
       },
       {
         "name": "long",
-        "type": "string"
+        "type": "string",
+        "description": "The description of the command"
       }
     ]
   },
   "output": [
     {
       "name": "args",
-      "type": "array"
+      "type": "array",
+      "description": "An array of the command line arguments"
     },
     {
       "name": "flags",
-      "type": "object"
+      "type": "map",
+      "description": "A map of the command line flags"
     }
   ],
   "reply": [
     {
       "name": "data",
-      "type": "any"
+      "type": "any",
+      "description": "The data that the command outputs"
     }
   ]
 }

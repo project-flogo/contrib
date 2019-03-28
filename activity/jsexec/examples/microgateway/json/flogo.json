@@ -1,0 +1,78 @@
+{
+  "name": "MyProxy",
+  "type": "flogo:app",
+  "version": "1.0.0",
+  "description": "This is a simple proxy.",
+  "triggers": [
+    {
+      "name": "flogo-rest",
+      "id": "MyProxy",
+      "ref": "github.com/project-flogo/contrib/trigger/rest",
+      "settings": {
+        "port": "9096"
+      },
+      "handlers": [
+        {
+          "settings": {
+            "method": "GET",
+            "path": "/calculate"
+          },
+          "actions": [
+            {
+              "id": "microgateway:JS"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "microgateway:JS",
+      "compressed": false,
+      "data": {
+        "name": "JS",
+        "steps": [
+          {
+            "service": "JS",
+            "input": {
+              "parameters": {
+                "a": 1.0,
+                "b": 2.0
+              }
+            }
+          }
+        ],
+        "responses": [
+          {
+            "error": false,
+            "output": {
+              "code": 200,
+              "data": "=$.JS.outputs.result"
+            }
+          }
+        ],
+        "services": [
+          {
+            "name": "JS",
+            "description": "Calculate sum",
+            "ref": "github.com/project-flogo/contrib/activity/jsexec",
+            "settings": {
+              "script": "result.sum = parameters.a + parameters.b"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "actions": [
+    {
+      "ref": "github.com/project-flogo/microgateway",
+      "settings": {
+        "uri": "microgateway:JS"
+      },
+      "id": "microgateway:JS",
+      "metadata": null
+    }
+  ]
+}

@@ -1,162 +1,176 @@
 package rest
 
 import (
-	"crypto/md5"
-	"errors"
+	"context"
+	"crypto/tls"
 	"fmt"
 	"net"
 	"net/http"
-	"os"
-	"strings"
-	"sync"
 	"time"
+
+	"github.com/project-flogo/core/support/log"
 )
 
-// Graceful shutdown HttpServer from: https://github.com/corneldamian/httpway/blob/master/server.go
+const (
+	httpDefaultAddr = ":http" //todo should this be :8080
+	httpDefaultTlsAddr = ":https" //todo should this be :8443
 
-// NewServer create a new server instance
-//param server - is a instance of http.Server, can be nil and a default one will be created
-func NewServer(addr string, handler http.Handler) *Server {
-	srv := &Server{}
-	srv.Server = &http.Server{Addr: addr, Handler: handler}
+	httpDefaultReadTimeout = 15 * time.Second
+	httpDefaultWriteTimeout = 15 * time.Second
+)
 
-	return srv
-}
-
-//Server the server  structure
 type Server struct {
-	*http.Server
+	running bool
+	srv *http.Server
 
-	serverInstanceID string
-	listener         net.Listener
-	lastError        error
-	serverGroup      *sync.WaitGroup
-	clientsGroup     chan bool
+	tlsEnabled bool
+	certFile string
+	keyFile string
 }
 
-// InstanceID the server instance id
-func (s *Server) InstanceID() string {
-	return s.serverInstanceID
-}
+func NewServer(addr string, handler http.Handler, opts ...func(*Server)) (*Server, error) {
 
-// Start this will start server
-// command isn't blocking, will exit after run
-func (s *Server) Start() error {
-	if s.Handler == nil {
-		return errors.New("No server handler set")
-	}
-
-	if s.listener != nil {
-		return errors.New("Server already started")
-	}
-
-	addr := s.Addr
 	if addr == "" {
-		addr = ":http"
+		addr = httpDefaultAddr
 	}
 
-	listener, err := net.Listen("tcp", addr)
-	if err != nil {
+	srv := &Server{}
+	srv.srv = &http.Server{
+		Addr: addr,
+		Handler: handler,
+		ReadTimeout:httpDefaultReadTimeout,
+		WriteTimeout:httpDefaultWriteTimeout,
+	}
+
+	for _, opt := range opts {
+		opt(srv)
+	}
+
+	if err := srv.validateInit(); err != nil {
+		return nil, err
+	}
+
+	return srv, nil
+}
+
+
+///////////////////////
+// Options
+
+// TLS option enables TLS on the server
+func TLS(certFile, keyFile string) func(*Server) {
+	return func(s *Server) {
+		s.tlsEnabled = true
+		s.certFile = certFile
+		s.keyFile = keyFile
+
+		if s.srv.Addr == "" {
+			s.srv.Addr = httpDefaultTlsAddr
+		}
+	}
+}
+
+// Timeouts options lets you set the read and write timeouts of the server
+func Timeouts(readTimeout, writeTimeout time.Duration) func(*Server) {
+	return func(s *Server) {
+		s.srv.ReadTimeout = readTimeout
+		s.srv.WriteTimeout = writeTimeout
+	}
+}
+
+///////////////////////
+// Lifecycle
+
+// Start starts the server
+func (s *Server) Start() error {
+
+	if s.running {
+		return nil
+	}
+
+	if err := s.validateStart(); err != nil {
 		return err
 	}
 
-	hostname, _ := os.Hostname()
-	s.serverInstanceID = fmt.Sprintf("%x", md5.Sum([]byte(hostname+addr)))
+	fullAddr := s.srv.Addr
+	if fullAddr[0] == ':' {
+		fullAddr = "0.0.0.0" + s.srv.Addr
+	}
 
-	s.listener = listener
-	s.serverGroup = &sync.WaitGroup{}
-	s.clientsGroup = make(chan bool, 50000)
+	s.running = true
 
-	//if s.ErrorLog == nil {
-	//    if r, ok := s.Handler.(ishttpwayrouter); ok {
-	//        s.ErrorLog = log.New(&internalServerLoggerWriter{r.(*Router).Logger}, "", 0)
-	//    }
-	//}
-	//
-	s.Handler = &serverHandler{s.Handler, s.clientsGroup, s.serverInstanceID}
+	if s.tlsEnabled {
 
-	s.serverGroup.Add(1)
-	go func() {
-		defer s.serverGroup.Done()
+		go func() {
 
-		err := s.Serve(listener)
-		if err != nil {
-			if strings.Contains(err.Error(), "use of closed network connection") {
-				return
+			log.RootLogger().Infof("Listening on https://%s", fullAddr)
+
+			if err := s.srv.ListenAndServeTLS(s.certFile, s.keyFile); err != nil {
+				s.running = false
+				if err != http.ErrServerClosed {
+					log.RootLogger().Error(err)
+				}
 			}
+		}()
+	} else {
+		go func() {
 
-			s.lastError = err
-		}
-	}()
+			log.RootLogger().Infof("Listening on http://%s", fullAddr)
+
+			if err := s.srv.ListenAndServe(); err != nil {
+				s.running = false
+				if err != http.ErrServerClosed {
+					log.RootLogger().Error(err)
+				}
+			}
+		}()
+	}
 
 	return nil
 }
 
-// Stop sends stop command to the server
+// Stop stops the server
 func (s *Server) Stop() error {
-	if s.listener == nil {
-		return errors.New("Server not started")
+
+	if !s.running {
+		return nil
 	}
 
-	if err := s.listener.Close(); err != nil {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	err := s.srv.Shutdown(ctx)
+	return err
+}
+
+///////////////////////
+// Validation Helpers
+
+func (s *Server) validateStart()  error {
+
+	//check if port is available
+	ln, err := net.Listen("tcp", s.srv.Addr)
+	if err != nil {
 		return err
 	}
+	ln.Close()
 
-	return s.lastError
+	return nil
 }
 
-// IsStarted checks if the server is started
-// will return true even if the server is stopped but there are still some requests to finish
-func (s *Server) IsStarted() bool {
-	if s.listener != nil {
-		return true
-	}
+func (s *Server) validateInit()  error {
 
-	if len(s.clientsGroup) > 0 {
-		return true
-	}
+	if s.tlsEnabled {
+		// using tls, so validate cert & key
 
-	return false
-}
+		if s.certFile == "" || s.keyFile == "" {
+			return fmt.Errorf("when TLS is enabled, both cert file and key file must be specified")
+		}
 
-// WaitStop waits until server is stopped and all requests are finish
-// timeout - is the time to wait for the requests to finish after the server is stopped
-// will return error if there are still some requests not finished
-func (s *Server) WaitStop(timeout time.Duration) error {
-	if s.listener == nil {
-		return errors.New("Server not started")
-	}
-
-	s.serverGroup.Wait()
-
-	checkClients := time.Tick(100 * time.Millisecond)
-	timeoutTime := time.NewTimer(timeout)
-
-	for {
-		select {
-		case <-checkClients:
-			if len(s.clientsGroup) == 0 {
-				return s.lastError
-			}
-		case <-timeoutTime.C:
-			return fmt.Errorf("WaitStop error, timeout after %s waiting for %d client(s) to finish", timeout, len(s.clientsGroup))
+		_, err := tls.LoadX509KeyPair(s.certFile, s.keyFile)
+		if err != nil {
+			return err
 		}
 	}
-}
 
-type serverHandler struct {
-	handler          http.Handler
-	clientsGroup     chan bool
-	serverInstanceID string
-}
-
-func (sh *serverHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	sh.clientsGroup <- true
-	defer func() {
-		<-sh.clientsGroup
-	}()
-
-	w.Header().Add("X-Server-Instance-Id", sh.serverInstanceID)
-
-	sh.handler.ServeHTTP(w, r)
+	return nil
 }

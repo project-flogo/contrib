@@ -7,11 +7,11 @@ import (
 	"github.com/project-flogo/core/data/expression/function"
 )
 
-type fnEqualsIgnoreCase struct {
+func init() {
+	_ = function.Register(&fnEqualsIgnoreCase{})
 }
 
-func init() {
-	function.Register(&fnEqualsIgnoreCase{})
+type fnEqualsIgnoreCase struct {
 }
 
 func (s *fnEqualsIgnoreCase) Name() string {

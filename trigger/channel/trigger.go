@@ -13,7 +13,7 @@ import (
 var triggerMd = trigger.NewMetadata(&HandlerSettings{}, &Output{})
 
 func init() {
-	trigger.Register(&Trigger{}, &Factory{})
+	_ = trigger.Register(&Trigger{}, &Factory{})
 }
 
 type Factory struct {
@@ -49,7 +49,10 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		}
 
 		l := &Listener{handler: handler}
-		ch.RegisterCallback(l.OnMessage)
+		err = ch.RegisterCallback(l.OnMessage)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -73,8 +76,8 @@ type Listener struct {
 func (l *Listener) OnMessage(msg interface{}) {
 	triggerData := make(map[string]interface{})
 
-	if vals, ok := msg.(map[string]interface{}); ok {
-		triggerData[ovData] = vals
+	if values, ok := msg.(map[string]interface{}); ok {
+		triggerData[ovData] = values
 	} else {
 		triggerData[ovData] = msg
 	}

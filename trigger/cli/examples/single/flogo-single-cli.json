@@ -1,9 +1,9 @@
 {
   "name": "cli",
-  "description": " ",
+  "description": "single command CLI",
   "version": "1.0.0",
   "type": "flogo:app",
-  "appModel": "1.0.0",
+  "appModel": "1.1.0",
   "imports": [
     "github.com/project-flogo/contrib/trigger/cli",
     "github.com/project-flogo/flow",
@@ -12,17 +12,17 @@
   "triggers": [
     {
       "id": "cli",
-      "type": "cli",
+      "ref": "#cli",
       "name": "simple",
       "description": "Simple CLI Utility",
       "settings": {
-        "singleCmd":true
+        "singleCmd": true
       },
       "handlers": [
         {
-          "name":"test1",
+          "name": "test1",
           "settings": {
-            "use":"[flags] [args]",
+            "usage": "[flags] [args]",
             "short": "test command",
             "long": "the test command",
             "flags": [
@@ -31,13 +31,13 @@
             ]
           },
           "action": {
-            "type": "flow",
+            "ref": "#flow",
             "settings": {
               "flowURI": "res://flow:command1"
             },
-            "input" :{
-              "flags":"=$.flags",
-              "args":"=$.args"
+            "input": {
+              "flags": "=$.flags",
+              "args": "=$.args"
             }
           }
         }
@@ -65,9 +65,9 @@
           {
             "id": "log",
             "activity": {
-              "type": "log",
+              "ref": "#log",
               "input": {
-                "message" : "=$flow.args"
+                "message": "=$flow.args"
               }
             }
           }

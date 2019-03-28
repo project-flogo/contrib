@@ -8,34 +8,22 @@ This activity allows you to cause an explicit error in the flow (throw an error)
 
 
 ## Installation
+
 ### Flogo Web
 This activity comes out of the box with the Flogo Web UI
+
 ### Flogo CLI
 ```bash
 flogo install  github.com/project-flogo/contrib/activity/error
 ```
 
-## Metadata
-```json
-{
-  "input":[
-    {
-      "name": "message",
-      "type": "string"
-    },
-    {
-      "name": "data",
-      "type": "object"
-    }
-  ]
-}
-```
-### Details
-#### Input:
-| Name     | Required | Description |
-|:------------|:---------|:------------|
-| message     | false    | The error message you want to throw |         
-| data        | false    | The error data you want to throw |
+## Configuration
+
+### Input:
+| Name     | Type   | Description
+|:---      | :---   | :---    
+| message  | string | The error message         
+| data     | any    | The error data
 
 ## Configuration Examples
 The below example throws a simple error with a message:

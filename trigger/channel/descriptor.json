@@ -10,7 +10,8 @@
   "output": [
     {
       "name": "data",
-      "type": "any"
+      "type": "any",
+      "description": "The data pulled from the channel"
     }
   ],
   "reply": [
@@ -20,7 +21,8 @@
       {
         "name": "channel",
         "type": "string",
-        "required" : true
+        "required" : true,
+        "description": "The internal engine channel"
       }
     ]
   }

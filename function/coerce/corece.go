@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	function.Register(&fnToType{})
+	_ = function.Register(&fnToType{})
 }
 
 type baseFn struct {

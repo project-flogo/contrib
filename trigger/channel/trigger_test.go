@@ -19,7 +19,7 @@ package channel
 //
 //const testConfig string = `{
 //  "id": "flogo-channel",
-//  "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/channel",
+//  "ref": "github.com/project-flogo/contrib/trigger/channel",
 //  "handlers": [
 //    {
 //      "settings": {

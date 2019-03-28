@@ -12,8 +12,8 @@ func init() {
 }
 
 type Input struct {
-	Message    string `md:"message"`
-	AddDetails bool   `md:"addDetails"`
+	Message    string `md:"message"`     // The message to log
+	AddDetails bool   `md:"addDetails"`  // Append contextual execution information to the log message
 }
 
 func (i *Input) ToMap() map[string]interface{} {
