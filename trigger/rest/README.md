@@ -3,7 +3,7 @@ title: REST
 weight: 4706
 -->
 # REST Trigger
-This trigger provides your flogo application the ability to start a flow via REST over HTTP
+This trigger provides your flogo application the ability to start an action via REST over HTTP
 
 ## Installation
 
@@ -11,87 +11,36 @@ This trigger provides your flogo application the ability to start a flow via RES
 flogo install github.com/project-flogo/contrib/trigger/rest
 ```
 
-## Metadata
-```json
-{
-  "settings": [
-    {
-      "name": "port",
-      "type": "int",
-      "required" : true
-    }
-  ],
-  "handler": {
-    "settings": [
-      {
-        "name": "method",
-        "type": "string",
-        "required" : true,
-        "allowed" : ["GET", "POST", "PUT", "PATCH", "DELETE"]
-      },
-      {
-        "name": "path",
-        "type": "string",
-        "required" : true
-      }
-    ]
-  },
-  "output": [
-    {
-      "name": "pathParams",
-      "type": "params"
-    },
-    {
-      "name": "queryParams",
-      "type": "params"
-    },
-    {
-      "name": "headers",
-      "type": "params"
-    },
-    {
-      "name": "content",
-      "type": "object"
-    }
-  ],
-  "reply": [
-    {
-      "name": "code",
-      "type": "int"
-    },
-    {
-      "name": "data",
-      "type": "any"
-    }
-  ]
-}
-```
-### Details
-#### Trigger Settings:
-| Setting  | Required | Description |
-|:---------|:---------|:------------|
-| port     | true     | The port to listen on
+## Configuration
+
+### Settings:
+| Name      | Type   | Description
+|:---       | :---   | :---       
+| port      | int    | The port to listen on - **REQUIRED**
+| enableTLS | bool   | Enable TLS on the server
+| certFile  | string | The path to PEM encoded server certificate
+| keyFile   | string | The path to PEM encoded server key
 
 
-#### Handler Settings:
-| Setting  | Required | Description |
-|:---------|:---------|:------------|
-| method   | true     | The HTTP method (ie. GET,POST,PUT,PATCH or DELETE)
-| path     | true     | The resource path
+### Handler Settings:
+| Name     | Type   | Description
+|:---      | :---   | :---          
+| method   | string | The HTTP method (ie. GET,POST,PUT,PATCH or DELETE) - **REQUIRED**
+| path     | string | The resource path - **REQUIRED**
 
-#### Output:
-|Name   | Description |
-|:--------|:------------|
-| pathParams  | The path params, ex. /device/:id, 'id' would be a path param
-| queryParams | The query params
-| headers     | The headers
-| content     | The content of the request
+### Output:
+| Name        | Type   | Description
+|:---         | :---   | :---        
+| pathParams  | params | The path parameters (e.g., 'id' in http://.../pet/:id/name )
+| queryParams | params | The query parameters (e.g., 'id' in http://.../pet?id=someValue )
+| headers     | params | The HTTP header parameters
+| content     | any    | The content of the request
 
-#### Reply:
-|Name   | Description |
-|:--------|:------------|
-| code  | The http code to reply with
-| data  | The data to reply with
+### Reply:
+| Name  | Type | Description
+|:---   | :--- | :---        
+| code  | int  | The http code to reply with
+| data  | any  | The data to reply with
 
 
 ## Example Configurations
@@ -108,7 +57,7 @@ Configure the Trigger to handle a POST on /device
       "id": "flogo-rest",
       "ref": "github.com/project-flogo/contrib/trigger/rest",
       "settings": {
-        "port": "8080"
+        "port": 8080
       },
       "handlers": [
         {
@@ -139,7 +88,7 @@ Configure the Trigger to handle a GET on /device/:id
       "id": "flogo-rest",
       "ref": "github.com/project-flogo/contrib/trigger/rest",
       "settings": {
-        "port": "8080"
+        "port": 8080
       },
       "handlers": [
         {

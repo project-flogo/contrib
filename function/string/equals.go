@@ -6,14 +6,14 @@ import (
 )
 
 func init() {
-	function.Register(&fnEquals{})
+	_ = function.Register(&fnEquals{})
 }
 
 type fnEquals struct {
 }
 
 func (fnEquals) Name() string {
-	return "string.equals"
+	return "equals"
 }
 
 func (fnEquals) Sig() (paramTypes []data.Type, isVariadic bool) {

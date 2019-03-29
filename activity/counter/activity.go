@@ -16,12 +16,12 @@ var counters = make(map[string]*Counter)
 type CounterFunc func() uint64
 
 type Settings struct {
-	CounterName string `md:"counterName,required"`
-	Op          string `md:"op,allowed(get,increment,reset)"`
+	CounterName string `md:"counterName,required"`             // The name of the counter
+	Op          string `md:"op,allowed(get,increment,reset)"`  // The counter operation, 'get' is the default operation
 }
 
 type Output struct {
-	Value string `md:"value"`
+	Value int `md:"value"` // The result of the counter operation
 }
 
 func init() {
@@ -73,7 +73,10 @@ func (a *Activity) Metadata() *activity.Metadata {
 func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 	val := a.invoke()
 
-	context.SetOutput(ovValue, int(val))
+	err = context.SetOutput(ovValue, int(val))
+	if err != nil {
+		return false, err
+	}
 
 	return true, nil
 }

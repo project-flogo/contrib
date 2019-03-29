@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	function.Register(&fnFloat{})
+	_ = function.Register(&fnFloat{})
 }
 
 type fnFloat struct {
@@ -16,7 +16,7 @@ type fnFloat struct {
 
 // Name returns the name of the function
 func (fnFloat) Name() string {
-	return "string.float"
+	return "float"
 }
 
 // Sig returns the function signature

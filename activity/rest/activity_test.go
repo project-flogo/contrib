@@ -3,13 +3,13 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
-	"testing"
-
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/mapper"
 	"github.com/project-flogo/core/data/resolve"
 	"github.com/project-flogo/core/support/test"
 	"github.com/stretchr/testify/assert"
+	"net/http"
+	"testing"
 )
 
 //todo add asserts
@@ -111,8 +111,10 @@ func TestSimpleGetWithHeaders(t *testing.T) {
 	//eval
 	act.Eval(tc)
 
-	val := tc.GetOutput("result")
-	fmt.Printf("result: %v\n", val)
+	output := &Output{}
+	tc.GetOutputObject(output)
+	assert.Equal(t, http.StatusNotFound, output.Status)
+
 }
 
 func TestParamGet(t *testing.T) {

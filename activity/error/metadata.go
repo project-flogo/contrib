@@ -5,8 +5,8 @@ import (
 )
 
 type Input struct {
-	Message string      `md:"message"`
-	Data    interface{} `md:"data"`
+	Message string      `md:"message"` // The error message
+	Data    interface{} `md:"data"`    // The error data
 }
 
 func (i *Input) ToMap() map[string]interface{} {

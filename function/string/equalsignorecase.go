@@ -7,15 +7,15 @@ import (
 	"github.com/project-flogo/core/data/expression/function"
 )
 
+func init() {
+	_ = function.Register(&fnEqualsIgnoreCase{})
+}
+
 type fnEqualsIgnoreCase struct {
 }
 
-func init() {
-	function.Register(&fnEqualsIgnoreCase{})
-}
-
 func (s *fnEqualsIgnoreCase) Name() string {
-	return "string.equalsIgnoreCase"
+	return "equalsIgnoreCase"
 }
 
 func (fnEqualsIgnoreCase) Sig() (paramTypes []data.Type, isVariadic bool) {

@@ -11,36 +11,17 @@ This trigger provides your flogo application the ability to start an action via 
 flogo install github.com/project-flogo/contrib/trigger/channel
 ```
 
-## Metadata
-```json
-{
-  "handler": {
-    "settings": [
-      {
-        "name": "channel",
-        "type": "string",
-        "required" : true
-      }
-    ]
-  },
-  "output": [
-    {
-      "name": "data",
-      "type": "any"
-    }
-  ]
-}
-```
-### Details    
-#### Handler Settings:
-| Setting  | Required | Description |
-|:---------|:---------|:------------|
-| channel  | true     | The internal engine channel |
+## Configuration    
+
+### Handler Settings:
+| Name    | Type   | Description
+|:---     | :---   | :---     
+| channel | string | The internal engine channel - **REQUIRED**
 
 #### Output:
-|Name   | Description |
-|:--------|:------------|
-| data     | The data pulled from the channel
+| Name | Type | Description
+|:---  | :--- | :---     
+| data | any  | The data pulled from the channel
 
 
 ## Example Configurations
@@ -48,7 +29,7 @@ flogo install github.com/project-flogo/contrib/trigger/channel
 Triggers are configured via the triggers.json of your application. The following are some example configuration of the Channel Trigger.
 
 ### Run Flow
-Configure the Trigger to handle an event recieved on the 'test' channel
+Configure the Trigger to handle an event received on the 'test' channel
 
 ```json
 {
@@ -62,7 +43,7 @@ Configure the Trigger to handle an event recieved on the 'test' channel
             "channel": "test"
           },
           "action": {
-            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "ref": "github.com/project-flogo/flow",
             "settings": {
                 "flowURI": "res://flow:testflow"
             }       

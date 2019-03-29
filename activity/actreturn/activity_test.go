@@ -66,11 +66,11 @@ func TestSimpleReturn(t *testing.T) {
 
 func newActionContext() *test.TestActivityHost {
 	input := map[string]data.TypedValue{"Input1": data.NewTypedValue(data.TypeString, "")}
-	output := map[string]data.TypedValue{"Output1": data.NewTypedValue(data.TypeString, ""), "Output2": data.NewTypedValue(data.TypeInt, "")}
+	output := map[string]data.TypedValue{"Output1": data.NewTypedValue(data.TypeString, "")}
 
 	ac := &test.TestActivityHost{
 		HostId:     "1",
-		HostRef:    "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+		HostRef:    "github.com/project-flogo/flow",
 		IoMetadata: &metadata.IOMetadata{Input: input, Output: output},
 		HostData:   data.NewSimpleScope(nil, nil),
 	}

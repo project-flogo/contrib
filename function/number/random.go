@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	function.Register(&fnRandom{})
+	_ = function.Register(&fnRandom{})
 }
 
 type fnRandom struct {

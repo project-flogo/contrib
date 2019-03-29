@@ -5,19 +5,27 @@ import (
 )
 
 type Settings struct {
-	Port int `md:"port,required"`
+	Port      int    `md:"port,required"` // The port to listen on
+	EnableTLS bool   `md:"enableTLS"`     // Enable TLS on the server
+	CertFile  string `md:"certFile"`      // The path to PEM encoded server certificate
+	KeyFile   string `md:"keyFile"`       // The path to PEM encoded server key
 }
 
 type HandlerSettings struct {
-	Method string `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"`
-	Path   string `md:"path,required"`
+	Method string `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"`  // The HTTP method (ie. GET,POST,PUT,PATCH or DELETE)
+	Path   string `md:"path,required"`                                       // The resource path
 }
 
 type Output struct {
-	PathParams  map[string]string `md:"pathParams"`
-	QueryParams map[string]string `md:"queryParams"`
-	Headers     map[string]string `md:"headers"`
-	Content     interface{}       `md:"content"`
+	PathParams  map[string]string `md:"pathParams"`  // The path parameters (e.g., 'id' in http://.../pet/:id/name )
+	QueryParams map[string]string `md:"queryParams"` // The query parameters (e.g., 'id' in http://.../pet?id=someValue )
+	Headers     map[string]string `md:"headers"`     // The HTTP header parameters
+	Content     interface{}       `md:"content"`     // The content of the request
+}
+
+type Reply struct {
+	Code int         `md:"code"`  // The http code to reply with
+	Data interface{} `md:"data"`  // The data to reply with
 }
 
 func (o *Output) ToMap() map[string]interface{} {
@@ -47,11 +55,6 @@ func (o *Output) FromMap(values map[string]interface{}) error {
 	o.Content = values["content"]
 
 	return nil
-}
-
-type Reply struct {
-	Code int         `md:"code"`
-	Data interface{} `md:"data"`
 }
 
 func (r *Reply) ToMap() map[string]interface{} {

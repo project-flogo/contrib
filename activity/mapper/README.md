@@ -4,55 +4,38 @@ weight: 4616
 ---
 
 # Mapper
-This activity allows you to map values to the working attribute set of a flow.
+This activity allows you to map values to the working attribute set of an action.
 
 ## Installation
+
 ### Flogo Web
 This activity comes out of the box with the Flogo Web UI
+
 ### Flogo CLI
 ```bash
-flogo install github.com/TIBCOSoftware/flogo-contrib/activity/mapper
+flogo install github.com/project-flogo/contrib/activity/mapper
 ```
 
-## Metadata
-```json
-{
-  "input":[
-    {
-      "name": "mappings",
-      "type": "array",
-      "required": true,
-      "display": {
-        "name": "Mapper",
-        "type": "mapper",
-        "mapperOutputScope" : "action"
-      }
-    }
-  ]
-}
-```
-### Details
-#### Settings:
-| Setting     | Required | Description |
-|:------------|:---------|:------------|
-| mappings    | true     | An array of mappings that are executed when the activity runs |
+## Configuration
+
+### Settings:
+| Name     | Type   | Description
+|:---      | :---   | :---     
+| mappings | object | Set of mappings to execute
 
 ## Example
-The below example allows you to configure the activity to reply and set the output values to literals "name" (a string) and 2 (an integer).
+The below example allows you to configure the activity to map the output 'value' of activity 'myActivity' to FlowAttr1
 
 ```json
 {
-  "id": "mapper_6",
+  "id": "mapper",
   "name": "Mapper",
-  "description": "Simple Mapper Activity",
   "activity": {
-    "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/mapper",
+    "ref": "github.com/project-flogo/contrib/activity/mapper",
     "input": {
-      "mappings": [
+      "mappings": 
         {
-          "mapTo": "FlowAttr1",
-          "type": "assign",
-          "value": "$activity[log_3].message"
+          "FlowAttr1": "=$activity[myActivity].value"
         }
       ]
     }

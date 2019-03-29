@@ -4,13 +4,9 @@ import (
 	"github.com/project-flogo/core/data/coerce"
 )
 
-type Settings struct {
-	Channel string `md:"channel,required"`
-}
-
 type Input struct {
-	Channel string      `md:"channel,required"`
-	Data    interface{} `md:"data"`
+	Channel string      `md:"channel,required"` //The name of channel to use
+	Data    interface{} `md:"data"`             //The data to put on the channel
 }
 
 func (i *Input) ToMap() map[string]interface{} {

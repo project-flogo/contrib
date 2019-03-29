@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -25,7 +26,7 @@ const (
 var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{}, &Reply{})
 
 func init() {
-	trigger.Register(&Trigger{}, &Factory{})
+	_ = trigger.Register(&Trigger{}, &Factory{})
 }
 
 type Factory struct {
@@ -91,7 +92,19 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 	}
 
 	t.logger.Debugf("Configured on port %d", t.settings.Port)
-	t.server = NewServer(addr, router)
+
+	var options []func(*Server)
+
+	if t.settings.EnableTLS {
+		options = append(options, TLS(t.settings.CertFile, t.settings.KeyFile))
+	}
+
+	server, err := NewServer(addr, router, options...)
+	if err != nil {
+		return err
+	}
+
+	t.server = server
 
 	return nil
 }
@@ -113,7 +126,7 @@ type PreflightHandler struct {
 // Handles the cors preflight request
 func (h *PreflightHandler) handleCorsPreflight(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
-	h.logger.Infof("Received [OPTIONS] request to CorsPreFlight: %+v", r)
+	h.logger.Debugf("Received [OPTIONS] request to CorsPreFlight: %+v", r)
 	h.c.HandlePreflight(w, r)
 }
 
@@ -155,14 +168,22 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 		switch contentType {
 		case "application/x-www-form-urlencoded":
 			buf := new(bytes.Buffer)
-			buf.ReadFrom(r.Body)
+			_,err :=buf.ReadFrom(r.Body)
+			if err != nil {
+				rt.logger.Debugf("Error reading body: %s", err.Error())
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+
 			s := buf.String()
 			m, err := url.ParseQuery(s)
-			content := make(map[string]interface{}, 0)
 			if err != nil {
-				rt.logger.Errorf("Error while parsing query string: %s", err.Error())
+				rt.logger.Debugf("Error parsing query string: %s", err.Error())
 				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
 			}
+
+			content := make(map[string]interface{}, 0)
 			for key, val := range m {
 				if len(val) == 1 {
 					content[key] = val[0]
@@ -179,29 +200,69 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 				switch {
 				case err == io.EOF:
 					// empty body
-					//todo should handler say if content is expected?
+					//todo what should handler say if content is expected?
 				case err != nil:
+					rt.logger.Debugf("Error parsing json body: %s", err.Error())
 					http.Error(w, err.Error(), http.StatusBadRequest)
 					return
 				}
 			}
 			out.Content = content
 		default:
-			b, err := ioutil.ReadAll(r.Body)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-			}
+			if strings.Contains(contentType, "multipart/form-data") {
+				// need to still extract the body, only handling the multipart data for now...
 
-			out.Content = string(b)
+				if err := r.ParseMultipartForm(32); err != nil {
+					rt.logger.Debugf("Error parsing multipart form: %s", err.Error())
+					http.Error(w, err.Error(), http.StatusBadRequest)
+					return
+				}
+
+				var files []map[string]interface{}
+
+				for key, fh := range r.MultipartForm.File {
+					for _, header := range fh {
+
+						fileDetails, err := getFileDetails(key, header)
+						if err != nil {
+							rt.logger.Debugf("Error getting attached file details: %s", err.Error())
+							http.Error(w, err.Error(), http.StatusBadRequest)
+							return
+						}
+
+						files = append(files, fileDetails)
+					}
+				}
+
+				// The content output from the trigger
+				content := map[string]interface{}{
+					"body":  nil,
+					"files": files,
+				}
+				out.Content = content
+			} else {
+				b, err := ioutil.ReadAll(r.Body)
+				if err != nil {
+					rt.logger.Debugf("Error reading body: %s", err.Error())
+					http.Error(w, err.Error(), http.StatusBadRequest)
+					return
+				}
+
+				out.Content = string(b)
+			}
 		}
 
 		results, err := handler.Handle(context.Background(), out)
+		if err != nil {
+			rt.logger.Debugf("Error handling request: %s", err.Error())
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 
 		reply := &Reply{}
-		reply.FromMap(results)
-
+		err = reply.FromMap(results)
 		if err != nil {
-			rt.logger.Debugf("Error: %s", err.Error())
+			rt.logger.Debugf("Error mapping results: %s", err.Error())
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
@@ -227,14 +288,14 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 				w.WriteHeader(reply.Code)
 				_, err = w.Write([]byte(t))
 				if err != nil {
-					log.Error(err)
+					rt.logger.Debugf("Error writing body: %s", err.Error())
 				}
 				return
 			default:
 				w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 				w.WriteHeader(reply.Code)
 				if err := json.NewEncoder(w).Encode(reply.Data); err != nil {
-					log.Error(err)
+					rt.logger.Debugf("Error encoding json reply: %s", err.Error())
 				}
 				return
 			}
@@ -246,4 +307,29 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 			w.WriteHeader(http.StatusOK)
 		}
 	}
+}
+
+
+func getFileDetails(key string, header *multipart.FileHeader) (map[string]interface{}, error){
+	file, err := header.Open()
+	if err != nil {
+		return nil, err
+	}
+
+	defer file.Close()
+
+	buf := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buf, file); err != nil {
+		return nil, err
+	}
+
+	fileDetails := map[string]interface{}{
+		"key":      key,
+		"fileName": header.Filename,
+		"fileType": header.Header.Get("Content-Type"),
+		"size":     header.Size,
+		"file":     buf.Bytes(),
+	}
+
+	return fileDetails, nil
 }

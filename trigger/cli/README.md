@@ -11,89 +11,83 @@ This trigger provides your flogo application the ability to run as a CLI app, th
 flogo install github.com/project-flogo/cli
 ```
 
-## Metadata
+## Configuration
+
+###  Settings:
+| Name      | Type   | Description
+|:---       | :---   | :---     
+| singleCmd | bool   | Indicates that this CLI runs only one command/handler         
+| usage     | string | The usage details of the CLI
+| long      | string | The description of the CLI
+
+###  Handler Settings:
+| Name  | Type   | Description
+|:---   | :---   | :---
+| flags | array  | List of flags         
+| usage | string | The usage details of the command 
+| short | string | A short description of the command
+| long  | string | The description of the command
+
+### Output:
+| Name  | Type  | Description
+|:---   | :---  | :---     
+| args  | array | An array of the command line arguments  
+| flags | map   | A map of the command line flags 
+
+### Reply:
+| Name | Type | Description
+|:---  | :--- | :---     
+| data | any  | The data that the command outputs |  
+
+
+#### Flags
+There is simple support for defining flags for a command.  You can specify either a boolean or string flag.
+<br>
+Flags are defined using the following format: `flagName||defaultValue||description`
+
+_**Note:** if a flag has a default value of **true** or **false** it is considered a boolean flag_
+
+## Sample Configuration
 ```json
-{
-  "settings": [
-    {
-      "name": "singleCmd",
-      "type": "bool"
+"triggers": [
+  {
+    "id": "cli",
+    "ref": "#cli",
+    "name": "simple",
+    "description": "Simple CLI Utility",
+    "settings": {
+      "singleCmd": true
     },
-    {
-      "name": "use",
-      "type": "string"
-    },
-    {
-      "name": "long",
-      "type": "string"
-    }
-  ],
-  "handler": {
-    "settings": [
+    "handlers": [
       {
-        "name": "flags",
-        "type": "array"
-      },
-      {
-        "name": "use",
-        "type": "string"
-      },
-      {
-        "name": "short",
-        "type": "string"
-      },
-      {
-        "name": "long",
-        "type": "string"
+        "name": "commandName",
+        "settings": {
+          "usage": "[flags] [args]",
+          "short": "short command description",
+          "long": "the long command descriptoin",
+          "flags": [
+           "flag1||||string flag",
+           "flag2||false||boolan flag"
+          ]
+        },
+        "action": {
+          "ref": "#flow",
+          "settings": {
+            "flowURI": "res://flow:commandName"
+          },
+          "input": {
+            "flags": "=$.flags",
+            "args": "=$.args"
+          }
+        }
       }
     ]
-  },
-  "output": [
-    {
-      "name": "args",
-      "type": "array"
-    },
-    {
-      "name": "flags",
-      "type": "object"
-    }
-  ],
-  "reply": [
-    {
-      "name": "data",
-      "type": "any"
-    }
-  ]
-}
+  }
+]  
 ```
-### Details
-####  Settings:
-| Setting      | Description                          |
-|:-------------|:-------------------------------------|
-| singleCmd    | Indicates that this cli runs only one command/handler |         
-| use      | The usage details of the cli |
-| long      | The description of the cli |
-####  Handler Settings:
-| Setting      | Description                          |
-|:-------------|:-------------------------------------|
-| flags      | The command invoked                  |         
-| use      | The usage details of the  command |
-| short      | A short description of the command |
-| long      | The description of the command |
+_**Note:** Each CLI command maps to a handler, so in order to set your command a name, you must set the name of the handler._
 
-#### Output:
-| Name      | Description                        |
-|:------------|:-----------------------------------|
-| args        | An array of the command line arguments |  
-| flags       | A map of the command line flags |  
-
-#### Reply:
-| Name      | Description                        |
-|:------------|:-----------------------------------|
-| data        | The data that the command outputs |  
-
-
-## Examples
+# Examples
 
 Triggers are configured via the triggers section of your application. The following are some example configuration of the CLI Trigger.
 
