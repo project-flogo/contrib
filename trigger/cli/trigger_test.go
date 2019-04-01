@@ -1,39 +1,73 @@
 package cli
 
 import (
-	"io/ioutil"
+	"encoding/json"
+	"testing"
+
+	"github.com/project-flogo/core/action"
+	"github.com/project-flogo/core/support/test"
+	"github.com/project-flogo/core/trigger"
+	"github.com/stretchr/testify/assert"
 )
 
-var jsonTestMetadata = getTestJsonMetadata()
-
-func getTestJsonMetadata() string {
-	jsonMetadataBytes, err := ioutil.ReadFile("trigger.json")
-	if err != nil {
-		panic("No Json Metadata found for trigger.json path")
-	}
-	return string(jsonMetadataBytes)
-}
+//var jsonTestMetadata = getTestJsonMetadata()
+//
+//func getTestJsonMetadata() string {
+//	jsonMetadataBytes, err := ioutil.ReadFile("trigger.json")
+//	if err != nil {
+//		panic("No Json Metadata found for trigger.json path")
+//	}
+//	return string(jsonMetadataBytes)
+//}
 
 const testConfig string = `{
   "id": "flogo-cli",
-  "ref": "github.com/project-flogo/contrib/trigger/cli",
+	"ref": "github.com/project-flogo/contrib/trigger/cli",
+	"settings":{
+		"singleCmd":true
+	},
   "handlers": [
     {
-      "actionId": "",
-      "settings": {
-        "command": "run",
-        "default": "true"
-      }
-    },
-    {
-      "actionId": "version_flow",
-      "settings": {
-        "command": "version"
+			"action":{
+				"id": "dummy"
+			},
+			"settings": {
+        "command": "run"
       }
     }
   ]
 }
 `
+
+func TestInitOk(t *testing.T) {
+	// New  factory
+	f := &Factory{}
+
+	config := &trigger.Config{}
+	json.Unmarshal([]byte(testConfig), &config)
+	tgr, err := f.New(config)
+	assert.Nil(t, err)
+	assert.NotNil(t, tgr)
+
+}
+
+func TestCliTrigger_Initialize(t *testing.T) {
+	f := &Factory{}
+
+	config := &trigger.Config{}
+	err := json.Unmarshal([]byte(testConfig), config)
+	assert.Nil(t, err)
+
+	actions := map[string]action.Action{"dummy": test.NewDummyAction(func() {
+		//do nothing
+	})}
+
+	trg, err := test.InitTrigger(f, config, actions)
+	assert.Nil(t, err)
+	assert.NotNil(t, trg)
+	_, err = Invoke()
+	assert.Nil(t, err)
+}
 
 /*
 //TODO fix this test

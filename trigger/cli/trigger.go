@@ -155,7 +155,8 @@ func Invoke() (string, error) {
 
 	cliPath, _ := os.Executable()
 	cliName := filepath.Base(cliPath)
-
+	
+	//Todo?
 	if singleton.settings.SingleCmd {
 
 	}

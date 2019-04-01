@@ -69,8 +69,9 @@ func TestChannelTrigger_Initialize(t *testing.T) {
 	})}
 
 	trg, err := test.InitTrigger(f, config, actions)
-	assert.NotNil(t, err)
-	assert.Nil(t, trg)
+	assert.Nil(t, err)
+	assert.NotNil(t, trg)
+
 }
 
 /*
