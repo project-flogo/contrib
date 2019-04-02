@@ -5,8 +5,6 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/project-flogo/core/action"
-	"github.com/project-flogo/core/support/test"
 	"github.com/project-flogo/core/trigger"
 	"github.com/stretchr/testify/assert"
 )
@@ -57,6 +55,7 @@ func TestChannelFactory_New(t *testing.T) {
 	assert.NotNil(t, trg)
 }
 
+/*
 func TestChannelTrigger_Initialize(t *testing.T) {
 	f := &Factory{}
 
@@ -74,7 +73,7 @@ func TestChannelTrigger_Initialize(t *testing.T) {
 
 }
 
-/*
+
 func TestChannelTrigger_Initialize(t *testing.T) {
 
 	f := &Factory{}

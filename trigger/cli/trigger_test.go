@@ -28,10 +28,10 @@ const testConfig string = `{
 	},
   "handlers": [
     {
-			"action":{
-				"id": "dummy"
-			},
-			"settings": {
+		"action":{
+			"id": "dummy"
+		},
+		"settings": {
         "command": "run"
       }
     }
