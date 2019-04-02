@@ -18,7 +18,8 @@
           "name": "object",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "any"
     }
   ]
 }
