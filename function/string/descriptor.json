@@ -15,7 +15,8 @@
           "name": "str",
           "type": "string"
         }
-      ]
+      ],
+      "returnType": "string"
     },
     {
       "name": "equals",
@@ -29,7 +30,8 @@
           "name": "str2",
           "type": "string"
         }
-      ]
+      ],
+      "returnType": "bool"
     },
     {
       "name": "equalsIgnoreCase",
@@ -43,7 +45,8 @@
           "name": "str2",
           "type": "string"
         }
-      ]
+      ],
+      "returnType": "bool"
     },
     {
       "name": "contains",
@@ -57,7 +60,8 @@
           "name": "str2",
           "type": "string"
         }
-      ]
+      ],
+      "returnType": "bool"
     },
     {
       "name": "float",
@@ -67,7 +71,8 @@
           "name": "str1",
           "type": "string"
         }
-      ]
+      ],
+      "returnType": "float64"
     },
     {
       "name": "integer",
@@ -77,7 +82,8 @@
           "name": "str1",
           "type": "string"
         }
-      ]
+      ],
+      "returnType": "int"
     },
     {
       "name": "len",
@@ -87,7 +93,8 @@
           "name": "str1",
           "type": "string"
         }
-      ]
+      ],
+      "returnType": "int"
     },
     {
       "name": "substring",
@@ -105,7 +112,8 @@
           "name": "end",
           "type": "string"
         }
-      ]
+      ],
+      "returnType": "string"
     }
   ]
 }
