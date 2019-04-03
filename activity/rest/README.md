@@ -8,9 +8,6 @@ This activity allows you to invoke a REST service.
 
 ## Installation
 
-### Flogo Web
-This activity comes out of the box with the Flogo Web UI
-
 ### Flogo CLI
 ```bash
 flogo install github.com/project-flogo/contrib/activity/rest

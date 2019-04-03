@@ -9,6 +9,7 @@ Core collection of Flogo contributions.  This repository consists of activities,
 ### Activities
 * [actreply](activity/actreply): Action Reply
 * [actreturn](activity/actreturn): Action Return
+* [appdata](activity/actreturn): App Shared Data
 * [channel](activity/channel): Send internal engine messages  
 * [counter](activity/counter): Simple Counter 
 * [error](activity/error): Throw error
