@@ -5,7 +5,7 @@ weight: 4706
 # LoadTester Trigger
 This trigger provides your flogo application the ability to run simple load test on a specified action
 
-Implementation based off github.com/tsliwowicz/go-wrk
+Implementation based off [go-wrk](github.com/tsliwowicz/go-wrk).
 
 ## Installation
 

@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	activity.Register(&Activity{})
+	_ = activity.Register(&Activity{})
 }
 
 type Input struct {
