@@ -24,55 +24,55 @@ type Input struct {
 	Content     interface{}       `md:"content"`     // The message content to send. This is only used in POST, PUT, and PATCH
 }
 
-func (o *Input) ToMap() map[string]interface{} {
+func (i *Input) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"pathParams":  o.PathParams,
-		"queryParams": o.QueryParams,
-		"headers":     o.Headers,
-		"content":     o.Content,
+		"pathParams":  i.PathParams,
+		"queryParams": i.QueryParams,
+		"headers":     i.Headers,
+		"content":     i.Content,
 	}
 }
 
-func (o *Input) FromMap(values map[string]interface{}) error {
+func (i *Input) FromMap(values map[string]interface{}) error {
 
 	var err error
-	o.PathParams, err = coerce.ToParams(values["pathParams"])
+	i.PathParams, err = coerce.ToParams(values["pathParams"])
 	if err != nil {
 		return err
 	}
-	o.QueryParams, err = coerce.ToParams(values["queryParams"])
+	i.QueryParams, err = coerce.ToParams(values["queryParams"])
 	if err != nil {
 		return err
 	}
-	o.Headers, err = coerce.ToParams(values["headers"])
+	i.Headers, err = coerce.ToParams(values["headers"])
 	if err != nil {
 		return err
 	}
-	o.Content = values["content"]
+	i.Content = values["content"]
 
 	return nil
 }
 
 type Output struct {
-	Status int         `md:"status"`  // The HTTP status code
-	Data   interface{} `md:"result"`  // The HTTP response data
+	Status int         `md:"status"` // The HTTP status code
+	Data   interface{} `md:"data"`   // The HTTP response data
 }
 
-func (r *Output) ToMap() map[string]interface{} {
+func (o *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"status": r.Status,
-		"data":   r.Data,
+		"status": o.Status,
+		"data":   o.Data,
 	}
 }
 
-func (r *Output) FromMap(values map[string]interface{}) error {
+func (o *Output) FromMap(values map[string]interface{}) error {
 
 	var err error
-	r.Status, err = coerce.ToInt(values["status"])
+	o.Status, err = coerce.ToInt(values["status"])
 	if err != nil {
 		return err
 	}
-	r.Data, _ = values["data"]
+	o.Data, _ = values["data"]
 
 	return nil
 }

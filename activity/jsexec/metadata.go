@@ -15,19 +15,19 @@ type Input struct {
 }
 
 // FromMap converts the values from a map into the struct Input
-func (r *Input) FromMap(values map[string]interface{}) error {
+func (i *Input) FromMap(values map[string]interface{}) error {
 	parameters, err := coerce.ToObject(values["parameters"])
 	if err != nil {
 		return err
 	}
-	r.Parameters = parameters
+	i.Parameters = parameters
 	return nil
 }
 
 // ToMap converts the struct Input into a map
-func (r *Input) ToMap() map[string]interface{} {
+func (i *Input) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"parameters": r.Parameters,
+		"parameters": i.Parameters,
 	}
 }
 

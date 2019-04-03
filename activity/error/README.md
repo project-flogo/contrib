@@ -9,9 +9,6 @@ This activity allows you to cause an explicit error in the flow (throw an error)
 
 ## Installation
 
-### Flogo Web
-This activity comes out of the box with the Flogo Web UI
-
 ### Flogo CLI
 ```bash
 flogo install  github.com/project-flogo/contrib/activity/error

@@ -1,0 +1,42 @@
+{
+  "name": "flogo-appdata",
+  "type": "flogo:activity",
+  "version": "0.0.1",
+  "title": "Use global App attribute",
+  "description": "Use global App attribute",
+  "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/appdata",
+  "settings":[
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "The name of the shared attribute"
+    },
+    {
+      "name": "op",
+      "type": "string",
+      "allowed" : ["get", "set"],
+      "description": "The operation (get or set), 'get' is the default"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "allowed" : [	"any","string", "int", "float64", "boolean", "object", "array", "params"],
+      "description": "The data type of the shared value, default is 'any'"
+    }
+  ],
+  "input": [
+    {
+      "name": "value",
+      "type": "object",
+      "description": "The value of the shared attribute"
+    }
+  ],
+  "output": [
+    {
+      "name": "value",
+      "type": "object",
+      "description": "The value of the shared attribute"
+    }
+  ]
+}
