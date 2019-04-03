@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	activity.Register(&Activity{}, New)
+	_ = activity.Register(&Activity{}, New)
 }
 
 type Settings struct {
