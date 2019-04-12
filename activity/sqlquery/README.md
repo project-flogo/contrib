@@ -57,7 +57,7 @@ the app imports section.  See [github.com/go-sql-driver/mysql](https://github.co
 ```
 
 ### Named Query
-
+Query with parameters.  Parameters are referenced using ':', e.g. `:id`, regardless of database
 ```json
 {
   "id": "named_dbquery",
