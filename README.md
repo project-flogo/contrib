@@ -18,6 +18,7 @@ Core collection of Flogo contributions.  This repository consists of activities,
 * [mapper](activity/mapper): Mapper
 * [noop](activity/noop): No-Op 
 * [rest](activity/rest): Basic REST invoker 
+* [sqlquery](activity/sqlquery): Run SQL Query 
 
 ### Triggers
 * [channel](trigger/channel): Listen to internal engine messages
