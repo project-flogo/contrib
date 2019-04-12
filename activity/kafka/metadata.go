@@ -1,4 +1,4 @@
-package kafkapub
+package kafka
 
 import (
 	"github.com/project-flogo/core/data/coerce"

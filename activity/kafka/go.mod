@@ -1,4 +1,4 @@
-module github.com/project-flogo/contrib/activity/kafkapub
+module github.com/project-flogo/contrib/activity/kafka
 
 require (
 	github.com/Shopify/sarama v1.22.0

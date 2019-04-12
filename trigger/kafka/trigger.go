@@ -1,4 +1,4 @@
-package kafkasub
+package kafka
 
 import (
 	"context"
@@ -360,7 +360,7 @@ func onMessage(t *KafkaSubTrigger, msg *sarama.ConsumerMessage) {
 		out := &Output{}
 
 		out.Message = string(msg.Value)
-
+		fmt.Println("Output is ...",out.Message)
 		//if(t.metadata.Metadata.OutPuts
 
 		_, err := handler.Handle(context.Background(), out)

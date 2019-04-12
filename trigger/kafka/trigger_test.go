@@ -1,4 +1,4 @@
-package kafkasub
+package kafka
 
 import (
 	"encoding/json"

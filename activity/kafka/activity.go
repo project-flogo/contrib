@@ -1,4 +1,4 @@
-package kafkapub
+package kafka
 
 import (
 	"crypto/tls"
@@ -41,6 +41,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	pKafkPubActivity := &KafkaPubActivity{logger: ctx.Logger()}
 	producers := make(map[string]sarama.SyncProducer)
 	pKafkPubActivity.syncProducerMap = &producers
+
 	return pKafkPubActivity, nil
 }
 func (a *KafkaPubActivity) Metadata() *activity.Metadata {
@@ -52,6 +53,8 @@ func (a *KafkaPubActivity) Eval(ctx activity.Context) (done bool, err error) {
 	input := &Input{}
 	output := &Output{}
 	err = ctx.GetInputObject(input)
+
+	a.logger = ctx.Logger()
 	if err != nil {
 		return true, err
 	}
@@ -75,13 +78,15 @@ func (a *KafkaPubActivity) Eval(ctx activity.Context) (done bool, err error) {
 		output.OffSet = offset
 		a.logger.Debugf("Kafkapub message [%v] sent successfully on partition [%d] and offset [%d]",
 			message, partition, offset)
+
+		ctx.SetOutputObject(output)
 		return true, nil
 	}
 	return false, fmt.Errorf("kafkapub called without a message to publish")
 }
 
 func initParms(a *KafkaPubActivity, input *Input, params *KafkaParms) error {
-	var producerkey (string)
+	var producerkey string
 	if input.BrokerUrls != "" {
 		params.kafkaConfig = sarama.NewConfig()
 		params.kafkaConfig.Producer.Return.Errors = true
@@ -90,6 +95,7 @@ func initParms(a *KafkaPubActivity, input *Input, params *KafkaParms) error {
 		params.kafkaConfig.Producer.Return.Successes = true
 		brokerUrls := strings.Split(input.BrokerUrls, ",")
 		brokers := make([]string, len(brokerUrls))
+
 		for brokerNo, broker := range brokerUrls {
 			error := validateBrokerUrl(broker)
 			if error != nil {
@@ -145,18 +151,19 @@ func initParms(a *KafkaPubActivity, input *Input, params *KafkaParms) error {
 		a.Unlock()
 	}()
 
-	if (*a.syncProducerMap)[producerkey] == nil {
+	if a.syncProducerMap == nil {
 		syncProducer, err := sarama.NewSyncProducer(params.brokers, params.kafkaConfig)
 		if err != nil {
 			return fmt.Errorf("Kafkapub failed to create a SyncProducer.  Check any TLS or SASL parameters carefully.  Reason given: [%s]", err)
 		}
 		params.syncProducer = syncProducer
-		(*a.syncProducerMap)[producerkey] = syncProducer
+		//(*a.syncProducerMap)[producerkey] = syncProducer
 		a.logger.Debugf("Kafkapub cacheing connection [%s]", producerkey)
 	} else {
 		params.syncProducer = (*a.syncProducerMap)[producerkey]
 		a.logger.Debugf("Kafkapub reusing cached connection [%s]", producerkey)
 	}
+
 	a.logger.Debug("Kafkapub synchronous producer created")
 	return nil
 }
