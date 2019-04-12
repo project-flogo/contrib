@@ -1,0 +1,36 @@
+{
+  "name": "SQL Activity",
+  "type": "flogo:activity",
+  "version": "0.0.1",
+  "title": "SQL Database Activity",
+  "description": "SQL Database Activity",
+  "homepage": "https://github.com/project-flogo/contrib/sql",
+  "settings": [
+    {
+      "name": "dataSourceName",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "query",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "columnTypes",
+      "type": "params"
+    }
+  ],
+  "input":[
+    {
+      "name": "params",
+      "type": "object"
+    }
+  ],
+  "output": [
+    {
+      "name": "results",
+      "type": "array"
+    }
+  ]
+}
