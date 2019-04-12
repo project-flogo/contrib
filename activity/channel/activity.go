@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	activity.Register(&Activity{})
+	_ = activity.Register(&Activity{})
 }
 
 var activityMd = activity.ToMetadata(&Input{})
@@ -28,7 +28,10 @@ func (a *Activity) Metadata() *activity.Metadata {
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	input := &Input{}
-	ctx.GetInputObject(input)
+	err = ctx.GetInputObject(input)
+	if err != nil {
+		return false, err
+	}
 
 	if len(input.Channel) == 0 {
 		return false, fmt.Errorf("channel name must be specified")
@@ -42,7 +45,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	blocking := true
 
-	//should we allow
+	//todo should we allow publish new wait?
 	if blocking {
 		ch.Publish(input.Data)
 	} else {

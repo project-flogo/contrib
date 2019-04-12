@@ -18,7 +18,8 @@
           "name": "type",
           "type": "string"
         }
-      ]
+      ],
+      "returnType": "any"
     },
     {
       "name": "toString",
@@ -28,7 +29,8 @@
           "name": "value",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "string"
     },
     {
       "name": "toInt",
@@ -38,7 +40,8 @@
           "name": "value",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "int"
     },
     {
       "name": "toInt32",
@@ -48,7 +51,8 @@
           "name": "value",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "int32"
     },
     {
       "name": "toInt64",
@@ -58,7 +62,8 @@
           "name": "value",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "int64"
     },
     {
       "name": "toFloat32",
@@ -68,7 +73,8 @@
           "name": "value",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "float32"
     },
     {
       "name": "toFloat64",
@@ -78,7 +84,8 @@
           "name": "value",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "float64"
     },
     {
       "name": "toBool",
@@ -88,7 +95,8 @@
           "name": "value",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "bool"
     },
     {
       "name": "toBytes",
@@ -98,7 +106,8 @@
           "name": "value",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "bytes"
     },
     {
       "name": "toParams",
@@ -108,7 +117,8 @@
           "name": "value",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "params"
     },
     {
       "name": "toObject",
@@ -118,7 +128,8 @@
           "name": "value",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "object"
     },
     {
       "name": "toArray",
@@ -128,7 +139,8 @@
           "name": "value",
           "type": "any"
         }
-      ]
+      ],
+      "returnType": "array"
     }
   ]
 }

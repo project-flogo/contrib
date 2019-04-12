@@ -25,7 +25,7 @@ type Output struct {
 }
 
 func init() {
-	activity.Register(&Activity{}, New)
+	_ = activity.Register(&Activity{}, New)
 }
 
 var activityMd = activity.ToMetadata(&Settings{}, &Output{})

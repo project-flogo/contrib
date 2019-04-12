@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	function.Register(&fnPath{})
+	_ = function.Register(&fnPath{})
 }
 
 type fnPath struct {

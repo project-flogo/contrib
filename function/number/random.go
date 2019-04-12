@@ -16,7 +16,7 @@ type fnRandom struct {
 }
 
 func (fnRandom) Name() string {
-	return "number.random"
+	return "random"
 }
 
 func (fnRandom) Sig() (paramTypes []data.Type, isVariadic bool) {

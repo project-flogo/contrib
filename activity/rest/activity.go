@@ -17,7 +17,7 @@ import (
 )
 
 func init() {
-	activity.Register(&Activity{}, New)
+	_ = activity.Register(&Activity{}, New)
 }
 
 const (

@@ -4,14 +4,17 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/json"
 	"fmt"
 	"sync"
 	"testing"
 	"time"
 
+	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/api"
 	"github.com/project-flogo/core/engine"
 	"github.com/project-flogo/core/support"
+	"github.com/project-flogo/core/support/test"
 	"github.com/project-flogo/core/trigger"
 	"github.com/stretchr/testify/assert"
 )
@@ -21,6 +24,47 @@ func TestTrigger_Register(t *testing.T) {
 	ref := support.GetRef(&Trigger{})
 	f := trigger.GetFactory(ref)
 	assert.NotNil(t, f)
+}
+
+const testConfig string = `{
+	"id": "trigger-rest",
+	"ref": "github.com/project-flogo/contrib/trigger/rest",
+	"settings": {
+        "port": "8888"
+    },
+	"handlers": [
+	  {
+		"settings": {
+		  "method": "GET",
+		  "path": "/test"
+		},
+		"action" : {
+		  "id": "dummy"
+		}
+	  }
+	]
+  }`
+
+func TestRestTrigger_Initialize(t *testing.T) {
+
+	f := &Factory{}
+
+	config := &trigger.Config{}
+	err := json.Unmarshal([]byte(testConfig), config)
+	assert.Nil(t, err)
+
+	actions := map[string]action.Action{"dummy": test.NewDummyAction(func() {
+	})}
+
+	trg, err := test.InitTrigger(f, config, actions)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, trg)
+	err = trg.Start()
+	assert.Nil(t, err)
+	err = trg.Stop()
+	assert.Nil(t, err)
+
 }
 
 func Test_App(t *testing.T) {
