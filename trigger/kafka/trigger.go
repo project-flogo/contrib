@@ -193,6 +193,7 @@ func getTopics(t *KafkaSubTrigger) []string {
 
 func initKafkaParams(t *KafkaSubTrigger) error {
 	brokersString := t.settings.BrokerUrls
+	t.kafkaConfig = sarama.NewConfig()
 	if brokersString == "" {
 		return fmt.Errorf("BrokerUrl not provided")
 	}
@@ -346,6 +347,7 @@ func validateBrokerUrl(broker string) error {
 }
 
 func onMessage(t *KafkaSubTrigger, msg *sarama.ConsumerMessage) {
+
 	if msg == nil {
 		return
 	}
@@ -360,7 +362,7 @@ func onMessage(t *KafkaSubTrigger, msg *sarama.ConsumerMessage) {
 		out := &Output{}
 
 		out.Message = string(msg.Value)
-		fmt.Println("Output is ...",out.Message)
+		fmt.Println("Output is ...", out.Message)
 		//if(t.metadata.Metadata.OutPuts
 
 		_, err := handler.Handle(context.Background(), out)
