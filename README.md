@@ -18,7 +18,11 @@ Core collection of Flogo contributions.  This repository consists of activities,
 * [mapper](activity/mapper): Mapper
 * [noop](activity/noop): No-Op 
 * [rest](activity/rest): Basic REST invoker 
+<<<<<<< HEAD
 * [sqlquery](activity/sqlquery): Run SQL Query 
+=======
+* [kafka](activity/kafka): Basic Kafka Publisher
+>>>>>>> upstream/master
 
 ### Triggers
 * [channel](trigger/channel): Listen to internal engine messages
@@ -26,6 +30,7 @@ Core collection of Flogo contributions.  This repository consists of activities,
 * [loadtester](trigger/loadtester): Basic load tester
 * [rest](trigger/rest): REST 
 * [timer](trigger/timer): Timer
+* [kafka](trigger/kafka): Basic Kafka Subscriber
  
 ### Functions
 * [coerce](function/coerce): Type Conversion
