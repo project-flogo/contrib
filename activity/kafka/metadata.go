@@ -17,7 +17,6 @@ type Input struct {
 
 func (i *Input) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-
 		"topic":   i.Topic,
 		"message": i.Message,
 	}

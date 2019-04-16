@@ -12,24 +12,24 @@ flogo install github.com/project-flogo/contrib/activity/kafka
 ### Settings: 
 | Name       | Type   | Description
 |:---        | :---   | :---   
-| BrokerUrls | string | The Kafka cluster to connect to  |
-| User       | string | If connectiong to a SASL enabled port, the userid to use for authentication  |
-| Password   | string | If connectiong to a SASL enabled port, the password to use for authentication  |
-| TrustStore | string |  If connectiong to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate |
+| brokerUrls | string | The Kafka cluster to connect to  |
+| user       | string | If connectiong to a SASL enabled port, the userid to use for authentication  |
+| password   | string | If connectiong to a SASL enabled port, the password to use for authentication  |
+| trustStore | string |  If connectiong to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate |
 
 ### Input:
 
 | Name       | Type   | Description
 |:---        | :---   | :---  
-| Topic      | string | The Kafka topic on which to place the message  |
-| Message    | string | The text message to send  |
+| topic      | string | The Kafka topic on which to place the message  |
+| message    | string | The text message to send  |
 
 ### Output:
 
 | Name         | Type     | Description
 |:---          | :---     | :---   
-| Partition    | int32    | Documents the partition that the message was placed on |
-| OffSet       | int64    | Documents the offset for the message |
+| partition    | int32    | Documents the partition that the message was placed on |
+| offSet       | int64    | Documents the offset for the message |
 
 ## Examples
 
@@ -42,7 +42,7 @@ The below example sends `Hello From Flogo` to a Kafka Broker running on localhos
   "activity": {
     "ref": "github.com/project-flogo/contrib/activity/kafka",
     "input": {
-      "brokerurls" : "localhost:9092",
+      "brokerUrls" : "localhost:9092",
       "topic"      : "syslog",
       "message"    : "Hello From Flogo",
       "user"       :  "",

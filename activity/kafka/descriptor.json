@@ -8,41 +8,49 @@
     "settings":[
       {
         "name": "brokerUrls",
-        "type": "string"
+        "type": "string",
+        "description": "The Kafka cluster to connect to"
       },
       {
         "name": "user",
-        "type": "string"
+        "type": "string",
+        "description": "If connectiong to a SASL enabled port, the userid to use for authentication"
       },
       {
         "name": "password",
-        "type": "string"
+        "type": "string",
+        "description": "If connectiong to a SASL enabled port, the password to use for authentication"
       },
       {
         "name": "truststore",
-        "type": "string"
+        "type": "string",
+        "description": " If connectiong to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate"
       }
     ],
     "input":[
       {
         "name": "topic",
         "type": "string",
-        "required": true
+        "required": true,
+        "description": "The Kafka topic on which to place the message"
       },
       {
         "name": "message",
         "type": "string",
-        "required": true
+        "required": true,
+        "description": "The text message to send"
       }
     ],
     "output": [
       {
         "name": "partition",
-        "type": "int"
+        "type": "int",
+        "description": "Documents the partition that the message was placed on"
       },
       {
         "name": "offset",
-        "type": "long"
+        "type": "long",
+        "description": "Documents the offset for the message"
       }
     ]
   }

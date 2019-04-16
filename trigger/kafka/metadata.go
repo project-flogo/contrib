@@ -5,7 +5,7 @@ import (
 )
 
 type Settings struct {
-	BrokerUrls string `md:"brokerurls,required"`
+	BrokerUrls string `md:"brokerUrls,required"`
 	User       string `md:"user"`
 	Password   string `md:"password"`
 	TrustStore string `md:"truststore"`
