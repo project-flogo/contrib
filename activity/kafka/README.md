@@ -9,17 +9,20 @@ flogo install github.com/project-flogo/contrib/activity/kafka
 
 ## Configuration
 
+### Settings: 
+| Name       | Type   | Description
+|:---        | :---   | :---   
+| BrokerUrls | string | The Kafka cluster to connect to  |
+| User       | string | If connectiong to a SASL enabled port, the userid to use for authentication  |
+| Password   | string | If connectiong to a SASL enabled port, the password to use for authentication  |
+| TrustStore | string |  If connectiong to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate |
 
 ### Input:
 
 | Name       | Type   | Description
-|:---        | :---   | :---   
-| BrokerUrls | string | The Kafka cluster to connect to  |
+|:---        | :---   | :---  
 | Topic      | string | The Kafka topic on which to place the message  |
 | Message    | string | The text message to send  |
-| User       | string | If connectiong to a SASL enabled port, the userid to use for authentication  |
-| Password   | string | If connectiong to a SASL enabled port, the password to use for authentication  |
-| TrustStore | string |  If connectiong to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate |
 
 ### Output:
 
