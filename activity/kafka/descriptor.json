@@ -7,7 +7,7 @@
     "author": "Wendell Nichols <wnichols@tibco.com>",
     "settings":[
       {
-        "name": "BrokerUrl",
+        "name": "brokerUrls",
         "type": "string"
       },
       {
@@ -25,12 +25,12 @@
     ],
     "input":[
       {
-        "name": "Topic",
+        "name": "topic",
         "type": "string",
         "required": true
       },
       {
-        "name": "Message",
+        "name": "message",
         "type": "string",
         "required": true
       }
