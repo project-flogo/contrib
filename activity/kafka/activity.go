@@ -38,6 +38,8 @@ type KafkaParms struct {
 	syncProducer sarama.SyncProducer
 }
 
+var params (KafkaParms)
+
 func New(ctx activity.InitContext) (activity.Activity, error) {
 	s := &Settings{}
 	err := metadata.MapToStruct(ctx.Settings(), s, true)
@@ -48,6 +50,8 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	pKafkPubActivity := &KafkaPubActivity{logger: ctx.Logger(), settings: s}
 	producers := make(map[string]sarama.SyncProducer)
 	pKafkPubActivity.syncProducerMap = &producers
+
+	err = initParms(pKafkPubActivity, &params)
 
 	return pKafkPubActivity, nil
 }
@@ -65,19 +69,25 @@ func (a *KafkaPubActivity) Eval(ctx activity.Context) (done bool, err error) {
 	if err != nil {
 		return true, err
 	}
-	var parms (KafkaParms)
+
+	if input.Topic != "" {
+		params.topic = input.Topic
+		a.logger.Debugf("Kafkapub topic [%s]", params.topic)
+	} else {
+		return false, fmt.Errorf("Topic input parameter not provided and is required")
+	}
 	a.logger.Debugf("Kafkapub Eval")
-	err = initParms(a, input, &parms)
+
 	if err != nil {
 		a.logger.Errorf("Kafkapub parameters initialization got error: [%s]", err.Error())
 		return false, err
 	}
 	if message := input.Message; message != "" {
 		msg := &sarama.ProducerMessage{
-			Topic: parms.topic,
+			Topic: params.topic,
 			Value: sarama.StringEncoder(message),
 		}
-		partition, offset, err := parms.syncProducer.SendMessage(msg)
+		partition, offset, err := params.syncProducer.SendMessage(msg)
 		if err != nil {
 			return false, fmt.Errorf("kafkapub failed to send message for reason [%s]", err.Error())
 		}
@@ -92,7 +102,7 @@ func (a *KafkaPubActivity) Eval(ctx activity.Context) (done bool, err error) {
 	return false, fmt.Errorf("kafkapub called without a message to publish")
 }
 
-func initParms(a *KafkaPubActivity, input *Input, params *KafkaParms) error {
+func initParms(a *KafkaPubActivity, params *KafkaParms) error {
 	var producerkey string
 	if a.settings.BrokerUrls != "" {
 		params.kafkaConfig = sarama.NewConfig()
@@ -115,12 +125,6 @@ func initParms(a *KafkaPubActivity, input *Input, params *KafkaParms) error {
 		a.logger.Debugf("Kafkapub brokers [%v]", brokers)
 	} else {
 		return fmt.Errorf("Kafkapub activity is not configured with at least one BrokerUrl")
-	}
-	if input.Topic != "" {
-		params.topic = input.Topic
-		a.logger.Debugf("Kafkapub topic [%s]", params.topic)
-	} else {
-		return fmt.Errorf("Topic input parameter not provided and is required")
 	}
 
 	//clientKeystore
