@@ -13,6 +13,7 @@ import (
 
 	"github.com/Shopify/sarama"
 	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
 )
 
@@ -27,6 +28,7 @@ type KafkaPubActivity struct {
 	sync.Mutex
 	logger          log.Logger
 	syncProducerMap *map[string]sarama.SyncProducer
+	settings        *Settings
 }
 
 type KafkaParms struct {
@@ -37,8 +39,13 @@ type KafkaParms struct {
 }
 
 func New(ctx activity.InitContext) (activity.Activity, error) {
+	s := &Settings{}
+	err := metadata.MapToStruct(ctx.Settings(), s, true)
+	if err != nil {
+		return nil, err
+	}
 
-	pKafkPubActivity := &KafkaPubActivity{logger: ctx.Logger()}
+	pKafkPubActivity := &KafkaPubActivity{logger: ctx.Logger(), settings: s}
 	producers := make(map[string]sarama.SyncProducer)
 	pKafkPubActivity.syncProducerMap = &producers
 
@@ -87,13 +94,13 @@ func (a *KafkaPubActivity) Eval(ctx activity.Context) (done bool, err error) {
 
 func initParms(a *KafkaPubActivity, input *Input, params *KafkaParms) error {
 	var producerkey string
-	if input.BrokerUrls != "" {
+	if a.settings.BrokerUrls != "" {
 		params.kafkaConfig = sarama.NewConfig()
 		params.kafkaConfig.Producer.Return.Errors = true
 		params.kafkaConfig.Producer.RequiredAcks = sarama.WaitForAll
 		params.kafkaConfig.Producer.Retry.Max = 5
 		params.kafkaConfig.Producer.Return.Successes = true
-		brokerUrls := strings.Split(input.BrokerUrls, ",")
+		brokerUrls := strings.Split(a.settings.BrokerUrls, ",")
 		brokers := make([]string, len(brokerUrls))
 
 		for brokerNo, broker := range brokerUrls {
@@ -123,7 +130,7 @@ func initParms(a *KafkaPubActivity, input *Input, params *KafkaParms) error {
 		see:   https://issues.apache.org/jira/browse/KAFKA-3647
 		for more info
 	*/
-	if trustStore := input.TrustStore; trustStore != "" {
+	if trustStore := a.settings.TrustStore; trustStore != "" {
 		if trustPool, err := getCerts(trustStore); err == nil {
 			config := tls.Config{
 				RootCAs:            trustPool,
@@ -138,8 +145,8 @@ func initParms(a *KafkaPubActivity, input *Input, params *KafkaParms) error {
 		producerkey += trustStore
 	}
 	// SASL
-	if user := input.User; user != "" {
-		password := input.Password
+	if user := a.settings.User; user != "" {
+		password := a.settings.Password
 		params.kafkaConfig.Net.SASL.Enable = true
 		params.kafkaConfig.Net.SASL.User = user
 		params.kafkaConfig.Net.SASL.Password = password

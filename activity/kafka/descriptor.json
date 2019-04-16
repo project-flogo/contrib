@@ -5,12 +5,25 @@
     "type": "flogo:activity",
     "description": "Publish a message to a kafka topic",
     "author": "Wendell Nichols <wnichols@tibco.com>",
-    "input":[
+    "settings":[
       {
-        "name": "BrokerUrls",
-        "type": "string",
-        "required": true
+        "name": "BrokerUrl",
+        "type": "string"
       },
+      {
+        "name": "user",
+        "type": "string"
+      },
+      {
+        "name": "password",
+        "type": "string"
+      },
+      {
+        "name": "truststore",
+        "type": "string"
+      }
+    ],
+    "input":[
       {
         "name": "Topic",
         "type": "string",
@@ -20,21 +33,6 @@
         "name": "Message",
         "type": "string",
         "required": true
-      },
-      {
-        "name": "user",
-        "type": "string",
-        "required": false
-      },
-      {
-        "name": "password",
-        "type": "string",
-        "required": false
-      },
-      {
-        "name": "truststore",
-        "type": "string",
-        "required": false
       }
     ],
     "output": [
