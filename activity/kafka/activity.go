@@ -9,8 +9,6 @@ import (
 	"strconv"
 	"strings"
 
-	"sync"
-
 	"github.com/Shopify/sarama"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
@@ -18,188 +16,174 @@ import (
 )
 
 func init() {
-	_ = activity.Register(&KafkaPubActivity{}, New)
+	_ = activity.Register(&KafkaActivity{}, New)
 }
 
 var activityMd = activity.ToMetadata(&Input{}, &Output{})
 
 // MyActivity is a stub for your Activity implementation
-type KafkaPubActivity struct {
-	sync.Mutex
-	logger          log.Logger
-	syncProducerMap *map[string]sarama.SyncProducer
-	settings        *Settings
+type KafkaActivity struct {
+	conn  *KafkaConnection
+	topic string
 }
-
-type KafkaParms struct {
-	kafkaConfig  *sarama.Config
-	brokers      []string
-	topic        string
-	syncProducer sarama.SyncProducer
-}
-
-var params (KafkaParms)
 
 func New(ctx activity.InitContext) (activity.Activity, error) {
-	s := &Settings{}
-	err := metadata.MapToStruct(ctx.Settings(), s, true)
+	settings := &Settings{}
+	err := metadata.MapToStruct(ctx.Settings(), settings, true)
 	if err != nil {
 		return nil, err
 	}
 
-	pKafkPubActivity := &KafkaPubActivity{logger: ctx.Logger(), settings: s}
-	producers := make(map[string]sarama.SyncProducer)
-	pKafkPubActivity.syncProducerMap = &producers
+	conn, err := getKafkaConnection(ctx.Logger(), settings)
+	if err != nil {
+		//ctx.Logger().Errorf("Kafka parameters initialization got error: [%s]", err.Error())
+		return nil, err
+	}
 
-	err = initParms(pKafkPubActivity, &params)
-
-	return pKafkPubActivity, nil
+	act := &KafkaActivity{conn: conn, topic: settings.Topic}
+	return act, nil
 }
-func (a *KafkaPubActivity) Metadata() *activity.Metadata {
+
+func (act *KafkaActivity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
 // Eval implements activity.Activity.Eval
-func (a *KafkaPubActivity) Eval(ctx activity.Context) (done bool, err error) {
+func (act *KafkaActivity) Eval(ctx activity.Context) (done bool, err error) {
 	input := &Input{}
-	output := &Output{}
-	err = ctx.GetInputObject(input)
 
-	a.logger = ctx.Logger()
+	err = ctx.GetInputObject(input)
 	if err != nil {
 		return true, err
 	}
 
-	if input.Topic != "" {
-		params.topic = input.Topic
-		a.logger.Debugf("Kafkapub topic [%s]", params.topic)
-	} else {
-		return false, fmt.Errorf("Topic input parameter not provided and is required")
+	if input.Message == "" {
+		return false, fmt.Errorf("no message to publish")
 	}
-	a.logger.Debugf("Kafkapub Eval")
 
+	ctx.Logger().Debugf("sending Kafka message")
+
+	msg := &sarama.ProducerMessage{
+		Topic: act.topic,
+		Value: sarama.StringEncoder(input.Message),
+	}
+
+	partition, offset, err := act.conn.Connection().SendMessage(msg)
 	if err != nil {
-		a.logger.Errorf("Kafkapub parameters initialization got error: [%s]", err.Error())
+		return false, fmt.Errorf("failed to send Kakfa message for reason [%s]", err.Error())
+	}
+
+	output := &Output{}
+	output.Partition = partition
+	output.OffSet = offset
+
+	if ctx.Logger().DebugEnabled() {
+		ctx.Logger().Debugf("Kafka message [%v] sent successfully on partition [%d] and offset [%d]",
+			input.Message, partition, offset)
+	}
+
+	err = ctx.SetOutputObject(output)
+	if err != nil {
 		return false, err
 	}
-	if message := input.Message; message != "" {
-		msg := &sarama.ProducerMessage{
-			Topic: params.topic,
-			Value: sarama.StringEncoder(message),
-		}
-		partition, offset, err := params.syncProducer.SendMessage(msg)
-		if err != nil {
-			return false, fmt.Errorf("kafkapub failed to send message for reason [%s]", err.Error())
-		}
-		output.Partition = partition
-		output.OffSet = offset
-		a.logger.Debugf("Kafkapub message [%v] sent successfully on partition [%d] and offset [%d]",
-			message, partition, offset)
 
-		ctx.SetOutputObject(output)
-		return true, nil
-	}
-	return false, fmt.Errorf("kafkapub called without a message to publish")
+	return true, nil
 }
 
-func initParms(a *KafkaPubActivity, params *KafkaParms) error {
-	var producerkey string
-	if a.settings.BrokerUrls != "" {
-		params.kafkaConfig = sarama.NewConfig()
-		params.kafkaConfig.Producer.Return.Errors = true
-		params.kafkaConfig.Producer.RequiredAcks = sarama.WaitForAll
-		params.kafkaConfig.Producer.Retry.Max = 5
-		params.kafkaConfig.Producer.Return.Successes = true
-		brokerUrls := strings.Split(a.settings.BrokerUrls, ",")
-		brokers := make([]string, len(brokerUrls))
+func getKafkaConnection(logger log.Logger, settings *Settings) (*KafkaConnection, error) {
 
-		for brokerNo, broker := range brokerUrls {
-			error := validateBrokerUrl(broker)
-			if error != nil {
-				return fmt.Errorf("BrokerUrl [%s] format invalid for reason: [%s]", broker, error.Error())
-			}
-			brokers[brokerNo] = broker
-			producerkey += broker
-		}
-		params.brokers = brokers
-		a.logger.Debugf("Kafkapub brokers [%v]", brokers)
-	} else {
-		return fmt.Errorf("Kafkapub activity is not configured with at least one BrokerUrl")
+	connKey := getConnectionKey(settings)
+
+	if conn, ok := connections[connKey]; ok {
+		logger.Debugf("Reusing cached Kafka connection [%s]", connKey)
+		return conn, nil
 	}
+
+	newConn := &KafkaConnection{}
+
+	newConn.kafkaConfig = sarama.NewConfig()
+	newConn.kafkaConfig.Producer.Return.Errors = true
+	newConn.kafkaConfig.Producer.RequiredAcks = sarama.WaitForAll
+	newConn.kafkaConfig.Producer.Retry.Max = 5
+	newConn.kafkaConfig.Producer.Return.Successes = true
+	brokerUrls := strings.Split(settings.BrokerUrls, ",")
+	brokers := make([]string, len(brokerUrls))
+
+	for brokerNo, broker := range brokerUrls {
+		err := validateBrokerUrl(broker)
+		if err != nil {
+			return nil, fmt.Errorf("BrokerUrl [%s] format invalid for reason: [%v]", broker, err)
+		}
+		brokers[brokerNo] = broker
+	}
+
+	newConn.brokers = brokers
+	logger.Debugf("Kafka brokers: [%v]", brokers)
 
 	//clientKeystore
 	/*
 		Its worth mentioning here that when the keystore for kafka is created it must support RSA keys via
 		the -keyalg RSA option.  If not then there will be ZERO overlap in supported cipher suites with java.
-		see:   https://issues.apache.org/jira/browse/KAFKA-3647
+		see: https://issues.apache.org/jira/browse/KAFKA-3647
 		for more info
 	*/
-	if trustStore := a.settings.TrustStore; trustStore != "" {
-		if trustPool, err := getCerts(trustStore); err == nil {
+	if trustStore := settings.TrustStore; trustStore != "" {
+		if trustPool, err := getCerts(logger, trustStore); err == nil {
 			config := tls.Config{
 				RootCAs:            trustPool,
 				InsecureSkipVerify: true}
-			params.kafkaConfig.Net.TLS.Enable = true
-			params.kafkaConfig.Net.TLS.Config = &config
+			newConn.kafkaConfig.Net.TLS.Enable = true
+			newConn.kafkaConfig.Net.TLS.Config = &config
 
-			a.logger.Debugf("Kafkapub initialized truststore from [%v]", trustStore)
+			logger.Debugf("Kafka initialized truststore from [%v]", trustStore)
 		} else {
-			return err
+			return nil, err
 		}
-		producerkey += trustStore
 	}
+
 	// SASL
-	if user := a.settings.User; user != "" {
-		password := a.settings.Password
-		params.kafkaConfig.Net.SASL.Enable = true
-		params.kafkaConfig.Net.SASL.User = user
-		params.kafkaConfig.Net.SASL.Password = password
-		a.logger.Debugf("Kafkapub SASL parms initialized; user [%v]  password[########]", user)
-		producerkey += user
-	}
-	a.Lock()
-	defer func() {
-		a.Unlock()
-	}()
-
-	if a.syncProducerMap == nil {
-		syncProducer, err := sarama.NewSyncProducer(params.brokers, params.kafkaConfig)
-		if err != nil {
-			return fmt.Errorf("Kafkapub failed to create a SyncProducer.  Check any TLS or SASL parameters carefully.  Reason given: [%s]", err)
-		}
-		params.syncProducer = syncProducer
-		//(*a.syncProducerMap)[producerkey] = syncProducer
-		a.logger.Debugf("Kafkapub cacheing connection [%s]", producerkey)
-	} else {
-		params.syncProducer = (*a.syncProducerMap)[producerkey]
-		a.logger.Debugf("Kafkapub reusing cached connection [%s]", producerkey)
+	if user := settings.User; user != "" {
+		password := settings.Password
+		newConn.kafkaConfig.Net.SASL.Enable = true
+		newConn.kafkaConfig.Net.SASL.User = user
+		newConn.kafkaConfig.Net.SASL.Password = password
+		logger.Debugf("Kafka SASL params initialized; user [%v]  password[########]", user)
 	}
 
-	a.logger.Debug("Kafkapub synchronous producer created")
-	return nil
+	syncProducer, err := sarama.NewSyncProducer(newConn.brokers, newConn.kafkaConfig)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create a Kafka SyncProducer.  Check any TLS or SASL parameters carefully.  Reason given: [%s]", err)
+	}
+	newConn.syncProducer = syncProducer
+	connections[connKey] = newConn
+	logger.Debugf("Caching Kafka connection [%s]", connKey)
+
+	return newConn, nil
 }
 
-//Ensure that this string meets the host:port definition of a kafka hostspec
-//Kafka calls it a url but its really just host:port, which for numeric ip addresses is not a valid URI
-//technically speaking.
+// validateBrokerUrl ensures that this string meets the host:port definition of a kafka host spec
+// Kafka calls it a url but its really just host:port, which for numeric ip addresses is not a valid URI
+// technically speaking.
 func validateBrokerUrl(broker string) error {
-	hostport := strings.Split(broker, ":")
-	if len(hostport) != 2 {
+	hostPort := strings.Split(broker, ":")
+	if len(hostPort) != 2 {
 		return fmt.Errorf("BrokerUrl must be composed of sections like \"host:port\"")
 	}
-	i, err := strconv.Atoi(hostport[1])
+	i, err := strconv.Atoi(hostPort[1])
 	if err != nil || i < 0 || i > 32767 {
-		return fmt.Errorf("Port specification [%s] is not numeric and between 0 and 32767", hostport[1])
+		return fmt.Errorf("port specification [%s] is not numeric and between 0 and 32767", hostPort[1])
 	}
 	return nil
 }
 
-func getCerts(trustStore string) (*x509.CertPool, error) {
+func getCerts(logger log.Logger, trustStore string) (*x509.CertPool, error) {
 	certPool := x509.NewCertPool()
+
 	fileInfo, err := os.Stat(trustStore)
 	if err != nil {
 		return certPool, fmt.Errorf("Truststore [%s] does not exist", trustStore)
 	}
+
 	switch mode := fileInfo.Mode(); {
 	case mode.IsDir():
 		break
@@ -207,21 +191,58 @@ func getCerts(trustStore string) (*x509.CertPool, error) {
 		return certPool, fmt.Errorf("Truststore [%s] is not a directory.  Must be a directory containing trusted certificates in PEM format",
 			trustStore)
 	}
+
 	trustedCertFiles, err := ioutil.ReadDir(trustStore)
 	if err != nil || len(trustedCertFiles) == 0 {
-		return certPool, fmt.Errorf("Failed to read trusted certificates from [%s]  Must be a directory containing trusted certificates in PEM format", trustStore)
+		return certPool, fmt.Errorf("failed to read trusted certificates from [%s]  Must be a directory containing trusted certificates in PEM format", trustStore)
 	}
+
 	for _, trustCertFile := range trustedCertFiles {
 		fqfName := fmt.Sprintf("%s%c%s", trustStore, os.PathSeparator, trustCertFile.Name())
 		trustCertBytes, err := ioutil.ReadFile(fqfName)
 		if err != nil {
-			fmt.Errorf("Failed to read trusted certificate [%s] ... continuing", trustCertFile.Name())
+			logger.Warnf("Failed to read trusted certificate [%s] ... continuing", trustCertFile.Name())
 		} else if trustCertBytes != nil {
 			certPool.AppendCertsFromPEM(trustCertBytes)
 		}
 	}
+
 	if len(certPool.Subjects()) < 1 {
-		return certPool, fmt.Errorf("Failed to read trusted certificates from [%s]  After processing all files in the directory no valid trusted certs were found", trustStore)
+		return certPool, fmt.Errorf("failed to read trusted certificates from [%s]  After processing all files in the directory no valid trusted certs were found", trustStore)
 	}
+
 	return certPool, nil
 }
+
+//////////////////////////////////////////////////
+// Connection Support
+
+// todo core should add support for shared connections and replace this
+var connections = make(map[string]*KafkaConnection)
+
+type KafkaConnection struct {
+	kafkaConfig  *sarama.Config
+	brokers      []string
+	syncProducer sarama.SyncProducer
+}
+
+func (c *KafkaConnection) Connection() sarama.SyncProducer {
+	return c.syncProducer
+}
+
+func getConnectionKey(settings *Settings) string {
+
+	var connKey string
+
+	connKey += settings.BrokerUrls
+	if settings.TrustStore != "" {
+		connKey += settings.TrustStore
+	}
+	if settings.User != "" {
+		connKey += settings.User
+	}
+
+	return connKey
+}
+
+

@@ -1,39 +1,41 @@
 {
-    "name": "tibco-kafkapub",
+    "name": "flogo-kafka",
     "version": "0.0.1",
     "title": "Publish Kafka message",
     "type": "flogo:activity",
     "description": "Publish a message to a kafka topic",
+    "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/kafka",
     "author": "Wendell Nichols <wnichols@tibco.com>",
     "settings":[
       {
         "name": "brokerUrls",
         "type": "string",
+        "required": true,
         "description": "The Kafka cluster to connect to"
       },
-      {
-        "name": "user",
-        "type": "string",
-        "description": "If connectiong to a SASL enabled port, the userid to use for authentication"
-      },
-      {
-        "name": "password",
-        "type": "string",
-        "description": "If connectiong to a SASL enabled port, the password to use for authentication"
-      },
-      {
-        "name": "truststore",
-        "type": "string",
-        "description": " If connectiong to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate"
-      }
-    ],
-    "input":[
       {
         "name": "topic",
         "type": "string",
         "required": true,
         "description": "The Kafka topic on which to place the message"
       },
+      {
+        "name": "user",
+        "type": "string",
+        "description": "If connection to a SASL enabled port, the userid to use for authentication"
+      },
+      {
+        "name": "password",
+        "type": "string",
+        "description": "If connection to a SASL enabled port, the password to use for authentication"
+      },
+      {
+        "name": "truststore",
+        "type": "string",
+        "description": "If connection to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate"
+      }
+    ],
+    "input":[
       {
         "name": "message",
         "type": "string",
