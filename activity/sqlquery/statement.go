@@ -36,7 +36,7 @@ const (
 func ToDbType(typeStr string) (DbType, error) {
 
 	switch strings.ToLower(typeStr) {
-	case "mssql":
+	case "mysql":
 		return DbMySql, nil
 	case "oracle":
 		return DbOracle, nil
@@ -194,8 +194,7 @@ func (s *SQLStatement) GetPreparedStatementArgs(params map[string]interface{}) [
 	case BtQuestion:
 		for _, part := range s.parts {
 			if pPart, ok := part.(*paramPart); ok {
-
-				if v, ok := params[pPart.param]; !ok {
+				if v, ok := params[pPart.param]; ok {
 					sParams = append(sParams, v)
 				}
 			}

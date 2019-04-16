@@ -45,8 +45,8 @@ the app imports section.  See [github.com/go-sql-driver/mysql](https://github.co
   "id": "dbquery",
   "name": "DbQuery",
   "activity": {
-    "ref": "github.com/project-flogo/activity/sqlquery",
-    "setting": {
+    "ref": "github.com/project-flogo/contrib/activity/sqlquery",
+    "settings": {
       "dbType": "mysql",
       "driverName": "mysql",
       "dataSourceName": "username:password@tcp(host:port)/dbName",
@@ -63,8 +63,8 @@ Query with parameters.  Parameters are referenced using ':', e.g. `:id`, regardl
   "id": "named_dbquery",
   "name": "Named DbQuery",
   "activity": {
-    "ref": "github.com/project-flogo/activity/sqlquery",
-    "setting": {
+    "ref": "github.com/project-flogo/contrib/activity/sqlquery",
+    "settings": {
       "dbType": "mysql",
       "driverName": "mysql",
       "dataSourceName": "username:password@tcp(host:port)/dbName",

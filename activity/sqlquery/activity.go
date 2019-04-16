@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/project-flogo/core/support/log"
+	"reflect"
 
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
@@ -179,19 +180,47 @@ func getResults(rows *sql.Rows) ([][]interface{},error) {
 		return nil, err
 	}
 
+	cTypes, err := rows.ColumnTypes()
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("ctypes: %v", cTypes)
+
+	types := make([]reflect.Type, len(cTypes))
+	for i, tp := range cTypes {
+		st := tp.ScanType()
+		if st == nil {
+			continue
+		}
+		types[i] = st
+	}
+
 	var results [][]interface{}
 
 	for rows.Next() {
 
 		values := make([]interface{}, len(columns))
 		for i := range values {
-			values[i] = new(interface{})
+			values[i] = reflect.New(types[i]).Interface()
 		}
+		//values := make([]interface{}, len(columns))
+		//for i := range values {
+		//	values[i] = new(interface{})
+		//}
 
 		err = rows.Scan(values...)
 		if err != nil {
 			return nil, err
 		}
+
+		for _, value := range values {
+			if v,ok:=value.([]byte); ok  {
+				fmt.Println("val:", string(v))
+			}
+		}
+
+		r:= *sql.RawBytes{}
+
 
 		//todo do we need to do column type mapping
 
