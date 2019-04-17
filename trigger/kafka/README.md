@@ -1,6 +1,6 @@
-# Kafka Subscriber Trigger
+# Kafka Trigger
 
-The *Kafka* trigger subscribes to a topic on Kafka cluster and listens for the messages.
+This trigger subscribes to a topic on Kafka cluster and listens for the messages.
 
 ### Flogo CLI
 ```bash
