@@ -1,55 +1,20 @@
-package sqlquery
+package util
 
 import (
 	"database/sql"
 	"fmt"
-	"github.com/project-flogo/core/data/coerce"
 	"strings"
 )
 
-type DbType int8
-type BindType int8
 type StmtType int8
 
 const (
-	BtUnknown BindType = iota
-	BtAt
-	BtColon
-	BtDollar
-	BtQuestion
-
-	DbUnknown DbType = iota
-	DbMySql
-	DbOracle
-	DbPostgres
-	DbSQLite
-	DbSqlServer
-
 	StUnknown StmtType = iota
 	StSelect
 	StInsert
 	StUpdate
 	StDelete
 )
-
-// ToTypeEnum get the data type that corresponds to the specified name
-func ToDbType(typeStr string) (DbType, error) {
-
-	switch strings.ToLower(typeStr) {
-	case "mysql":
-		return DbMySql, nil
-	case "oracle":
-		return DbOracle, nil
-	case "postgres":
-		return DbPostgres, nil
-	case "sqlite":
-		return DbSQLite, nil
-	case "sqlserver":
-		return DbSqlServer, nil
-	default:
-		return DbUnknown, fmt.Errorf("unknown type: %s", typeStr)
-	}
-}
 
 // ToTypeEnum get the data type that corresponds to the specified name
 func ToStmtType(typeStr string) (StmtType, error) {
@@ -68,22 +33,7 @@ func ToStmtType(typeStr string) (StmtType, error) {
 	}
 }
 
-func GetBindType(dbType DbType) BindType {
-	switch dbType {
-	case DbPostgres:
-		return BtDollar
-	case DbMySql, DbSQLite:
-		return BtQuestion
-	case DbOracle:
-		return BtColon
-	case DbSqlServer:
-		return BtAt
-	default:
-		return BtUnknown
-	}
-}
-
-func NewSQLStatement(dbType DbType, sql string) (*SQLStatement, error) {
+func NewSQLStatement(dbHelper DbHelper, sql string) (*SQLStatement, error) {
 
 	sql = strings.TrimSpace(sql)
 	sqlParts := strings.Fields(sql)
@@ -97,8 +47,9 @@ func NewSQLStatement(dbType DbType, sql string) (*SQLStatement, error) {
 		return nil, err
 	}
 
-	bt := GetBindType(dbType)
-	parts := parse(sql,dbType, bt)
+	bt :=  dbHelper.BindType()
+
+	parts := parse(sql, bt)
 	numMap := make(map[string]int)
 
 	//if "dollar" placeholder, calculate positions
@@ -127,13 +78,12 @@ func NewSQLStatement(dbType DbType, sql string) (*SQLStatement, error) {
 	}
 	preparedSQL := b.String()
 
-	return &SQLStatement{stmtType: stmtType, parts: parts, bindType: bt, preparedSQL: preparedSQL}, nil
+	return &SQLStatement{dbHelper: dbHelper, stmtType: stmtType, parts: parts, preparedSQL: preparedSQL}, nil
 }
 
 // SQLStatement is a parsed DML SQL Statement
 type SQLStatement struct {
-	dbType         DbType
-	bindType       BindType
+	dbHelper       DbHelper
 	stmtType       StmtType
 	parts          []Part
 	placeholderIds map[string]int
@@ -171,8 +121,8 @@ func (s *SQLStatement) ToStatementSQL(params map[string]interface{}) string {
 
 	var b strings.Builder
 	b.Grow(n)
-	for _, s := range s.parts {
-		b.WriteString(s.ToValue(params))
+	for _, part := range s.parts {
+		b.WriteString(part.ToValue(s.dbHelper, params))
 	}
 	return b.String()
 }
@@ -185,7 +135,7 @@ func (s *SQLStatement) GetPreparedStatementArgs(params map[string]interface{}) [
 
 	var sParams []interface{}
 
-	switch s.bindType {
+	switch s.dbHelper.BindType() {
 	case BtAt, BtColon:
 		//named
 		for name, value := range params {
@@ -209,7 +159,7 @@ func (s *SQLStatement) GetPreparedStatementArgs(params map[string]interface{}) [
 	return sParams
 }
 
-func parse(sqlStatement string, dbType DbType, bindType BindType) []Part {
+func parse(sqlStatement string, bindType BindType) []Part {
 	var i, j, start int
 
 	var parts []Part
@@ -238,7 +188,7 @@ func parse(sqlStatement string, dbType DbType, bindType BindType) []Part {
 					break
 				}
 			}
-			parts = append(parts, newParamPart(sqlStatement[start+1:j], dbType, bindType))
+			parts = append(parts, newParamPart(sqlStatement[start+1:j], bindType))
 			i = j
 			start = j
 		}
@@ -252,7 +202,7 @@ func parse(sqlStatement string, dbType DbType, bindType BindType) []Part {
 }
 
 type Part interface {
-	ToValue(params map[string]interface{}) string
+	ToValue(helper DbHelper, params map[string]interface{}) string
 	Placeholder() string
 	String() string
 }
@@ -261,7 +211,7 @@ type literalPart struct {
 	literal string
 }
 
-func (p *literalPart) ToValue(params map[string]interface{}) string {
+func (p *literalPart) ToValue(helper DbHelper, params map[string]interface{}) string {
 	return p.literal
 }
 
@@ -273,9 +223,9 @@ func (p *literalPart) String() string {
 	return p.literal
 }
 
-func newParamPart(param string, dbType DbType, bindType BindType) Part {
+func newParamPart(param string, bindType BindType) Part {
 
-	part := &paramPart{param: param, dbType:dbType}
+	part := &paramPart{param: param}
 	switch bindType {
 	case BtAt:
 		part.placeholder = "@" + param
@@ -289,15 +239,14 @@ func newParamPart(param string, dbType DbType, bindType BindType) Part {
 }
 
 type paramPart struct {
-	dbType      DbType
 	param       string
 	placeholder string
 }
 
-func (p *paramPart) ToValue(params map[string]interface{}) string {
+func (p *paramPart) ToValue(helper DbHelper, params map[string]interface{}) string {
 
 	v := params[p.param]
-	return ToSql(p.dbType, v)
+	return helper.ToSQLStatementVal(v)
 }
 
 func (p *paramPart) Placeholder() string {
@@ -308,35 +257,3 @@ func (p *paramPart) String() string {
 	return ":" + p.param
 }
 
-func ToSql(dbType DbType, val interface{}) string {
-
-	switch t := val.(type) {
-	case bool:
-		switch dbType {
-		case DbSQLite, DbOracle:
-			if t {
-				return "1"
-			} else {
-				return "0"
-			}
-		case DbPostgres, DbSqlServer:
-			if t {
-				return "TRUE"
-			} else {
-				return "FALSE"
-			}
-		default:
-			if t {
-				return "true"
-			} else {
-				return "false"
-			}
-		}
-	case int, int32, int64, float32, float64:
-		s,_ := coerce.ToString(val)
-		return s
-	default:
-		s, _ := coerce.ToString(val)
-		return "'" + s + "'"
-	}
-}

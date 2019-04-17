@@ -18,9 +18,9 @@ flogo install github.com/project-flogo/activity/sqlquery
 | dbType             | string | The type of database (mysql, oracle, postres, sqlite, sqlserver) - **REQUIRED**         
 | driverName         | string | The database driver name - **REQUIRED**
 | dataSourceName     | string | The database DataSource name - **REQUIRED**
-| query              | string | The SQL select query - **REQUIRED**
 | maxOpenConnections | int    | Max open connections (default is unlimited)
 | maxIdleConnections | int    | Max idle connections (default is 2)
+| query              | string | The SQL select query - **REQUIRED**
 | disablePrepared    | bool   | Disable prepared statement usage
 | labeledResults     | bool   | Return results labeled by column name
 
