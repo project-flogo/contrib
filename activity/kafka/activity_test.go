@@ -11,7 +11,7 @@ import (
 
 func TestRegister(t *testing.T) {
 
-	ref := activity.GetRef(&KafkaPubActivity{})
+	ref := activity.GetRef(&KafkaActivity{})
 	act := activity.Get(ref)
 
 	assert.NotNil(t, act)
@@ -19,7 +19,7 @@ func TestRegister(t *testing.T) {
 
 func TestPlain(t *testing.T) {
 
-	act := &KafkaPubActivity{}
+	act := &KafkaActivity{}
 	tc := test.NewActivityContext(act.Metadata())
 
 	//setup attrs

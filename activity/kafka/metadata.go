@@ -5,19 +5,18 @@ import (
 )
 
 type Settings struct {
-	BrokerUrls string `md:"brokerUrls,required"`
-	User       string `md:"user"`
-	Password   string `md:"password"`
-	TrustStore string `md:"truststore"`
+	BrokerUrls string `md:"brokerUrls,required"` // The Kafka cluster to connect to
+	User       string `md:"user"`       // If connecting to a SASL enabled port, the user id to use for authentication
+	Password   string `md:"password"`   // If connecting to a SASL enabled port, the password to use for authentication
+	TrustStore string `md:"trustStore"` // If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate
+	Topic      string `md:"topic,required"` // The Kafka topic on which to place the message
 }
 type Input struct {
-	Topic   string `md:"topic,required"`
-	Message string `md:"message,required"`
+	Message string `md:"message,required"` // The message to send
 }
 
 func (i *Input) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"topic":   i.Topic,
 		"message": i.Message,
 	}
 }
@@ -25,22 +24,13 @@ func (i *Input) ToMap() map[string]interface{} {
 func (i *Input) FromMap(values map[string]interface{}) error {
 
 	var err error
-
-	i.Topic, err = coerce.ToString(values["topic"])
-	if err != nil {
-		return err
-	}
 	i.Message, err = coerce.ToString(values["message"])
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 type Output struct {
-	Partition int32 `md:"partition"`
-	OffSet    int64 `md:"offset"`
+	Partition int32 `md:"partition"` // Documents the partition that the message was placed on
+	OffSet    int64 `md:"offset"`    // Documents the offset for the message
 }
 
 func (o *Output) ToMap() map[string]interface{} {
