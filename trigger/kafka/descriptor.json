@@ -1,61 +1,57 @@
 {
-    "name": "flogo-kafkasub",
-    "type": "flogo:trigger",
-    "version": "0.0.1",
-    "title": "Receive Kafka Messages",
-    "author": "Wendell Nichols <wnichols@tibco.com>",
-    "description": "Simple Kafka Trigger",
-    "settings":[
-      {
-        "name": "brokerUrl",
-        "type": "string",
-        "description": "The Kafka cluster to connect to"
-      },
-      {
-        "name": "user",
-        "type": "string",
-        "description": "If connectiong to a SASL enabled port, the userid to use for authentication"
-      },
-      {
-        "name": "password",
-        "type": "string",
-        "description": "If connectiong to a SASL enabled port, the password to use for authentication"
-      },
-      {
-        "name": "truststore",
-        "type": "string",
-        "description": " If connectiong to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate"
-      }
-    ],
-    "output": [
-      {
-        "name": "message",
-        "type": "string",
-        "description": "The text message sent"
-      }
-    ],
-    "handler": {
-      "settings": [
-        {
-          "name": "topic",
-          "type": "string",
-          "required":"true",
-          "description": "The Kafka topic on which to place the message"
-        },
-        {
-          "name": "partitions",
-          "type": "string",
-          "description": "Documents the partition that the message was placed on"
-        },
-        {
-          "name": "group",
-          "type": "string"
-        },
-        {
-          "name": "offset",
-          "type": "int",
-          "description": "Documents the offset for the message"
-        }
-      ]
+  "name": "flogo-kafka",
+  "type": "flogo:trigger",
+  "version": "0.0.1",
+  "title": "Receive Kafka Messages",
+  "author": "Wendell Nichols <wnichols@tibco.com>",
+  "description": "Simple Kafka Trigger",
+  "settings": [
+    {
+      "name": "brokerUrls",
+      "type": "string",
+      "description": "The Kafka cluster to connect to"
+    },
+    {
+      "name": "user",
+      "type": "string",
+      "description": "If connecting to a SASL enabled port, the user id to use for authentication"
+    },
+    {
+      "name": "password",
+      "type": "string",
+      "description": "If connecting to a SASL enabled port, the password to use for authentication"
+    },
+    {
+      "name": "trustStore",
+      "type": "string",
+      "description": "If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate"
     }
-  }
+  ],
+  "handler": {
+    "settings": [
+      {
+        "name": "topic",
+        "type": "string",
+        "required": "true",
+        "description": "The Kafka topic on which to listen for messages"
+      },
+      {
+        "name": "partitions",
+        "type": "string",
+        "description": "The specific partitions to consume messages from"
+      },
+      {
+        "name": "offset",
+        "type": "int",
+        "description": "The offset to use when starting to consume messages"
+      }
+    ]
+  },
+  "output": [
+    {
+      "name": "message",
+      "type": "string",
+      "description": "The message that was consumed"
+    }
+  ]
+}
