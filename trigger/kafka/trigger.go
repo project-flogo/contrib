@@ -82,7 +82,7 @@ func (t *KafkaTrigger) Stop() error {
 
 func NewKafkaHandler(logger log.Logger, handler trigger.Handler, consumer sarama.Consumer) (*KafkaHandler, error) {
 
-	kafkaHandler := &KafkaHandler{logger: logger, shutdown:make(chan struct{})}
+	kafkaHandler := &KafkaHandler{logger: logger, shutdown: make(chan struct{}), handler: handler}
 
 	handlerSetting := &HandlerSettings{}
 	err := metadata.MapToStruct(handler.Settings(), handlerSetting, true)
@@ -157,7 +157,7 @@ func (h *KafkaHandler) consumePartition(consumer sarama.PartitionConsumer) {
 				return
 			}
 			time.Sleep(time.Millisecond * 100)
-		case <- h.shutdown:
+		case <-h.shutdown:
 			return
 		case msg := <-consumer.Messages():
 
