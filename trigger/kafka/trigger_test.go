@@ -14,16 +14,16 @@ const testConfig string = `{
 	"id": "flogo-timer",
 	"ref": "github.com/project-flogo/contrib/trigger/kafka",
 	"settings": {
-	  "brokerurls": "localhost:9092"
+	  "brokerUrls": "localhost:9092"
 	},
 	"handlers": [
 	  {
-		"action":{
-			"id":"dummy"
-		},
-		"settings": {
-		  "topic": "syslog"
-		}
+			"action":{
+				"id":"dummy"
+			},
+			"settings": {
+		  	"topic": "syslog"
+			}
 	  }
 	]
 	

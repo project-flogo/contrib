@@ -157,7 +157,7 @@ func (h *KafkaHandler) consumePartition(consumer sarama.PartitionConsumer) {
 				return
 			}
 			time.Sleep(time.Millisecond * 100)
-		case <- h.shutdown:
+		case <-h.shutdown:
 			return
 		case msg := <-consumer.Messages():
 
