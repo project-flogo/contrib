@@ -1,6 +1,6 @@
-# Kafka Publisher Actvitiy
+# Kafka Activity
 
-The `kafka` activity publishes the message on the kafka queue.
+This activity publishes messages on a topic in a Kafka cluster.
 
 ### Flogo CLI
 ```bash
@@ -12,24 +12,24 @@ flogo install github.com/project-flogo/contrib/activity/kafka
 ### Settings: 
 | Name       | Type   | Description
 |:---        | :---   | :---   
-| brokerUrls | string | The Kafka cluster to connect to  |
-| user       | string | If connectiong to a SASL enabled port, the userid to use for authentication  |
-| password   | string | If connectiong to a SASL enabled port, the password to use for authentication  |
-| trustStore | string |  If connectiong to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate |
+| brokerUrls | string | The brokers of the Kafka cluster to connect to - ***REQUIRED***
+| topic      | string | The Kafka topic on which to place the message - ***REQUIRED***
+| user       | string | If connecting to a SASL enabled port, the user id to use for authentication
+| password   | string | If connecting to a SASL enabled port, the password to use for authentication 
+| trustStore | string | If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate
 
 ### Input:
 
 | Name       | Type   | Description
 |:---        | :---   | :---  
-| topic      | string | The Kafka topic on which to place the message  |
-| message    | string | The text message to send  |
+| message    | string | The message to send 
 
 ### Output:
 
 | Name         | Type     | Description
 |:---          | :---     | :---   
-| partition    | int32    | Documents the partition that the message was placed on |
-| offSet       | int64    | Documents the offset for the message |
+| partition    | int32    | Documents the partition that the message was placed on
+| offSet       | int64    | Documents the offset for the message
 
 ## Examples
 
@@ -41,12 +41,12 @@ The below example sends `Hello From Flogo` to a Kafka Broker running on localhos
   "name": "Publish Message to Kafka",
   "activity": {
     "ref": "github.com/project-flogo/contrib/activity/kafka",
-    "input": {
+    "settings": {
       "brokerUrls" : "localhost:9092",
-      "topic"      : "syslog",
-      "message"    : "Hello From Flogo",
-      "user"       :  "",
-      "password"   : ""
+      "topic"      : "syslog"
+    },
+    "input": {
+      "message"    : "Hello From Flogo"
     }
   }
 }
@@ -56,7 +56,7 @@ The below example sends `Hello From Flogo` to a Kafka Broker running on localhos
 
 ### Testing
 
-To run tests first set up the kafka broker using the docker-compose file given below:
+To run tests first set up the Kafka broker using the docker-compose file given below:
 
 ```yaml
 version: '2'

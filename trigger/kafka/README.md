@@ -1,6 +1,6 @@
-# Kafka Subscriber Trigger
+# Kafka Trigger
 
-The `kafka` trigger subscribes to a topic on kafka broker and listens for the messages.
+This trigger subscribes to a topic on Kafka cluster and listens for the messages.
 
 ### Flogo CLI
 ```bash
@@ -13,25 +13,24 @@ flogo install github.com/project-flogo/contrib/trigger/kafka
 
 | Name       | Type   | Description
 |:---        | :---   | :---     
-| brokerUrls | string | The Kafka cluster to connect to  |
-| trustStore | string | If connectiong to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate  |
-| user       | string | If connectiong to a SASL enabled port, the userid to use for authentication  |
-| password   | string | If connectiong to a SASL enabled port, the password to use for authentication  |
+| brokerUrls | string | The brokers of the Kafka cluster to connect to - ***REQUIRED***
+| user       | string | If connecting to a SASL enabled port, the userid to use for authentication
+| password   | string | If connecting to a SASL enabled port, the password to use for authentication
+| trustStore | string | If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate
 
 ### HandlerSettings:
 
 | Name       | Type   | Description
 |:---        | :---   | :---   
-| topic      | string | The Kafka topic on which to place the message  |
-| group      | string | The kafka group  |
-| partition  | string | Documents the partition that the message was placed on  |
-| offSet     | int64  | Documents the offset for the message  |
+| topic      | string | The Kafka topic on which to listen for messages
+| partitions | string | The specific partitions to consume messages from
+| offset     | int64  | The offset to use when starting to consume messages
 
 ### Output:
 
 | Name         | Type     | Description
 |:---          | :---     | :---   
-| Message      | string   | The text message sent  |
+| message      | string   | The message that was consumed
 
 
 ## Examples
@@ -44,18 +43,17 @@ flogo install github.com/project-flogo/contrib/trigger/kafka
       "ref": "github.com/project-flogo/contrib/trigger/kafka",
       "settings": {
         "brokerUrls" : "localhost:9092",
-        "truststore" : "" 
+        "trustStore" : "" 
       },
       "handlers": [
         {
           "settings": {
             "topic": "syslog",
-            "group": ""
           },
           "action": {
             "ref": "github.com/project-flogo/flow",
             "settings": {
-              "flowURI": "res://flow:new_device_flow"
+              "flowURI": "res://flow:my_flow"
             }
           }
         }
