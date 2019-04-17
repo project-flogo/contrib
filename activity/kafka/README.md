@@ -1,6 +1,6 @@
-# Kafka Publisher Activity
+# Kafka Activity
 
-The *Kafka* activity publishes messages on a topic in a Kafka cluster.
+This activity publishes messages on a topic in a Kafka cluster.
 
 ### Flogo CLI
 ```bash
