@@ -12,7 +12,8 @@ flogo install github.com/project-flogo/contrib/activity/kafka
 ### Settings: 
 | Name       | Type   | Description
 |:---        | :---   | :---   
-| brokerUrls | string | The Kafka cluster to connect to 
+| brokerUrls | string | The Kafka cluster to connect to - ***REQUIRED***
+| topic      | string | The Kafka topic on which to place the message - ***REQUIRED***
 | user       | string | If connecting to a SASL enabled port, the user id to use for authentication
 | password   | string | If connecting to a SASL enabled port, the password to use for authentication 
 | trustStore | string | If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate
@@ -21,15 +22,15 @@ flogo install github.com/project-flogo/contrib/activity/kafka
 
 | Name       | Type   | Description
 |:---        | :---   | :---  
-| topic      | string | The Kafka topic on which to place the message
+
 | message    | string | The message to send 
 
 ### Output:
 
 | Name         | Type     | Description
 |:---          | :---     | :---   
-| partition    | int32    | Documents the partition that the message was placed on |
-| offSet       | int64    | Documents the offset for the message |
+| partition    | int32    | Documents the partition that the message was placed on
+| offSet       | int64    | Documents the offset for the message
 
 ## Examples
 
