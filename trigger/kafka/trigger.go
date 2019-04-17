@@ -82,7 +82,7 @@ func (t *KafkaTrigger) Stop() error {
 
 func NewKafkaHandler(logger log.Logger, handler trigger.Handler, consumer sarama.Consumer) (*KafkaHandler, error) {
 
-	kafkaHandler := &KafkaHandler{logger: logger, shutdown:make(chan struct{})}
+	kafkaHandler := &KafkaHandler{logger: logger, shutdown: make(chan struct{}), handler: handler}
 
 	handlerSetting := &HandlerSettings{}
 	err := metadata.MapToStruct(handler.Settings(), handlerSetting, true)
