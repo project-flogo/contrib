@@ -1,6 +1,6 @@
 # Kafka Subscriber Trigger
 
-The `kafka` trigger subscribes to a topic on kafka broker and listens for the messages.
+The *Kafka* trigger subscribes to a topic on Kafka cluster and listens for the messages.
 
 ### Flogo CLI
 ```bash
@@ -13,10 +13,10 @@ flogo install github.com/project-flogo/contrib/trigger/kafka
 
 | Name       | Type   | Description
 |:---        | :---   | :---     
-| brokerUrls | string | The Kafka cluster to connect to
-| trustStore | string | If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate
+| brokerUrls | string | The brokers of the Kafka cluster to connect to - ***REQUIRED***
 | user       | string | If connecting to a SASL enabled port, the userid to use for authentication
 | password   | string | If connecting to a SASL enabled port, the password to use for authentication
+| trustStore | string | If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate
 
 ### HandlerSettings:
 
@@ -49,12 +49,11 @@ flogo install github.com/project-flogo/contrib/trigger/kafka
         {
           "settings": {
             "topic": "syslog",
-            "group": ""
           },
           "action": {
             "ref": "github.com/project-flogo/flow",
             "settings": {
-              "flowURI": "res://flow:new_device_flow"
+              "flowURI": "res://flow:my_flow"
             }
           }
         }
