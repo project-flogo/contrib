@@ -1,7 +1,6 @@
 package kafka
 
 import (
-	"log"
 	"testing"
 
 	"github.com/project-flogo/core/activity"
@@ -18,14 +17,16 @@ func TestRegister(t *testing.T) {
 }
 
 func TestPlain(t *testing.T) {
+	settings := &Settings{BrokerUrls: "localhost:9092", Topic: "syslog"}
 
-	act := &KafkaActivity{}
+	iCtx := test.NewActivityInitContext(settings, nil)
+	act, err := New(iCtx)
+	assert.Nil(t, err)
+
 	tc := test.NewActivityContext(act.Metadata())
+	tc.SetInput("message", "Hello")
 
-	//setup attrs
-	tc.SetInput("brokerurls", "localhost:9092")
-	tc.SetInput("topic", "syslog")
-	tc.SetInput("message", "######### PLAIN ###########  Mary had a little lamb, its fleece was white as snow.")
-	act.Eval(tc)
-	log.Printf("TestEval successfull.  partition [%d]  offset [%d]", tc.GetOutput("partition"), tc.GetOutput("offset"))
+	done, err := act.Eval(tc)
+	assert.Nil(t, err)
+	assert.True(t, done)
 }
