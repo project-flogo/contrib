@@ -22,7 +22,6 @@ flogo install github.com/project-flogo/contrib/activity/kafka
 
 | Name       | Type   | Description
 |:---        | :---   | :---  
-
 | message    | string | The message to send 
 
 ### Output:
