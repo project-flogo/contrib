@@ -1,4 +1,4 @@
-# Kafka Publisher Actvitiy
+# Kafka Publisher Activity
 
 The `kafka` activity publishes the message on the kafka queue.
 
