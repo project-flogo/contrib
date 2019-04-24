@@ -85,7 +85,7 @@
       "description" : "The HTTP status code"
     },
     {
-      "name": "result",
+      "name": "data",
       "type": "any",
       "description" : "The HTTP response data"
     }

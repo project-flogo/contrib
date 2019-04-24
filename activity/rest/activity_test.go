@@ -12,7 +12,6 @@ import (
 	"testing"
 )
 
-//todo add asserts
 
 func TestRegister(t *testing.T) {
 
