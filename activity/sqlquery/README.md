@@ -33,7 +33,7 @@ flogo install github.com/project-flogo/activity/sqlquery
 | Name        | Type  | Description
 |:---         | :---  | :---    
 | columnNames | array |  The names of the result columns
-| result      | array |  The results
+| results     | array |  The results
 
 ## Examples
 
