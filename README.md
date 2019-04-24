@@ -9,30 +9,31 @@ Core collection of Flogo contributions.  This repository consists of activities,
 ### Activities
 * [actreply](activity/actreply): Action Reply
 * [actreturn](activity/actreturn): Action Return
-* [appdata](activity/actreturn): App Shared Data
-* [channel](activity/channel): Send internal engine messages  
+* [appdata](activity/actreturn): Application Shared Data
+* [channel](activity/channel):  Internal Engine Message Publisher  
 * [counter](activity/counter): Simple Counter 
-* [error](activity/error): Throw error
+* [error](activity/error): Throw Error
 * [jsexec](activity/jsexec): Execute Javascript 
+* [kafka](activity/kafka): Kafka Publisher
 * [log](activity/log): Log Message
 * [mapper](activity/mapper): Mapper
 * [noop](activity/noop): No-Op 
-* [rest](activity/rest): Basic REST invoker 
-* [kafka](activity/kafka): Basic Kafka Publisher
+* [rest](activity/rest): REST Invoker 
+* [sqlquery](activity/sqlquery): Run SQL Query 
 
 ### Triggers
-* [channel](trigger/channel): Listen to internal engine messages
+* [channel](trigger/channel): Internal Engine Message Listener
 * [cli](trigger/cli): CLI
-* [loadtester](trigger/loadtester): Basic load tester
-* [rest](trigger/rest): REST 
+* [kafka](trigger/kafka): Kafka Subscriber
+* [loadtester](trigger/loadtester): Basic Load Tester
+* [rest](trigger/rest): REST
 * [timer](trigger/timer): Timer
-* [kafka](trigger/kafka): Basic Kafka Subscriber
  
 ### Functions
 * [coerce](function/coerce): Type Conversion
-* [json](function/json): JSON functions
-* [number](function/number): Number functions
-* [string](function/string): Basic string functions
+* [json](function/json): JSON
+* [number](function/number): Numbers
+* [string](function/string): Strings
 
 ## Installation
 
