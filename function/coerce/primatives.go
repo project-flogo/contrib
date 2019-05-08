@@ -33,7 +33,7 @@ type fnToInt struct {
 }
 
 func (*fnToInt) Name() string {
-	return "toString"
+	return "toInt"
 }
 
 func (*fnToInt) Eval(params ...interface{}) (interface{}, error) {
