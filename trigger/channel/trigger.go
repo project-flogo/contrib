@@ -48,7 +48,7 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 			return fmt.Errorf("unknown engine channel '%s'", s.Channel)
 		}
 
-		l := &Listener{handler: handler}
+		l := &Listener{handler: handler, logger:ctx.Logger()}
 		err = ch.RegisterCallback(l.OnMessage)
 		if err != nil {
 			return err
