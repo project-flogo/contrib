@@ -194,7 +194,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	defer func() {
 		if resp.Body != nil {
-			resp.Body.Close()
+			_ = resp.Body.Close()
 		}
 	}()
 
@@ -215,7 +215,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			switch {
 			case err == io.EOF:
 				// empty body
-			case err != nil:
+			default:
 				return false, err
 			}
 		}
