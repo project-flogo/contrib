@@ -45,6 +45,11 @@
       "description": "The HTTP header parameters"
     },
     {
+      "name": "method",
+      "type": "string",
+      "description": "The HTTP method used"
+    },
+    {
       "name": "content",
       "type": "any",
       "description": "The content of the request"
