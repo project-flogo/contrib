@@ -23,10 +23,17 @@ flogo install github.com/project-flogo/contrib/activity/rest
 | headers       | params | The HTTP header parameters
 | proxy         | string | The address of the proxy server to be used
 | timeout       | int    | The request timeout in seconds
-| skipSSLVerify | bool   | Skip SSL validation, defaults to false
+| sslConfig     | object | SSL configuration
+
+
+#### *sslConfig* Object:
+| Property      | Type   | Description
+|:---           | :---   | :---     
+| skipVerify    | bool   | Skip SSL validation, defaults to false
+| useSystemCert | bool   | Use the systems root certificate file, defaults to false
+| caFile        | string | The path to PEM encoded root certificates file
 | certFile      | string | The path to PEM encoded client certificate
 | keyFile       | string | The path to PEM encoded client key
-| CAFile        | string | The path to PEM encoded root certificates file
 
 ### Input:
 | Name        | Type   | Description

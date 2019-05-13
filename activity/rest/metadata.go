@@ -5,16 +5,16 @@ import (
 )
 
 type Settings struct {
-	Method        string            `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"` // The HTTP method to invoke
-	Uri           string            `md:"uri,required"`  // The URI of the service to invoke
-	Headers       map[string]string `md:"headers"`       // The HTTP header parameters
-	Proxy         string            `md:"proxy"`         // The address of the proxy server to be use
-	Timeout       int               `md:"timeout"`       // The request timeout in seconds
-	SkipSSLVerify bool              `md:"skipSSLVerify"` // Skip SSL validation
-	CertFile      string            `md:"certFile"`      // Path to PEM encoded client certificate
-	KeyFile       string            `md:"keyFile"`       // Path to PEM encoded client key
-	CAFile        string            `md:"CAFile"`        // Path to PEM encoded root certificates file
-
+	Method        string                 `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"` // The HTTP method to invoke
+	Uri           string                 `md:"uri,required"`                                       // The URI of the service to invoke
+	Headers       map[string]string      `md:"headers"`                                            // The HTTP header parameters
+	Proxy         string                 `md:"proxy"`                                              // The address of the proxy server to be use
+	Timeout       int                    `md:"timeout"`                                            // The request timeout in seconds
+	SkipSSLVerify bool                   `md:"skipSSLVerify"`                                      // Skip SSL validation
+	CertFile      string                 `md:"certFile"`                                           // Path to PEM encoded client certificate
+	KeyFile       string                 `md:"keyFile"`                                            // Path to PEM encoded client key
+	CAFile        string                 `md:"CAFile"`                                             // Path to PEM encoded root certificates file
+	SSLConfig     map[string]interface{} `md:"sslConfig"`                                          // SSL Configuration
 }
 
 type Input struct {
