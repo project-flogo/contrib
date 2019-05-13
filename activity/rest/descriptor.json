@@ -4,7 +4,7 @@
   "version": "0.9.0",
   "title": "REST Invoke",
   "description": "Invokes a REST Service",
-  "homepage": "https://github.com/prject-flogo/contrib/tree/master/activity/rest",
+  "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/rest",
   "settings": [
     {
       "name": "method",
