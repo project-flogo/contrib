@@ -15,7 +15,8 @@
           "name": "limit",
           "type": "int"
         }
-      ]
+      ],
+      "returnType": "int"
     }
   ]
 }

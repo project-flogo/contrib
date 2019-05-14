@@ -1,5 +1,10 @@
+<!--
+title: AppData
+weight: 4616
+-->
+
 # AppData
-This activity allows you to set and get global App attributes\.
+This activity allows you to set and get global App attributes.
 
 ## Installation
 
