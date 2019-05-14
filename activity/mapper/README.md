@@ -1,7 +1,7 @@
----
+<!--
 title: Mapper
 weight: 4616
----
+-->
 
 # Mapper
 This activity allows you to map values to the working attribute set of an action.

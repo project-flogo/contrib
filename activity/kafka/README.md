@@ -1,3 +1,8 @@
+<!--
+title: Kafka
+weight: 4616
+-->
+
 # Kafka Activity
 
 This activity publishes messages on a topic in a Kafka cluster.

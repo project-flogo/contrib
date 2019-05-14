@@ -1,6 +1,9 @@
+<!--
+title: SQL Query
+weight: 4616
+-->
 
-# SQLQuery 
-## SQLQuery Database Activity 
+# SQLQuery Database Activity 
 This activity provides your flogo application execute database queries. 
 
 
