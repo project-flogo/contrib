@@ -3,6 +3,7 @@ package rest
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/DataDog/zstd"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -62,9 +63,23 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	if strings.HasPrefix(s.Uri, "https") {
 
 		cfg := &ssl.Config{}
-		err := cfg.FromMap(s.SSLConfig)
-		if err != nil {
-			return nil, err
+
+		if len(s.SSLConfig) != 0 {
+			err := cfg.FromMap(s.SSLConfig)
+			if err != nil {
+				return nil, err
+			}
+
+			if _, set := s.SSLConfig["skipVerify"]; !set {
+				cfg.SkipVerify = true
+			}
+			if _, set := s.SSLConfig["useSystemCert"]; !set {
+				cfg.UseSystemCert = true
+			}
+		} else {
+			//using ssl but not configured, use defaults
+			cfg.SkipVerify = true
+			cfg.UseSystemCert = true
 		}
 
 		tlsConfig, err := ssl.NewClientTLSConfig(cfg)

@@ -26,15 +26,16 @@ flogo install github.com/project-flogo/contrib/activity/rest
 | sslConfig     | object | SSL configuration
 
 
-#### *sslConfig* Object:
+#### *sslConfig* Object: 
 | Property      | Type   | Description
 |:---           | :---   | :---     
-| skipVerify    | bool   | Skip SSL validation, defaults to false
-| useSystemCert | bool   | Use the systems root certificate file, defaults to false
+| skipVerify    | bool   | Skip SSL validation, defaults to true
+| useSystemCert | bool   | Use the systems root certificate file, defaults to true
 | caFile        | string | The path to PEM encoded root certificates file
 | certFile      | string | The path to PEM encoded client certificate
 | keyFile       | string | The path to PEM encoded client key
 
+*Note: used if URI is https*
 ### Input:
 | Name        | Type   | Description
 |:---         | :---   | :---     
