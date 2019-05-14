@@ -3,7 +3,6 @@ package rest
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/DataDog/zstd"
 	"io"
 	"io/ioutil"
 	"net/http"
