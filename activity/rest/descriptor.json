@@ -42,13 +42,13 @@
         {
           "name": "skipVerify",
           "type": "boolean",
-          "value": "false",
+          "value": "true",
           "description" : "Skip SSL validation"
         },
         {
           "name": "useSystemCert",
           "type": "boolean",
-          "value": "false",
+          "value": "true",
           "description" : "Use the systems root certificate file"
         },
         {
