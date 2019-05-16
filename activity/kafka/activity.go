@@ -9,17 +9,18 @@ import (
 )
 
 func init() {
-	_ = activity.Register(&KafkaActivity{}, New)
+	_ = activity.Register(&Activity{}, New)
 }
 
 var activityMd = activity.ToMetadata(&Input{}, &Output{})
 
-// MyActivity is a stub for your Activity implementation
-type KafkaActivity struct {
+// Activity is a kafka activity
+type Activity struct {
 	conn  *KafkaConnection
 	topic string
 }
 
+// New create a new kafka activity
 func New(ctx activity.InitContext) (activity.Activity, error) {
 	settings := &Settings{}
 	err := metadata.MapToStruct(ctx.Settings(), settings, true)
@@ -33,16 +34,17 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, err
 	}
 
-	act := &KafkaActivity{conn: conn, topic: settings.Topic}
+	act := &Activity{conn: conn, topic: settings.Topic}
 	return act, nil
 }
 
-func (act *KafkaActivity) Metadata() *activity.Metadata {
+// Metadata returns the metadata for the kafka activity
+func (*Activity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
-// Eval implements activity.Activity.Eval
-func (act *KafkaActivity) Eval(ctx activity.Context) (done bool, err error) {
+// Eval implements the evaluation of the kafka activity
+func (act *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	input := &Input{}
 
 	err = ctx.GetInputObject(input)
