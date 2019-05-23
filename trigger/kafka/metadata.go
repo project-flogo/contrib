@@ -17,7 +17,7 @@ type HandlerSettings struct {
 }
 
 type Output struct {
-	Message string `md:"string"` // The message that was consumed
+	Message string `md:"message"` // The message that was consumed
 }
 
 func (o *Output) ToMap() map[string]interface{} {
