@@ -108,7 +108,7 @@ func (t *Trigger) scheduleOnce(handler trigger.Handler, settings *HandlerSetting
 		t.logger.Debugf("Scheduling action to run once in %d seconds", seconds)
 	}
 
-	timerJob := scheduler.Every(seconds).Seconds()
+	var timerJob *scheduler.Job
 
 	fn := func() {
 		t.logger.Debug("Executing \"Once\" timer trigger")
@@ -127,6 +127,7 @@ func (t *Trigger) scheduleOnce(handler trigger.Handler, settings *HandlerSetting
 		t.logger.Debug("Start delay not specified, executing action immediately")
 		fn()
 	} else {
+		timerJob := scheduler.Every(seconds).Seconds()
 		timerJob, err := timerJob.NotImmediately().Run(fn)
 		if err != nil {
 			t.logger.Error("Error scheduling execute \"once\" timer: ", err.Error())
