@@ -8,27 +8,24 @@ import (
 	"github.com/project-flogo/core/activity"
 )
 
-
-
-// XML2JSONActivity is an Activity that can stop flow execution for given time duration.
-// inputs : {interval, intervalType}
-// outputs: none
-type XML2JSONActivity struct {
-
+// Activity is an activity that converts XML data into JSON object.
+// inputs: XML data
+// outputs: JSON object
+type Activity struct {
 }
 
 func init() {
-	_ = activity.Register(&XML2JSONActivity{})
+	_ = activity.Register(&Activity{})
 }
 
 var activityMd = activity.ToMetadata(&Input{}, &Output{})
 
 // Metadata returns the activity's metadata
-func (a *XML2JSONActivity) Metadata() *activity.Metadata {
+func (a *Activity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
-func (a *XML2JSONActivity) Eval(context activity.Context) (done bool, err error) {
+func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 
 	context.Logger().Debug("Executing XML2JSON activity")
 
@@ -39,12 +36,11 @@ func (a *XML2JSONActivity) Eval(context activity.Context) (done bool, err error)
 	}
 	xmlData := input.XmlData
 
-
 	output := &Output{}
 
 	xml := strings.NewReader(xmlData)
 
-	jsonData, err := xj.Convert(xml,xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.String, xj.Null))
+	jsonData, err := xj.Convert(xml, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.String, xj.Null))
 	if err != nil {
 		context.Logger().Error(err)
 		return false, activity.NewError("Failed to convert XML data", "", nil)
