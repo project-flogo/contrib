@@ -11,7 +11,7 @@ import (
 
 func TestRegister(t *testing.T) {
 
-	ref := activity.GetRef(&XML2JSONActivity{})
+	ref := activity.GetRef(&Activity{})
 	act := activity.Get(ref)
 
 	assert.NotNil(t, act)
@@ -19,7 +19,7 @@ func TestRegister(t *testing.T) {
 
 func TestEval(t *testing.T) {
 
-	act := &XML2JSONActivity{}
+	act := &Activity{}
 	tc := test.NewActivityContext(act.Metadata())
 
 	aInput := &Input{XmlData: `<?xml version="1.0" encoding="UTF-8"?><hello>world</hello>`}
