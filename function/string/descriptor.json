@@ -335,7 +335,7 @@
     },
     {
       "name": "trimright",
-      "description": "TrimRight returns a slice of the string s with all leading Unicode code points contained in cutset removed. utils.trimright(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "description": "TrimRight returns a slice of the string s with all trailing Unicode code points contained in cutset removed. utils.trimright(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
       "varArgs": true,
       "args": [
         {
