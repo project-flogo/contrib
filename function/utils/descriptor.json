@@ -15,8 +15,8 @@
       ]
     },
     {
-      "name": "encodestring",
-      "description": "encodestring returns a base 64 encoded copy of the input string.  utils.encodestring(\"Hello World\")",
+      "name": "encodeString",
+      "description": "encodeString returns a base 64 encoded copy of the input string.  utils.encodeString(\"Hello World\")",
       "varArgs": true,
       "args": [
         {
@@ -26,8 +26,8 @@
       ]
     },
     {
-      "name": "decodestring",
-      "description": "decodestring returns the string represented by the base 64 encoded input string.  utils.decodestring(\"SGVsbG8sIFdvcmxk\")",
+      "name": "decodeString",
+      "description": "decodeString returns the string represented by the base 64 encoded input string.  utils.decodeString(\"SGVsbG8sIFdvcmxk\")",
       "varArgs": true,
       "args": [
         {

@@ -15,7 +15,7 @@ type fnTrimSuffix struct {
 }
 
 func (fnTrimSuffix) Name() string {
-	return "trimsuffix"
+	return "trimSuffix"
 }
 
 func (fnTrimSuffix) Sig() (paramTypes []data.Type, isVariadic bool) {

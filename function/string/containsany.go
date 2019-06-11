@@ -15,7 +15,7 @@ type fnContainsAny struct {
 }
 
 func (fnContainsAny) Name() string {
-	return "containsany"
+	return "containsAny"
 }
 
 func (fnContainsAny) Sig() (paramTypes []data.Type, isVariadic bool) {

@@ -15,7 +15,7 @@ type fnLastIndex struct {
 }
 
 func (fnLastIndex) Name() string {
-	return "lastindex"
+	return "lastIndex"
 }
 
 func (fnLastIndex) Sig() (paramTypes []data.Type, isVariadic bool) {
