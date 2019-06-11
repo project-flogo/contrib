@@ -15,7 +15,7 @@ type fnTrimRight struct {
 }
 
 func (fnTrimRight) Name() string {
-	return "trimright"
+	return "trimRight"
 }
 
 func (fnTrimRight) Sig() (paramTypes []data.Type, isVariadic bool) {

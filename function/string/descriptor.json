@@ -150,8 +150,8 @@
       ]
     },
     {
-      "name": "containsany",
-      "description": "ContainsAny reports whether any Unicode code points in chars are within s.   utils.containsany(\"failure\", \"u & i\")",
+      "name": "containsAny",
+      "description": "containsAny reports whether any Unicode code points in chars are within inputstring.  utils.containsAny(\"failure\", \"u & i\")",
       "varArgs": true,
       "args": [
         {
@@ -166,7 +166,7 @@
     },
     {
       "name": "count",
-      "description": "Count counts the number of non-overlapping instances of substr in s. If substr is an empty string, Count returns 1 + the number of Unicode code points in s. utils.count(\"cheese\", \"e\")",
+      "description": "Count counts the number of non-overlapping instances of substring in inputstring. If substring is an empty string, Count returns 1 + the number of Unicode code points in inputstring. utils.count(\"cheese\", \"e\")",
       "varArgs": true,
       "args": [
         {
@@ -181,7 +181,7 @@
     },
     {
       "name": "index",
-      "description": "Index returns the index of the first instance of substr in s, or -1 if substr is not present in s. utils.index(\"cheese\", \"e\")",
+      "description": "Index returns the index of the first instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.index(\"cheese\", \"e\")",
       "varArgs": true,
       "args": [
         {
@@ -195,8 +195,8 @@
       ]
     },
     {
-      "name": "indexany",
-      "description": "IndexAny returns the index of the first instance of any Unicode code point from chars in s, or -1 if no Unicode code point from chars is present in s. utils.indexany(\"chicken\", \"aeiouy\")",
+      "name": "indexAny",
+      "description": "indexAny returns the index of the first instance of any Unicode code point from chars in inputstring, or -1 if no Unicode code point from chars is present in inputstring. utils.indexAny(\"chicken\", \"aeiouy\")",
       "varArgs": true,
       "args": [
         {
@@ -210,8 +210,8 @@
       ]
     },
     {
-      "name": "lastindex",
-      "description": "LastIndex returns the index of the last instance of substr in s, or -1 if substr is not present in s. utils.lastindex(\"go gopher\", \"go\")",
+      "name": "lastIndex",
+      "description": "LastIndex returns the index of the last instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.lastIndex(\"go gopher\", \"go\")",
       "varArgs": true,
       "args": [
         {
@@ -241,7 +241,7 @@
     },
     {
       "name": "replace",
-      "description": "Replace returns a copy of the string s with the first n non-overlapping instances of old replaced by new.  If n < 0, there is no limit on the number of replacements  utils.replace(\"oink oink oink\", \"k\", \"ky\", 2)",
+      "description": "Replace returns a copy of inputstring with the first count non-overlapping instances of old replaced by new.  If count < 0, there is no limit on the number of replacements  utils.replace(\"oink oink oink\", \"k\", \"ky\", 2)",
       "varArgs": true,
       "args": [
         {
@@ -263,8 +263,8 @@
       ]
     },
     {
-      "name": "replaceall",
-      "description": "ReplaceAll returns a copy of the string s with all non-overlapping instances of old replaced by new.  utils.replaceall(\"oink oink oink\", \"oink\", \"moo\")",
+      "name": "replaceAll",
+      "description": "replaceAll returns a copy of inputstring with all non-overlapping instances of old replaced by new.  utils.replaceAll(\"oink oink oink\", \"oink\", \"moo\")",
       "varArgs": true,
       "args": [
         {
@@ -282,8 +282,8 @@
       ]
     },
     {
-      "name": "tolower",
-      "description": "ToLower returns a copy of the string s with all Unicode letters mapped to their lower case.  utils.tolower(\"Hello World\")",
+      "name": "toLower",
+      "description": "toLower returns a copy of inputstring with all Unicode letters mapped to their lower case.  utils.tolower(\"Hello World\")",
       "varArgs": true,
       "args": [
         {
@@ -293,8 +293,8 @@
       ]
     },
     {
-      "name": "toupper",
-      "description": "ToUpper returns a copy of the string s with all Unicode letters mapped to their upper case.  utils.toupper(\"Hello World\")",
+      "name": "toUpper",
+      "description": "toUpper returns a copy of inputstring with all Unicode letters mapped to their upper case.  utils.toUpper(\"Hello World\")",
       "varArgs": true,
       "args": [
         {
@@ -305,7 +305,7 @@
     },
     {
       "name": "trim",
-      "description": "Trim returns a slice of the string s with all leading and trailing Unicode code points contained in cutset removed. utils.trim(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "description": "Trim returns a slice of inputstring with all leading and trailing Unicode code points contained in cutset removed. utils.trim(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
       "varArgs": true,
       "args": [
         {
@@ -319,8 +319,8 @@
       ]
     },
     {
-      "name": "trimleft",
-      "description": "TrimLeft returns a slice of the string s with all leading Unicode code points contained in cutset removed. utils.trimleft(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "name": "trimLeft",
+      "description": "trimLeft returns a slice of inputstring with all leading Unicode code points contained in cutset removed. utils.trimLeft(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
       "varArgs": true,
       "args": [
         {
@@ -334,8 +334,8 @@
       ]
     },
     {
-      "name": "trimright",
-      "description": "TrimRight returns a slice of the string s with all trailing Unicode code points contained in cutset removed. utils.trimright(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "name": "trimRight",
+      "description": "trimRight returns a slice of inputstring with all trailing Unicode code points contained in cutset removed. utils.trimRight(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
       "varArgs": true,
       "args": [
         {
@@ -349,8 +349,8 @@
       ]
     },
     {
-      "name": "trimprefix",
-      "description": "TrimPrefix returns s without the provided leading prefix string. If s doesn't start with prefix, s is returned unchanged. utils.trimprefix(\"¡¡¡Hello, Gophers!!!\", \"¡¡¡Hello\")",
+      "name": "trimPrefix",
+      "description": "trimPrefix returns inputstring without the provided leading prefix string. If inputstring doesn't start with prefix, it is returned unchanged. utils.trimPrefix(\"¡¡¡Hello, Gophers!!!\", \"¡¡¡Hello\")",
       "varArgs": true,
       "args": [
         {
@@ -364,8 +364,8 @@
       ]
     },
     {
-      "name": "trimsuffix",
-      "description": "TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged. utils.trimsuffix(\"¡¡¡Hello, Gophers!!!\", \"Gophers!!!\")",
+      "name": "trimSuffix",
+      "description": "TrimSuffix returns inputstring without the provided trailing suffix string. If it doesn't end with suffix, it is returned unchanged. utils.trimSuffix(\"¡¡¡Hello, Gophers!!!\", \"Gophers!!!\")",
       "varArgs": true,
       "args": [
         {

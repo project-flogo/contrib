@@ -15,7 +15,7 @@ type fnIndexAny struct {
 }
 
 func (fnIndexAny) Name() string {
-	return "indexany"
+	return "indexAny"
 }
 
 func (fnIndexAny) Sig() (paramTypes []data.Type, isVariadic bool) {

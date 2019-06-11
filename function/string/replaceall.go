@@ -15,7 +15,7 @@ type fnReplaceAll struct {
 }
 
 func (fnReplaceAll) Name() string {
-	return "replaceall"
+	return "replaceAll"
 }
 
 func (fnReplaceAll) Sig() (paramTypes []data.Type, isVariadic bool) {

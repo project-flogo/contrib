@@ -16,7 +16,7 @@ type fnDecodeString struct {
 }
 
 func (fnDecodeString) Name() string {
-	return "decodestring"
+	return "decodeString"
 }
 
 func (fnDecodeString) Sig() (paramTypes []data.Type, isVariadic bool) {

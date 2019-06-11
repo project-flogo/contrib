@@ -15,7 +15,7 @@ type fnEncodeString struct {
 }
 
 func (fnEncodeString) Name() string {
-	return "encodestring"
+	return "encodeString"
 }
 
 func (fnEncodeString) Sig() (paramTypes []data.Type, isVariadic bool) {

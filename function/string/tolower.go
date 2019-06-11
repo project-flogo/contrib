@@ -15,7 +15,7 @@ type fnToLower struct {
 }
 
 func (fnToLower) Name() string {
-	return "tolower"
+	return "toLower"
 }
 
 func (fnToLower) Sig() (paramTypes []data.Type, isVariadic bool) {
