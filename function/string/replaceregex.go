@@ -15,7 +15,7 @@ type fnReplaceregex struct {
 }
 
 func (fnReplaceregex) Name() string {
-	return "replaceregex"
+	return "replaceRegEx"
 }
 
 func (fnReplaceregex) Sig() (paramTypes []data.Type, isVariadic bool) {

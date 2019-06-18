@@ -116,8 +116,8 @@
       "returnType": "string"
     },
     {
-      "name": "matchregex",
-      "description": "Match input against regular expression   utils.matchregex(\"p([a-z]+)ch\", \"peach\")",
+      "name": "matchRegEx",
+      "description": "Match input against regular expression   utils.matchRegEx(\"p([a-z]+)ch\", \"peach\")",
       "varArgs": true,
       "args": [
         {
@@ -131,8 +131,8 @@
       ]
     },
     {
-      "name": "replaceregex",
-      "description": "Replace data in a string based on a regular expression match   utils.replaceregex(\"p([a-z]+)ches\", \" I hate peaches !\", \"apples\")",
+      "name": "replaceRegEx",
+      "description": "Replace data in a string based on a regular expression match   utils.replaceRegEx(\"p([a-z]+)ches\", \" I hate peaches !\", \"apples\")",
       "varArgs": true,
       "args": [
         {
