@@ -1,0 +1,139 @@
+{
+    "name": "array",
+    "type": "flogo:function",
+    "version": "0.0.1",
+    "title": "arrayFunctions",
+    "description": "arrayFunctions",
+    "functions": [
+        {
+            "name": "append",
+            "description": "Append item to exist array",
+            "example": "array.append($activity[xxx].array, \"new Item\")\nReturns\n [$activity.array, \"new Item\"]",
+            "args": [
+                {
+                    "name": "items",
+                    "type": "array",
+                    "valueType": "any"
+                },
+                {
+                    "name": "item",
+                    "type": "any"
+                }
+            ],
+            "return": {
+                "type": "array",
+                "valueType": "any"
+            }
+        },
+        {
+            "name": "contains",
+            "description": "Returns true if the item is found in the given array else returns false. The item type must match with the array type.",
+            "example": "array.contains(array.create(\"A\",\"B\",\"C\"), \"B\")\nReturns\ntrue",
+            "args": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "valueType": "any"
+                },
+                {
+                    "name": "item",
+                    "type": "any"
+                }
+            ],
+            "return": {
+                "type": "boolean"
+            }
+        },
+        {
+            "name": "count",
+            "description": "Count the length of an array",
+            "example": "array.count($activity.array)\nReturns\n 2",
+            "args": [
+                {
+                    "name": "items",
+                    "type": "array",
+                    "valueType": "any"
+                }
+            ],
+            "return": {
+                "type": "int"
+            }
+        },
+        {
+            "name": "create",
+            "description": "Create an array of *primitive types* from the given items. All items must be same primitive types e.g. string, integer etc and must match with the field type where this function is used.",
+            "example": "array.create(\"A\",\"B\",\"C\")\nReturns\n[\"A\",\"B\",\"C\"]",
+            "varArgs": true,
+            "args": [
+                {
+                    "name": "item1",
+                    "type": "any"
+                },
+                {
+                    "name": "item2",
+                    "type": "any"
+                }
+            ],
+            "return": {
+                "type": "array",
+                "valueType": "any"
+            }
+        },
+        {
+            "name": "delete",
+            "description": "Delete the specific index of item in an array",
+            "example": "array.delete(array.create(\"item1\",\"item2\"), 1)\nReturns\n [item1]",
+            "args": [
+                {
+                    "name": "items",
+                    "type": "array",
+                    "valueType": "any"
+                },
+                {
+                    "name": "index",
+                    "type": "int"
+                }
+            ],
+            "return": {
+                "type": "array",
+                "valueType": "any"
+            }
+        },
+        {
+            "name": "forEach",
+            "description": "Specify a source array argument to iterate through the array, or provide no argument to create a single-item array.",
+            "example": "array.forEach($TriggerData.parameters.headers)\nReturns\nvoid\narray.forEach()\nReturns\nvoid",
+            "args": [
+                {
+                    "name": "input",
+                    "required": false,
+                    "type": "array",
+                    "valueType": "any"
+                }
+            ],
+            "return": {
+                "type": "array",
+                "valueType": "any"
+            }
+        },
+        {
+            "name": "get",
+            "description": "Get the specify index of item in an array",
+            "example": "array.get(array.create(\"item1\",\"item2\"), 1)\nReturns\n item2",
+            "args": [
+                {
+                    "name": "items",
+                    "type": "array",
+                    "valueType": "any"
+                },
+                {
+                    "name": "index",
+                    "type": "int"
+                }
+            ],
+            "return": {
+                "type": "any"
+            }
+        }
+    ]
+}
