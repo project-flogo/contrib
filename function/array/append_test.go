@@ -2,7 +2,6 @@ package array
 
 import (
 	"fmt"
-	"github.com/project-flogo/core/data/expression/function"
 	"github.com/project-flogo/core/data/resolve"
 	"reflect"
 	"testing"
@@ -27,19 +26,9 @@ func TestStaticAppend(t *testing.T) {
 	}
 }
 
-func TestStaticFunc_ArrayEmtpy(t *testing.T) {
+func TestArrayEmtpy(t *testing.T) {
 	final, _ := s.Eval(nil, "Mouse")
 	for _, item := range final.([]string) {
 		assert.Equal(t, item, "Mouse")
 	}
-}
-
-func TestExpression1(t *testing.T) {
-	function.ResolveAliases()
-	fun, err := factory.NewExpr(`array.append(array.create("aaa","bb"),"cc")`)
-	assert.Nil(t, err)
-	assert.NotNil(t, fun)
-	v, err := fun.Eval(nil)
-	assert.Nil(t, err)
-	assert.Equal(t, []interface{}{"aaa", "bb", "cc"}, v)
 }

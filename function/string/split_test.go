@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var sp = &Split{}
+var sp = &fnSplit{}
 
 func TestStaticFunc_Split(t *testing.T) {
 	final1, _ := sp.Eval("TIBCO Web Integrator", " ")

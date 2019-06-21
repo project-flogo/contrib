@@ -20,7 +20,7 @@ func TestFnEqualsIgnoreCase_Eval(t *testing.T) {
 	assert.True(t, v.(bool))
 }
 
-var eqi = &EqualsIgnoreCase{}
+var eqi = &fnEqualsIgnoreCase{}
 
 func TestStaticFuncEQI(t *testing.T) {
 	final1, _ := eqi.Eval("TIBCO FLOGO", "TIBCO")

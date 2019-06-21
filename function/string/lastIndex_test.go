@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var in = &LastIndex{}
+var in = &fnLastIndex{}
 
 func TestStaticFunc_Index(t *testing.T) {
 	final1, _ := in.Eval("Integration with TIBCO Web Integrator", "Integrat")

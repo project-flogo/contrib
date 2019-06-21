@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var index = &Index{}
+var index = &fnIndex{}
 
 func TestStatic_Index(t *testing.T) {
 	final1, _ := index.Eval("TIBCO Web Integrator", "Web")

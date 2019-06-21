@@ -8,14 +8,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFnEquals_Eval(t *testing.T) {
-	f := &fnEquals{}
+var eq = &fnEquals{}
 
-	v, err := function.Eval(f, "foo", "bar")
+
+func TestFnEquals_Eval(t *testing.T) {
+
+	v, err := function.Eval(eq, "foo", "bar")
 	assert.Nil(t, err)
 	assert.False(t, v.(bool))
 
-	v, err = function.Eval(f, "foo", "foo")
+	v, err = function.Eval(eq, "foo", "foo")
 	assert.Nil(t, err)
 	assert.True(t, v.(bool))
 }
