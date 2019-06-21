@@ -12,7 +12,10 @@
       "varArgs": true,
       "args": [
         { }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "encodeString",
@@ -23,7 +26,10 @@
           "name": "inputstring",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "decodeString",
@@ -34,7 +40,10 @@
           "name": "inputstring",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     }
   ]
 }

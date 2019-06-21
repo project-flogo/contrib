@@ -1,7 +1,9 @@
 package string
 
 import (
+	"fmt"
 	"github.com/project-flogo/core/data"
+	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/expression/function"
 )
 
@@ -21,8 +23,13 @@ func (fnEquals) Sig() (paramTypes []data.Type, isVariadic bool) {
 }
 
 func (fnEquals) Eval(params ...interface{}) (interface{}, error) {
-
-	s1 := params[0].(string)
-	s2 := params[1].(string)
+	s1, err := coerce.ToString(params[0])
+	if err != nil {
+		return nil, fmt.Errorf("string.equals function first parameter [%+v] must be string", params[0])
+	}
+	s2, err := coerce.ToString(params[1])
+	if err != nil {
+		return nil, fmt.Errorf("string.quals function second parameter [%+v] must be string", params[1])
+	}
 	return s1 == s2, nil
 }

@@ -1,6 +1,8 @@
 package string
 
 import (
+	"fmt"
+	"github.com/project-flogo/core/data/coerce"
 	"strings"
 
 	"github.com/project-flogo/core/data"
@@ -23,5 +25,13 @@ func (fnLastIndex) Sig() (paramTypes []data.Type, isVariadic bool) {
 }
 
 func (fnLastIndex) Eval(params ...interface{}) (interface{}, error) {
-	return strings.LastIndex(params[0].(string), params[1].(string)), nil
+	s1, err := coerce.ToString(params[0])
+	if err != nil {
+		return nil, fmt.Errorf("string.lastIndex function first parameter [%+v] must be string", params[0])
+	}
+	s2, err := coerce.ToString(params[1])
+	if err != nil {
+		return nil, fmt.Errorf("string.lastIndex function second parameter [%+v] must be string", params[1])
+	}
+	return strings.LastIndex(s1, s2), nil
 }

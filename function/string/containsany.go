@@ -1,6 +1,8 @@
 package string
 
 import (
+	"fmt"
+	"github.com/project-flogo/core/data/coerce"
 	"strings"
 
 	"github.com/project-flogo/core/data"
@@ -23,5 +25,15 @@ func (fnContainsAny) Sig() (paramTypes []data.Type, isVariadic bool) {
 }
 
 func (fnContainsAny) Eval(params ...interface{}) (interface{}, error) {
-	return strings.ContainsAny(params[0].(string), params[1].(string)), nil
+
+	str1, err := coerce.ToString(params[0])
+	if err != nil {
+		return nil, fmt.Errorf("containsAny function first parameter [%+v] must be string", params[0])
+	}
+	str2, err := coerce.ToString(params[1])
+	if err != nil {
+		return nil, fmt.Errorf("containsAny function second parameter [%+v] must be string", params[1])
+	}
+
+	return strings.ContainsAny(str1, str2), nil
 }

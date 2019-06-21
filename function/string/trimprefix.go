@@ -1,6 +1,8 @@
 package string
 
 import (
+	"fmt"
+	"github.com/project-flogo/core/data/coerce"
 	"strings"
 
 	"github.com/project-flogo/core/data"
@@ -23,5 +25,16 @@ func (fnTrimPrefix) Sig() (paramTypes []data.Type, isVariadic bool) {
 }
 
 func (fnTrimPrefix) Eval(params ...interface{}) (interface{}, error) {
-	return strings.TrimPrefix(params[0].(string), params[1].(string)), nil
+
+	s1, err := coerce.ToString(params[0])
+	if err != nil {
+		return nil, fmt.Errorf("string.trimPrefix function first parameter [%+v] must be string", params[0])
+	}
+
+	s2, err := coerce.ToString(params[0])
+	if err != nil {
+		return nil, fmt.Errorf("string.trimPrefix function second parameter [%+v] must be string", params[1])
+	}
+
+	return strings.TrimPrefix(s1, s2), nil
 }

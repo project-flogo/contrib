@@ -1,6 +1,8 @@
 package string
 
 import (
+	"fmt"
+	"github.com/project-flogo/core/data/coerce"
 	"strings"
 
 	"github.com/project-flogo/core/data"
@@ -23,5 +25,9 @@ func (fnToUpper) Sig() (paramTypes []data.Type, isVariadic bool) {
 }
 
 func (fnToUpper) Eval(params ...interface{}) (interface{}, error) {
-	return strings.ToUpper(params[0].(string)), nil
+	s1, err := coerce.ToString(params[0])
+	if err != nil {
+		return nil, fmt.Errorf("string.toUpper function first parameter [%+v] must be string", params[0])
+	}
+	return strings.ToUpper(s1), nil
 }
