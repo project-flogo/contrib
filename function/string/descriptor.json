@@ -7,20 +7,6 @@
   "homepage": "https://github.com/project-flogo/contrib/tree/master/function/string",
   "functions": [
     {
-      "name": "base64ToString",
-      "description": "Decodes a base64 encoded string base64str and returns the decoded string.",
-      "example": "string.base64ToString(\"SGVsbG8sIFdvcmxk\")\nReturns\nHello, World",
-      "args": [
-        {
-          "name": "base64str",
-          "type": "string"
-        }
-      ],
-      "return": {
-        "type": "string"
-      }
-    },
-    {
       "name": "concat",
       "description": "concatenate a set of string",
       "varArgs": true,
@@ -512,20 +498,6 @@
       ],
       "return": {
         "type": "boolean"
-      }
-    },
-    {
-      "name": "stringToBase64",
-      "description": "Returns a base64 encoded string of the input.",
-      "example": "string.stringToBase64(\"Hello, World\")\nReturns\nSGVsbG8sIFdvcmxk",
-      "args": [
-        {
-          "name": "str",
-          "type": "string"
-        }
-      ],
-      "return": {
-        "type": "string"
       }
     },
     {
