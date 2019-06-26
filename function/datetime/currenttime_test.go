@@ -18,13 +18,3 @@ func TestCurrentTime_Eval(t *testing.T) {
 	assert.NotNil(t, date)
 	fmt.Println(date)
 }
-
-func TestCurrentimeExpression(t *testing.T) {
-	fun, err := factory.NewExpr(`datetime.currentTime()`)
-	assert.Nil(t, err)
-	assert.NotNil(t, fun)
-	v, err := fun.Eval(nil)
-	assert.Nil(t, err)
-	assert.NotNil(t, v)
-	fmt.Println(v)
-}

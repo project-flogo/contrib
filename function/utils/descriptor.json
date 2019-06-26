@@ -18,31 +18,31 @@
       }
     },
     {
-      "name": "encodeString",
-      "description": "encodeString returns a base 64 encoded copy of the input string.  utils.encodeString(\"Hello World\")",
+      "name": "encodeBase64",
+      "description": "encodeBase64 returns a base 64 encoded bytes of the input.  utils.encodeBase64(corece.ToBytes(\"Hello World\"))",
       "varArgs": true,
       "args": [
         {
-          "name": "inputstring",
-          "type": "string"
+          "name": "input",
+          "type": "bytes"
         }
       ],
       "return": {
-        "type": "string"
+        "type": "bytes"
       }
     },
     {
-      "name": "decodeString",
-      "description": "decodeString returns the string represented by the base 64 encoded input string.  utils.decodeString(\"SGVsbG8sIFdvcmxk\")",
+      "name": "decodeBase64",
+      "description": "decodeBase64 returns the bytes represented by the base 64 encoded input.  utils.decodeBase64(corece.ToBytes(\"SGVsbG8sIFdvcmxk\"))",
       "varArgs": true,
       "args": [
         {
-          "name": "inputstring",
-          "type": "string"
+          "name": "input",
+          "type": "bytes"
         }
       ],
       "return": {
-        "type": "string"
+        "type": "bytes"
       }
     }
   ]

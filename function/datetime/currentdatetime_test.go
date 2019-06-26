@@ -29,13 +29,3 @@ func TestDatetime_CDT(t *testing.T) {
 	assert.NotNil(t, date)
 	logrus.Info(date)
 }
-
-func TestCurrentDatetimeExpression(t *testing.T) {
-	fun, err := factory.NewExpr(`datetime.currentDatetime()`)
-	assert.Nil(t, err)
-	assert.NotNil(t, fun)
-	v, err := fun.Eval(nil)
-	assert.Nil(t, err)
-	assert.NotNil(t, v)
-	fmt.Println(v)
-}

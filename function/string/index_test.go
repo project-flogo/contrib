@@ -21,13 +21,3 @@ func TestStatic_Index(t *testing.T) {
 	fmt.Println(final3)
 	assert.Equal(t, 13, final3)
 }
-
-func TestIndexExpression(t *testing.T) {
-	fun, err := factory.NewExpr(`string.index("TIBCO NAME", "NAME")`)
-	assert.Nil(t, err)
-	assert.NotNil(t, fun)
-	v, err := fun.Eval(nil)
-	assert.Nil(t, err)
-	assert.NotNil(t, v)
-	fmt.Println(v)
-}

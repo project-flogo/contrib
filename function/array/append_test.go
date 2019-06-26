@@ -2,16 +2,11 @@ package array
 
 import (
 	"fmt"
-	"github.com/project-flogo/core/data/resolve"
 	"reflect"
 	"testing"
 
-	"github.com/project-flogo/core/data/expression/script"
 	"github.com/stretchr/testify/assert"
 )
-
-var resolver = resolve.NewCompositeResolver(map[string]resolve.Resolver{"static": nil, ".": nil, "env": &resolve.EnvResolver{}})
-var factory = script.NewExprFactory(resolver)
 
 var s = &appendFunc{}
 

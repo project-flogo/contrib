@@ -22,13 +22,3 @@ func TestStaticFunc_Starts_with(t *testing.T) {
 	fmt.Println(final3)
 	assert.Equal(t, false, final3)
 }
-
-func TestStartWithExpression(t *testing.T) {
-	fun, err := factory.NewExpr(`string.startsWith("seafood,name", "sea")`)
-	assert.Nil(t, err)
-	assert.NotNil(t, fun)
-	v, err := fun.Eval(nil)
-	assert.Nil(t, err)
-	assert.NotNil(t, v)
-	fmt.Println(v)
-}

@@ -39,12 +39,9 @@ func TestFormatTimeExpression(t *testing.T) {
 			expected: "10-11-05",
 		},
 	}
-
+	tf := &FormatTime{}
 	for _, test := range testCases {
-		fun, err := factory.NewExpr("datetime.formatTime(\"" + test.dateV + "\", \"" + test.format + "\")")
-		assert.Nil(t, err)
-		assert.NotNil(t, fun)
-		v, err := fun.Eval(nil)
+		v, err := tf.Eval(test.dateV, test.format)
 		assert.Nil(t, err)
 		assert.NotNil(t, v)
 		assert.Equal(t, test.expected, v)

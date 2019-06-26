@@ -17,13 +17,3 @@ func TestNow_Eval(t *testing.T) {
 	assert.NotNil(t, now)
 	fmt.Println(now)
 }
-
-func TestExpression(t *testing.T) {
-	fun, err := factory.NewExpr(`datetime.now()`)
-	assert.Nil(t, err)
-	assert.NotNil(t, fun)
-	v, err := fun.Eval(nil)
-	assert.Nil(t, err)
-	assert.NotNil(t, v)
-	fmt.Println(v)
-}
