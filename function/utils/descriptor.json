@@ -24,7 +24,7 @@
       "args": [
         {
           "name": "input",
-          "type": "bytes"
+          "type": "any"
         }
       ],
       "return": {
@@ -38,7 +38,7 @@
       "args": [
         {
           "name": "input",
-          "type": "bytes"
+          "type": "any"
         }
       ],
       "return": {

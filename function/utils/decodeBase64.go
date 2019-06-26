@@ -21,7 +21,7 @@ func (fnDecodeBase64) Name() string {
 }
 
 func (fnDecodeBase64) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeBytes}, false
+	return []data.Type{data.TypeAny}, false
 }
 
 // Eval - Decode base64 string
