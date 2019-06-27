@@ -114,6 +114,284 @@
         }
       ],
       "returnType": "string"
+    },
+    {
+      "name": "matchRegEx",
+      "description": "Match input against regular expression   utils.matchRegEx(\"p([a-z]+)ch\", \"peach\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "expression",
+          "type": "string"
+        },
+        {
+          "name": "input",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "replaceRegEx",
+      "description": "Replace data in a string based on a regular expression match   utils.replaceRegEx(\"p([a-z]+)ches\", \" I hate peaches !\", \"apples\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "expression",
+          "type": "string"
+        },
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "replacewith",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "containsAny",
+      "description": "containsAny reports whether any Unicode code points in chars are within inputstring.  utils.containsAny(\"failure\", \"u & i\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "substring",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "count",
+      "description": "Count counts the number of non-overlapping instances of substring in inputstring. If substring is an empty string, Count returns 1 + the number of Unicode code points in inputstring. utils.count(\"cheese\", \"e\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "substring",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "index",
+      "description": "Index returns the index of the first instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.index(\"cheese\", \"e\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "substring",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "indexAny",
+      "description": "indexAny returns the index of the first instance of any Unicode code point from chars in inputstring, or -1 if no Unicode code point from chars is present in inputstring. utils.indexAny(\"chicken\", \"aeiouy\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "substring",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "lastIndex",
+      "description": "LastIndex returns the index of the last instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.lastIndex(\"go gopher\", \"go\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "substring",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "repeat",
+      "description": "Repeat returns a new string consisting of count copies of the string s. utils.repeat(\"na\", 3)",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "count",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "replace",
+      "description": "Replace returns a copy of inputstring with the first count non-overlapping instances of old replaced by new.  If count < 0, there is no limit on the number of replacements  utils.replace(\"oink oink oink\", \"k\", \"ky\", 2)",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "old",
+          "type": "string"
+        },
+        {
+          "name": "new",
+          "type": "string"
+        },
+        {
+          "name": "count",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "replaceAll",
+      "description": "replaceAll returns a copy of inputstring with all non-overlapping instances of old replaced by new.  utils.replaceAll(\"oink oink oink\", \"oink\", \"moo\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "old",
+          "type": "string"
+        },
+        {
+          "name": "new",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "toLower",
+      "description": "toLower returns a copy of inputstring with all Unicode letters mapped to their lower case.  utils.tolower(\"Hello World\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "toUpper",
+      "description": "toUpper returns a copy of inputstring with all Unicode letters mapped to their upper case.  utils.toUpper(\"Hello World\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "trim",
+      "description": "Trim returns a slice of inputstring with all leading and trailing Unicode code points contained in cutset removed. utils.trim(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "cutset",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "trimLeft",
+      "description": "trimLeft returns a slice of inputstring with all leading Unicode code points contained in cutset removed. utils.trimLeft(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "cutset",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "trimRight",
+      "description": "trimRight returns a slice of inputstring with all trailing Unicode code points contained in cutset removed. utils.trimRight(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "cutset",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "trimPrefix",
+      "description": "trimPrefix returns inputstring without the provided leading prefix string. If inputstring doesn't start with prefix, it is returned unchanged. utils.trimPrefix(\"¡¡¡Hello, Gophers!!!\", \"¡¡¡Hello\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "prefix",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "trimSuffix",
+      "description": "TrimSuffix returns inputstring without the provided trailing suffix string. If it doesn't end with suffix, it is returned unchanged. utils.trimSuffix(\"¡¡¡Hello, Gophers!!!\", \"Gophers!!!\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "suffix",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "split",
+      "description": "Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators. utils.split(\"a,b,c\", \",\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        },
+        {
+          "name": "separator",
+          "type": "string"
+        }
+      ]
     }
   ]
 }

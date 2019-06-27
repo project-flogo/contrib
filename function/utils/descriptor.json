@@ -1,0 +1,40 @@
+{
+  "name": "utils",
+  "type": "flogo:function",
+  "version": "0.9.0",
+  "title": "Misc utility functions",
+  "description": "Usefull tools and utilities",
+  "homepage": "https://github.com/project-flogo/contrib/tree/master/function/utils",
+  "functions": [
+    {
+      "name": "uuid",
+      "description": "Returns a random UUID according to RFC 4122. utils.uuid()",
+      "varArgs": true,
+      "args": [
+        { }
+      ]
+    },
+    {
+      "name": "encodeString",
+      "description": "encodeString returns a base 64 encoded copy of the input string.  utils.encodeString(\"Hello World\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "decodeString",
+      "description": "decodeString returns the string represented by the base 64 encoded input string.  utils.decodeString(\"SGVsbG8sIFdvcmxk\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "inputstring",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}
