@@ -21,7 +21,7 @@ func (fnEncodeBase64) Name() string {
 }
 
 func (fnEncodeBase64) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeAny}, false
+	return []data.Type{data.TypeBytes}, false
 }
 
 // Eval - UUID generates a random UUID according to RFC 4122
