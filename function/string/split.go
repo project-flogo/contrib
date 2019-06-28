@@ -1,6 +1,8 @@
 package string
 
 import (
+	"fmt"
+	"github.com/project-flogo/core/data/coerce"
 	"strings"
 
 	"github.com/project-flogo/core/data"
@@ -23,5 +25,14 @@ func (fnSplit) Sig() (paramTypes []data.Type, isVariadic bool) {
 }
 
 func (fnSplit) Eval(params ...interface{}) (interface{}, error) {
-	return strings.Split(params[0].(string), params[1].(string)), nil
+
+	s1, err := coerce.ToString(params[0])
+	if err != nil {
+		return nil, fmt.Errorf("string.split function first parameter [%+v] must be string", params[0])
+	}
+	s2, err := coerce.ToString(params[1])
+	if err != nil {
+		return nil, fmt.Errorf("string.split function second parameter [%+v] must be string", params[1])
+	}
+	return strings.Split(s1, s2), nil
 }

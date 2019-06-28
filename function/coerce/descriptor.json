@@ -19,7 +19,9 @@
           "type": "string"
         }
       ],
-      "returnType": "any"
+      "return": {
+        "type": "any"
+      }
     },
     {
       "name": "toString",
@@ -30,7 +32,9 @@
           "type": "any"
         }
       ],
-      "returnType": "string"
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "toInt",
@@ -41,7 +45,9 @@
           "type": "any"
         }
       ],
-      "returnType": "int"
+      "return": {
+        "type": "int"
+      }
     },
     {
       "name": "toInt32",
@@ -52,7 +58,9 @@
           "type": "any"
         }
       ],
-      "returnType": "int32"
+      "return": {
+        "type": "int32"
+      }
     },
     {
       "name": "toInt64",
@@ -63,7 +71,9 @@
           "type": "any"
         }
       ],
-      "returnType": "int64"
+      "return": {
+        "type": "int64"
+      }
     },
     {
       "name": "toFloat32",
@@ -74,7 +84,9 @@
           "type": "any"
         }
       ],
-      "returnType": "float32"
+      "return": {
+        "type": "float32"
+      }
     },
     {
       "name": "toFloat64",
@@ -85,7 +97,9 @@
           "type": "any"
         }
       ],
-      "returnType": "float64"
+      "return": {
+        "type": "float64"
+      }
     },
     {
       "name": "toBool",
@@ -96,7 +110,9 @@
           "type": "any"
         }
       ],
-      "returnType": "bool"
+      "return": {
+        "type": "bool"
+      }
     },
     {
       "name": "toBytes",
@@ -107,7 +123,9 @@
           "type": "any"
         }
       ],
-      "returnType": "bytes"
+      "return": {
+        "type": "bytes"
+      }
     },
     {
       "name": "toParams",
@@ -118,7 +136,9 @@
           "type": "any"
         }
       ],
-      "returnType": "params"
+      "return": {
+        "type": "params"
+      }
     },
     {
       "name": "toObject",
@@ -129,7 +149,9 @@
           "type": "any"
         }
       ],
-      "returnType": "object"
+      "return": {
+        "type": "object"
+      }
     },
     {
       "name": "toArray",
@@ -140,7 +162,10 @@
           "type": "any"
         }
       ],
-      "returnType": "array"
+      "return": {
+        "type": "array",
+        "valueType": "any"
+      }
     }
   ]
 }

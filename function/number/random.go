@@ -1,6 +1,7 @@
 package number
 
 import (
+	"github.com/project-flogo/core/data/coerce"
 	"math/rand"
 	"time"
 
@@ -24,10 +25,13 @@ func (fnRandom) Sig() (paramTypes []data.Type, isVariadic bool) {
 }
 
 func (fnRandom) Eval(params ...interface{}) (interface{}, error) {
-
 	limit := 10
 	if len(params) > 0 {
-		limit = params[0].(int)
+		var err error
+		limit, err = coerce.ToInt(params[0])
+		if err != nil {
+			limit = 10
+		}
 	}
 	rand.Seed(time.Now().UnixNano())
 	return rand.Intn(limit), nil

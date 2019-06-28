@@ -1,6 +1,8 @@
 package string
 
 import (
+	"fmt"
+	"github.com/project-flogo/core/data/coerce"
 	"strings"
 
 	"github.com/project-flogo/core/data"
@@ -23,5 +25,9 @@ func (fnToLower) Sig() (paramTypes []data.Type, isVariadic bool) {
 }
 
 func (fnToLower) Eval(params ...interface{}) (interface{}, error) {
-	return strings.ToLower(params[0].(string)), nil
+	s1, err := coerce.ToString(params[0])
+	if err != nil {
+		return nil, fmt.Errorf("string.toLower function first parameter [%+v] must be string", params[0])
+	}
+	return strings.ToLower(s1), nil
 }

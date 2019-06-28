@@ -19,7 +19,9 @@
           "type": "any"
         }
       ],
-      "returnType": "any"
+      "return": {
+        "type": "any"
+      }
     }
   ]
 }

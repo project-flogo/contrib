@@ -16,7 +16,27 @@
           "type": "string"
         }
       ],
-      "returnType": "string"
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "endsWith",
+      "description": "Returns whether a string ends with another string.",
+      "example": "string.endsWith(\"TIBCO Web Integrator\", \"Integrator\")\nReturns\ntrue",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "substr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "boolean"
+      }
     },
     {
       "name": "equals",
@@ -31,7 +51,9 @@
           "type": "string"
         }
       ],
-      "returnType": "bool"
+      "return": {
+        "type": "bool"
+      }
     },
     {
       "name": "equalsIgnoreCase",
@@ -46,7 +68,9 @@
           "type": "string"
         }
       ],
-      "returnType": "bool"
+      "return": {
+        "type": "bool"
+      }
     },
     {
       "name": "contains",
@@ -61,7 +85,9 @@
           "type": "string"
         }
       ],
-      "returnType": "bool"
+      "return": {
+        "type": "bool"
+      }
     },
     {
       "name": "float",
@@ -72,7 +98,9 @@
           "type": "string"
         }
       ],
-      "returnType": "float64"
+      "return": {
+        "type": "float64"
+      }
     },
     {
       "name": "integer",
@@ -83,7 +111,9 @@
           "type": "string"
         }
       ],
-      "returnType": "int"
+      "return": {
+        "type": "int"
+      }
     },
     {
       "name": "len",
@@ -94,7 +124,9 @@
           "type": "string"
         }
       ],
-      "returnType": "int"
+      "return": {
+        "type": "int"
+      }
     },
     {
       "name": "substring",
@@ -113,7 +145,9 @@
           "type": "string"
         }
       ],
-      "returnType": "string"
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "matchRegEx",
@@ -128,7 +162,10 @@
           "name": "input",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "bool"
+      }
     },
     {
       "name": "replaceRegEx",
@@ -147,7 +184,10 @@
           "name": "replacewith",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "containsAny",
@@ -162,7 +202,10 @@
           "name": "substring",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "bool"
+      }
     },
     {
       "name": "count",
@@ -177,7 +220,10 @@
           "name": "substring",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "int"
+      }
     },
     {
       "name": "index",
@@ -192,7 +238,10 @@
           "name": "substring",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "int"
+      }
     },
     {
       "name": "indexAny",
@@ -207,7 +256,10 @@
           "name": "substring",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "int"
+      }
     },
     {
       "name": "lastIndex",
@@ -222,7 +274,10 @@
           "name": "substring",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "int"
+      }
     },
     {
       "name": "repeat",
@@ -237,7 +292,10 @@
           "name": "count",
           "type": "int"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "replace",
@@ -260,7 +318,10 @@
           "name": "count",
           "type": "int"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "replaceAll",
@@ -279,7 +340,10 @@
           "name": "new",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "toLower",
@@ -290,7 +354,10 @@
           "name": "inputstring",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "toUpper",
@@ -301,7 +368,10 @@
           "name": "inputstring",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "trim",
@@ -316,7 +386,10 @@
           "name": "cutset",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "trimLeft",
@@ -331,7 +404,10 @@
           "name": "cutset",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "trimRight",
@@ -346,7 +422,10 @@
           "name": "cutset",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "trimPrefix",
@@ -361,7 +440,10 @@
           "name": "prefix",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "trimSuffix",
@@ -376,7 +458,10 @@
           "name": "suffix",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "string"
+      }
     },
     {
       "name": "split",
@@ -391,7 +476,65 @@
           "name": "separator",
           "type": "string"
         }
-      ]
+      ],
+      "return": {
+        "type": "array",
+        "valueType": "string"
+      }
+    },
+    {
+      "name": "startsWith",
+      "description": "Returns whether a string begins with another string.",
+      "example": "string.startsWith(\"TIBCO Web Integrator\", \"TIBCO\")\nReturns true",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "substr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "boolean"
+      }
+    },
+    {
+      "name": "substringAfter",
+      "description": "Returns the string that follows after the first occurrence of the second string, or a zero length string if the first string does not contain the second string.",
+      "example": "string.substringAfter(\"1999/04/01\", \"/\")\nReturns\n04/01",
+      "args": [
+        {
+          "name": "input",
+          "type": "string"
+        },
+        {
+          "name": "afterstr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "substringBefore",
+      "description": "Returns the string that follows before the first occurrence of the second string, or a zero length string if the first string does not contain the second string.",
+      "example": "string.substringBefore(\"1999/04/01\", \"/\")\nReturns\n1999",
+      "args": [
+        {
+          "name": "input",
+          "type": "string"
+        },
+        {
+          "name": "beforestr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
     }
   ]
 }

@@ -1,6 +1,8 @@
 package string
 
 import (
+	"fmt"
+	"github.com/project-flogo/core/data/coerce"
 	"strconv"
 
 	"github.com/project-flogo/core/data"
@@ -26,5 +28,9 @@ func (fnInteger) Sig() (paramTypes []data.Type, isVariadic bool) {
 
 // Eval fnInteger the function
 func (fnInteger) Eval(params ...interface{}) (interface{}, error) {
-	return strconv.Atoi(params[0].(string))
+	s1, err := coerce.ToString(params[0])
+	if err != nil {
+		return nil, fmt.Errorf("string.integer function first parameter [%+v] must be string", params[0])
+	}
+	return strconv.Atoi(s1)
 }

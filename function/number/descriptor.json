@@ -16,7 +16,9 @@
           "type": "int"
         }
       ],
-      "returnType": "int"
+      "return": {
+        "type": "int"
+      }
     }
   ]
 }
