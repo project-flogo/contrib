@@ -15,7 +15,7 @@ func init() {
 }
 
 func (a *appendFunc) Name() string {
-	return "appendFunc"
+	return "append"
 }
 
 func (appendFunc) Sig() (paramTypes []data.Type, isVariadic bool) {
