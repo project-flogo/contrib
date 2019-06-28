@@ -38,5 +38,5 @@ func (fnReplaceAll) Eval(params ...interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, fmt.Errorf("string.replaceAll function third parameter [%+v] must be string", params[2])
 	}
-	return strings.ReplaceAll(s1, s2, s3), nil
+	return strings.Replace(s1, s2, s3, -1), nil
 }
