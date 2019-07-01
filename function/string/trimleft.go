@@ -30,7 +30,7 @@ func (fnTrimLeft) Eval(params ...interface{}) (interface{}, error) {
 		return nil, fmt.Errorf("string.trimLeft function first parameter [%+v] must be string", params[0])
 	}
 
-	s2, err := coerce.ToString(params[0])
+	s2, err := coerce.ToString(params[1])
 	if err != nil {
 		return nil, fmt.Errorf("string.trimLeft function second parameter [%+v] must be string", params[1])
 	}

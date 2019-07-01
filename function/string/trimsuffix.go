@@ -31,7 +31,7 @@ func (fnTrimSuffix) Eval(params ...interface{}) (interface{}, error) {
 		return nil, fmt.Errorf("string.trimSuffix function first parameter [%+v] must be string", params[0])
 	}
 
-	s2, err := coerce.ToString(params[0])
+	s2, err := coerce.ToString(params[1])
 	if err != nil {
 		return nil, fmt.Errorf("string.trimSuffix function second parameter [%+v] must be string", params[1])
 	}
