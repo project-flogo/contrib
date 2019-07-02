@@ -96,6 +96,12 @@
         {
           "name": "str1",
           "type": "string"
+        },
+        {
+          "name": "precision",
+          "type": "number",
+          "required": false,
+          "value": 16
         }
       ],
       "return": {
@@ -384,7 +390,8 @@
         },
         {
           "name": "cutset",
-          "type": "string"
+          "type": "string",
+          "required": false
         }
       ],
       "return": {
