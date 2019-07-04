@@ -5,7 +5,7 @@
   "title": "Channel",
   "description": "Publish on Channel",
   "homepage": "https://github.com/prject-flogo/contrib/tree/master/activity/channel",
-  "input":[
+  "input": [
     {
       "name": "channel",
       "type": "string",
@@ -13,7 +13,7 @@
       "description": "The name of channel to use"
     },
     {
-      "name": "value",
+      "name": "data",
       "type": "any",
       "description": "The data to put on the channel"
     }
