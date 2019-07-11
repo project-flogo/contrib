@@ -40,7 +40,14 @@ func (appendFunc) Eval(params ...interface{}) (interface{}, error) {
 
 	arrV := reflect.ValueOf(items)
 	if arrV.Kind() == reflect.Slice {
-		arrV = reflect.Append(arrV, reflect.ValueOf(item))
+		item := reflect.ValueOf(item)
+		if item.Kind() == reflect.Slice {
+			for i := 0; i < item.Len(); i++ {
+				arrV = reflect.Append(arrV, item.Index(i))
+			}
+		} else {
+			arrV = reflect.Append(arrV, item)
+		}
 	}
 
 	log.RootLogger().Debugf("array append function done, final array %+v", arrV.Interface())
