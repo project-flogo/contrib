@@ -9,6 +9,7 @@
     {
       "name": "toType",
       "description": "convert value to specified type",
+      "example": "coerce.toType(\"123\",\"int\")\nReturns\n123",
       "args": [
         {
           "name": "value",
@@ -26,6 +27,7 @@
     {
       "name": "toString",
       "description": "convert value to a string",
+      "example": "coerce.toString(123)\nReturns\n\"123\"",
       "args": [
         {
           "name": "value",
@@ -39,6 +41,7 @@
     {
       "name": "toInt",
       "description": "convert value to an int",
+      "example": "coerce.toInt(\"333\")\nReturns\n333",
       "args": [
         {
           "name": "value",
@@ -52,6 +55,7 @@
     {
       "name": "toInt32",
       "description": "convert value to an int32",
+      "example": "coerce.toInt32(\"333\")\nReturns\n333",
       "args": [
         {
           "name": "value",
@@ -65,6 +69,7 @@
     {
       "name": "toInt64",
       "description": "convert value to a int64",
+      "example": "coerce.toInt64(\"333\")\nReturns\n333",
       "args": [
         {
           "name": "value",
@@ -78,6 +83,7 @@
     {
       "name": "toFloat32",
       "description": "convert value to a float32",
+      "example": "coerce.toFloat32(\"3.3\")\nReturns\n3.3",
       "args": [
         {
           "name": "value",
@@ -91,6 +97,7 @@
     {
       "name": "toFloat64",
       "description": "convert value to a float64",
+      "example": "coerce.toFloat64(\"3.3\")\nReturns\n3.3",
       "args": [
         {
           "name": "value",
@@ -104,6 +111,7 @@
     {
       "name": "toBool",
       "description": "convert value to a bool",
+      "example": "coerce.toBool(\"true\")\nReturns\ntrue",
       "args": [
         {
           "name": "value",
@@ -117,6 +125,7 @@
     {
       "name": "toBytes",
       "description": "convert value to bytes",
+      "example": "coerce.toBytes(\"hello\")\nReturns\n3byte data",
       "args": [
         {
           "name": "value",
@@ -130,6 +139,7 @@
     {
       "name": "toParams",
       "description": "convert value to params",
+      "example": "coerce.toParams($activity[xxx].xxx)\nReturns\nstring name-value map",
       "args": [
         {
           "name": "value",
@@ -142,6 +152,7 @@
     },
     {
       "name": "toObject",
+      "example": "coerce.toObject($activity[xxx].xxx)\nReturns\n Json object",
       "description": "convert value to an object",
       "args": [
         {
@@ -156,6 +167,7 @@
     {
       "name": "toArray",
       "description": "convert value to an array",
+      "example": "coerce.toArray($activity[xxx].xxx)\nReturns\n Json array",
       "args": [
         {
           "name": "value",

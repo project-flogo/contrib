@@ -9,6 +9,7 @@
     {
       "name": "random",
       "description": "generate a random number",
+      "example": "number.random(100)\nReturns\n90",
       "varArgs": true,
       "args": [
         {

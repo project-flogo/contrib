@@ -9,6 +9,7 @@
     {
       "name": "path",
       "description": "apply a json path to an object",
+      "example": "json.path(\"$.key\",$activity[xxx].data)\nReturns\nvalue",
       "args": [
         {
           "name": "path",
