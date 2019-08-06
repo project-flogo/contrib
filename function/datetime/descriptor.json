@@ -8,7 +8,7 @@
         {
             "name": "currentDate",
             "description": "Returns the current date with UTC time zone.",
-            "example": "datetime.currentDate()\nReturns 2017-05-13+00:00",
+            "example": "datetime.currentDate() => 2017-05-13+00:00",
             "args": [],
             "return": {
                 "type": "string"
@@ -17,7 +17,7 @@
         {
             "name": "currentDatetime",
             "description": "Returns the current datetime with UTC timezone.",
-            "example": "datetime.currentDatetime()\nReturns 2017-05-13T22:27:54+00:00",
+            "example": "datetime.currentDatetime() => 2017-05-13T22:27:54+00:00",
             "args": [],
             "return": {
                 "type": "string"
@@ -26,7 +26,7 @@
         {
             "name": "currentTime",
             "description": "Returns the current time with UTC timezone.",
-            "example": "datetime.currentTime()\nReturns 22:27:54+00:00",
+            "example": "datetime.currentTime() => 22:27:54+00:00",
             "args": [],
             "return": {
                 "type": "string"
@@ -35,7 +35,7 @@
         {
             "name": "formatDate",
             "description": "Format the date according to the specified format.",
-            "example": "datetime.formatDate（\"02/08/2017\", string.dateFormat()）\nReturns\n 2017-02-08+00:00",
+            "example": "datetime.formatDate（\"02/08/2017\", \"dd-MM-yyyy\"）=> 08-02-2017",
             "args": [
                 {
                     "name": "date",
@@ -53,7 +53,7 @@
         {
             "name": "formatDatetime",
             "description": "Format the datetime according to the specified format.",
-            "example": "datetime.formatDatetime（\"2017-04-10T22:17:32.000+0000\", string.datetimeFormat()）\nReturns\n 2017-04-10T22:17:32+00:00",
+            "example": "datetime.formatDatetime（\"2017-04-10T22:17:32.000+0700\", \"dd/MM/yyyy T hh:mm:ss\") => 10/04/2017 T 22:17:32",
             "args": [
                 {
                     "name": "datetime",
@@ -71,7 +71,7 @@
         {
             "name": "formatTime",
             "description": "Format the time according to the specified format.",
-            "example": "datetime.formatTime（\"10:11:05.00000\", string.timeFormat()）\nReturns\n 10:11:05+00:00",
+            "example": "datetime.formatTime（\"10:11:05.00000\", \"hh-mm-ss\") => 10-11-05",
             "args": [
                 {
                     "name": "time",
@@ -89,7 +89,7 @@
         {
             "name": "now",
             "description": "Returns the current time with UTC timezone.",
-            "example": "datetime.now()\nReturns 2017-05-13T15:59:41+00:00",
+            "example": "datetime.now() => 2017-05-13T15:59:41+00:00",
             "args": [],
             "return": {
                 "type": "string"

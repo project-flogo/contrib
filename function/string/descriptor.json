@@ -9,7 +9,7 @@
     {
       "name": "concat",
       "description": "concatenate a set of string",
-      "example": "string.concat(\"Hello\",' ', \"World\")\nReturns\nHello World",
+      "example": "string.concat(\"Hello\",' ', \"World\") => Hello World",
       "varArgs": true,
       "args": [
         {
@@ -24,7 +24,7 @@
     {
       "name": "endsWith",
       "description": "Returns whether a string ends with another string.",
-      "example": "string.endsWith(\"TIBCO Web Integrator\", \"Integrator\")\nReturns\ntrue",
+      "example": "string.endsWith(\"TIBCO Web Integrator\", \"Integrator\") => true",
       "args": [
         {
           "name": "str",
@@ -42,7 +42,7 @@
     {
       "name": "equals",
       "description": "check if two strings are equal",
-      "example": "string.equals(\"Hello\",\"Hello2\")\nReturns\nfalse",
+      "example": "string.equals(\"Hello\",\"Hello2\") => false",
       "args": [
         {
           "name": "str1",
@@ -60,7 +60,7 @@
     {
       "name": "equalsIgnoreCase",
       "description": "check if two strings are equal ignoring case",
-      "example": "string.equalsIgnoreCase(\"Hello\",\"hello\")\nReturns\ntrue",
+      "example": "string.equalsIgnoreCase(\"Hello\",\"hello\") => true",
       "args": [
         {
           "name": "str1",
@@ -78,7 +78,7 @@
     {
       "name": "contains",
       "description": "check if str2 is within str1",
-      "example": "string.contains(\"foobar\",\"foo\")\nReturns\ntrue",
+      "example": "string.contains(\"foobar\",\"foo\") => true",
       "args": [
         {
           "name": "str1",
@@ -96,7 +96,7 @@
     {
       "name": "float",
       "description": "convert the string to a float",
-      "example": "string.float(\"2.77876542316664548335\",14)\nReturns\n2.77876542316665",
+      "example": "string.float(\"2.77876542316664548335\",14) => 2.77876542316665",
       "args": [
         {
           "name": "str1",
@@ -116,7 +116,7 @@
     {
       "name": "integer",
       "description": "convert the string to an integer",
-      "example": "string.integer(\"1001\")\nReturns\n1001",
+      "example": "string.integer(\"1001\") => 1001",
       "args": [
         {
           "name": "str1",
@@ -130,7 +130,7 @@
     {
       "name": "len",
       "description": "get the length of a string",
-      "example": "string.len(\"hello\")\nReturns\n5",
+      "example": "string.len(\"hello\") => 5",
       "args": [
         {
           "name": "str1",
@@ -144,7 +144,7 @@
     {
       "name": "substring",
       "description": "get a substring from a string",
-      "example": "string.substring(\"abc\", 1,1)\nReturns\nb",
+      "example": "string.substring(\"abc\", 1,1) => b",
       "args": [
         {
           "name": "str",
@@ -166,7 +166,7 @@
     {
       "name": "matchRegEx",
       "description": "Match input against regular expression   utils.matchRegEx(\"p([a-z]+)ch\", \"peach\")",
-      "example": "string.matchRegEx(\"foo.*\", \"Tseafood\")\nReturns\ntrue",
+      "example": "string.matchRegEx(\"foo.*\", \"Tseafood\") => true",
       "varArgs": true,
       "args": [
         {
@@ -185,7 +185,7 @@
     {
       "name": "replaceRegEx",
       "description": "Replace data in a string based on a regular expression match   utils.replaceRegEx(\"p([a-z]+)ches\", \" I hate peaches !\", \"apples\")",
-      "example": "string.replaceRegEx(\"foo.*\", \"Tseafood\", \"People\")\nReturns\nTseaPeople",
+      "example": "string.replaceRegEx(\"foo.*\", \"Tseafood\", \"People\") => TseaPeople",
       "varArgs": true,
       "args": [
         {
@@ -208,7 +208,7 @@
     {
       "name": "containsAny",
       "description": "containsAny reports whether any Unicode code points in chars are within inputstring.  utils.containsAny(\"failure\", \"u & i\")",
-      "example": "string.containsAny(\"foo.*\", \"Tseafood\", \"People\")\nReturns\nTseaPeople",
+      "example": "string.containsAny(\"foo.*\", \"Tseafood\", \"People\") => TseaPeople",
       "varArgs": true,
       "args": [
         {
@@ -227,7 +227,7 @@
     {
       "name": "count",
       "description": "Count counts the number of non-overlapping instances of substring in inputstring. If substring is an empty string, Count returns 1 + the number of Unicode code points in inputstring. utils.count(\"cheese\", \"e\")",
-      "example": "string.count(\"hello flogo\", \"o\")\nReturns\n3",
+      "example": "string.count(\"hello flogo\", \"o\") => 3",
       "varArgs": true,
       "args": [
         {
@@ -246,7 +246,7 @@
     {
       "name": "index",
       "description": "Index returns the index of the first instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.index(\"cheese\", \"e\")",
-      "example": "string.index(\"hello flogo\", \"flogo\")\nReturns\n6",
+      "example": "string.index(\"hello flogo\", \"flogo\") => 6",
       "varArgs": true,
       "args": [
         {
@@ -265,7 +265,7 @@
     {
       "name": "indexAny",
       "description": "indexAny returns the index of the first instance of any Unicode code point from chars in inputstring, or -1 if no Unicode code point from chars is present in inputstring. utils.indexAny(\"chicken\", \"aeiouy\")",
-      "example": "string.indexAny(\"hello flogo\", \"flogo\")\nReturns\n2",
+      "example": "string.indexAny(\"hello flogo\", \"flogo\") => 2",
       "varArgs": true,
       "args": [
         {
@@ -284,7 +284,7 @@
     {
       "name": "lastIndex",
       "description": "LastIndex returns the index of the last instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.lastIndex(\"go gopher\", \"go\")",
-      "example": "string.lastIndex(\"hello flogo\", \"flogo\")\nReturns\n6",
+      "example": "string.lastIndex(\"hello flogo\", \"flogo\") => 6",
       "varArgs": true,
       "args": [
         {
@@ -303,7 +303,7 @@
     {
       "name": "repeat",
       "description": "Repeat returns a new string consisting of count copies of the string s. utils.repeat(\"na\", 3)",
-      "example": "string.repeat(\"hello flogo\", 2)\nReturns\nhello flogohello flogo",
+      "example": "string.repeat(\"hello flogo\", 2) => hello flogohello flogo",
       "varArgs": true,
       "args": [
         {
@@ -323,7 +323,7 @@
       "name": "replace",
       "description": "Replace returns a copy of inputstring with the first count non-overlapping instances of old replaced by new.  If count < 0, there is no limit on the number of replacements  utils.replace(\"oink oink oink\", \"k\", \"ky\", 2)",
       "varArgs": true,
-      "example": "string.replace(\"hello flogo\", \"flogo\", \"world\", -1)\nReturns\nhello world",
+      "example": "string.replace(\"hello flogo\", \"flogo\", \"world\", -1) => hello world",
       "args": [
         {
           "name": "inputstring",
@@ -349,7 +349,7 @@
     {
       "name": "replaceAll",
       "description": "replaceAll returns a copy of inputstring with all non-overlapping instances of old replaced by new.  utils.replaceAll(\"oink oink oink\", \"oink\", \"moo\")",
-      "example": "string.replaceAll(\"hello flogo\", \"flogo\", \"world\"1)\nReturns\nhello world",
+      "example": "string.replaceAll(\"hello flogo\", \"flogo\", \"world\"1) => hello world",
       "varArgs": true,
       "args": [
         {
@@ -372,7 +372,7 @@
     {
       "name": "toLower",
       "description": "toLower returns a copy of inputstring with all Unicode letters mapped to their lower case.  ",
-      "example": "string.tolower(\"Hello World\")\nReturns\nhello world",
+      "example": "string.tolower(\"Hello World\") => hello world",
       "varArgs": true,
       "args": [
         {
@@ -387,7 +387,7 @@
     {
       "name": "toUpper",
       "description": "toUpper returns a copy of inputstring with all Unicode letters mapped to their upper case.",
-      "example": "string.toUpper(\"Hello World\")\nReturns\nHELLO WORLD",
+      "example": "string.toUpper(\"Hello World\") => HELLO WORLD",
       "varArgs": true,
       "args": [
         {
@@ -402,7 +402,7 @@
     {
       "name": "trim",
       "description": "Trim returns a slice of inputstring with all leading and trailing Unicode code points contained in cutset removed. utils.trim(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
-      "example": "string.trim(\" Hello World \", \" \")\nReturns\nHello World",
+      "example": "string.trim(\" Hello World \", \" \") => Hello World",
       "varArgs": true,
       "args": [
         {
@@ -422,7 +422,7 @@
     {
       "name": "trimLeft",
       "description": "trimLeft returns a slice of inputstring with all leading Unicode code points contained in cutset removed. utils.trimLeft(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
-      "example": "string.trimLeft(\" Hello World \", \" \")\nReturns\nHello World ",
+      "example": "string.trimLeft(\" Hello World \", \" \") => Hello World ",
       "varArgs": true,
       "args": [
         {
@@ -441,7 +441,7 @@
     {
       "name": "trimRight",
       "description": "trimRight returns a slice of inputstring with all trailing Unicode code points contained in cutset removed. utils.trimRight(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
-      "example": "string.trimRight(\" Hello World \", \" \")\nReturns\n Hello World",
+      "example": "string.trimRight(\" Hello World \", \" \") =>  Hello World",
       "varArgs": true,
       "args": [
         {
@@ -460,7 +460,7 @@
     {
       "name": "trimPrefix",
       "description": "trimPrefix returns inputstring without the provided leading prefix string. If inputstring doesn't start with prefix, it is returned unchanged. utils.trimPrefix(\"¡¡¡Hello, Gophers!!!\", \"¡¡¡Hello\")",
-      "example": "string.trimPrefix(\"Hello World \", \"Hello\")\nReturns\n World",
+      "example": "string.trimPrefix(\"Hello World \", \"Hello\") =>  World",
       "varArgs": true,
       "args": [
         {
@@ -479,7 +479,7 @@
     {
       "name": "trimSuffix",
       "description": "TrimSuffix returns inputstring without the provided trailing suffix string. If it doesn't end with suffix, it is returned unchanged. utils.trimSuffix(\"¡¡¡Hello, Gophers!!!\", \"Gophers!!!\")",
-      "example": "string.trimSuffix(\"Hello World\", \"World\")\nReturns\n Hello",
+      "example": "string.trimSuffix(\"Hello World\", \"World\") =>  Hello",
       "varArgs": true,
       "args": [
         {
@@ -498,7 +498,7 @@
     {
       "name": "split",
       "description": "Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators. utils.split(\"a,b,c\", \",\")",
-      "example": "string.split(\"Hello,World\", \",\")\nReturns\n [Hello,World]",
+      "example": "string.split(\"Hello,World\", \",\") =>  [Hello,World]",
       "varArgs": true,
       "args": [
         {
@@ -536,7 +536,7 @@
     {
       "name": "substringAfter",
       "description": "Returns the string that follows after the first occurrence of the second string, or a zero length string if the first string does not contain the second string.",
-      "example": "string.substringAfter(\"1999/04/01\", \"/\")\nReturns\n04/01",
+      "example": "string.substringAfter(\"1999/04/01\", \"/\") => 04/01",
       "args": [
         {
           "name": "input",
@@ -554,7 +554,7 @@
     {
       "name": "substringBefore",
       "description": "Returns the string that follows before the first occurrence of the second string, or a zero length string if the first string does not contain the second string.",
-      "example": "string.substringBefore(\"1999/04/01\", \"/\")\nReturns\n1999",
+      "example": "string.substringBefore(\"1999/04/01\", \"/\") => 1999",
       "args": [
         {
           "name": "input",
