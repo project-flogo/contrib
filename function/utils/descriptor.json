@@ -9,7 +9,7 @@
     {
       "name": "uuid",
       "description": "Returns a random UUID according to RFC 4122. utils.uuid()",
-      "example": "utils.uuid()\n Returns\n 245056b5-0d11-47aa-b564-fbbf3c6e044a",
+      "example": "utils.uuid() => 245056b5-0d11-47aa-b564-fbbf3c6e044a",
       "args": [
         { }
       ],
@@ -20,7 +20,7 @@
     {
       "name": "encodeBase64",
       "description": "encodeBase64 returns a base 64 encoded string of the input.",
-      "example": "utils.encodeBase64(corece.ToBytes(\"Hello, World\"))\n Returns\nSGVsbG8sIFdvcmxk",
+      "example": "utils.encodeBase64(corece.ToBytes(\"Hello, World\")) => SGVsbG8sIFdvcmxk",
       "args": [
         {
           "name": "input",
@@ -34,7 +34,7 @@
     {
       "name": "decodeBase64",
       "description": "decodeBase64 returns the bytes represented by the base 64 encoded input string.  utils.decodeBase64(\"SGVsbG8sIFdvcmxk\")",
-      "example": "utils.decodeBase64(\"SGVsbG8sIFdvcmxk\")\n Returns\nHello, World",
+      "example": "utils.decodeBase64(\"SGVsbG8sIFdvcmxk\") => Hello, World",
       "args": [
         {
           "name": "input",
