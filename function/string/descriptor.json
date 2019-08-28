@@ -24,7 +24,7 @@
     {
       "name": "endsWith",
       "description": "Returns whether a string ends with another string.",
-      "example": "string.endsWith(\"TIBCO Web Integrator\", \"Integrator\") => true",
+      "example": "string.endsWith(\"TIBCO Integrator\", \"Integrator\") => true",
       "args": [
         {
           "name": "str",
@@ -208,7 +208,7 @@
     {
       "name": "containsAny",
       "description": "containsAny reports whether any Unicode code points in chars are within inputstring.  utils.containsAny(\"failure\", \"u & i\")",
-      "example": "string.containsAny(\"foo.*\", \"Tseafood\", \"People\") => TseaPeople",
+      "example": "string.containsAny(\"Tseafood\", \"food\") => true",
       "varArgs": true,
       "args": [
         {
@@ -349,7 +349,7 @@
     {
       "name": "replaceAll",
       "description": "replaceAll returns a copy of inputstring with all non-overlapping instances of old replaced by new.  utils.replaceAll(\"oink oink oink\", \"oink\", \"moo\")",
-      "example": "string.replaceAll(\"hello flogo\", \"flogo\", \"world\"1) => hello world",
+      "example": "string.replaceAll(\"hello flogo\", \"flogo\", \"world\") => hello world",
       "varArgs": true,
       "args": [
         {
@@ -372,7 +372,7 @@
     {
       "name": "toLower",
       "description": "toLower returns a copy of inputstring with all Unicode letters mapped to their lower case.  ",
-      "example": "string.tolower(\"Hello World\") => hello world",
+      "example": "string.toLower(\"Hello World\") => hello world",
       "varArgs": true,
       "args": [
         {
@@ -518,7 +518,7 @@
     {
       "name": "startsWith",
       "description": "Returns whether a string begins with another string.",
-      "example": "string.startsWith(\"TIBCO Web Integrator\", \"TIBCO\")\nReturns true",
+      "example": "string.startsWith(\"TIBCO Flogo\", \"TIBCO\")\nReturns true",
       "args": [
         {
           "name": "str",
