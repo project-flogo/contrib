@@ -24,7 +24,7 @@
     {
       "name": "endsWith",
       "description": "Returns whether a string ends with another string.",
-      "example": "string.endsWith(\"TIBCO Integrator\", \"Integrator\") => true",
+      "example": "string.endsWith(\"Project Flogo\", \"Flogo\") => true",
       "args": [
         {
           "name": "str",
@@ -518,7 +518,7 @@
     {
       "name": "startsWith",
       "description": "Returns whether a string begins with another string.",
-      "example": "string.startsWith(\"TIBCO Flogo\", \"TIBCO\")\nReturns true",
+      "example": "string.startsWith(\"Project Flogo\", \"Project\") => true",
       "args": [
         {
           "name": "str",
