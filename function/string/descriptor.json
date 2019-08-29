@@ -152,11 +152,11 @@
         },
         {
           "name": "start",
-          "type": "string"
+          "type": "int"
         },
         {
           "name": "end",
-          "type": "string"
+          "type": "int"
         }
       ],
       "return": {
