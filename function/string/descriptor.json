@@ -205,7 +205,7 @@
     },
     {
       "name": "containsAny",
-      "description": "containsAny reports whether any Unicode code points in chars are within inputstring.  utils.containsAny(\"failure\", \"u & i\")",
+      "description": "containsAny reports whether any Unicode code points in chars are within inputstring",
       "example": "string.containsAny(\"Tseafood\", \"food\") => true",
       "args": [
         {
