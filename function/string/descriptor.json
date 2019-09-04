@@ -167,7 +167,6 @@
       "name": "matchRegEx",
       "description": "Match input against regular expression   utils.matchRegEx(\"p([a-z]+)ch\", \"peach\")",
       "example": "string.matchRegEx(\"foo.*\", \"Tseafood\") => true",
-      "varArgs": true,
       "args": [
         {
           "name": "expression",
@@ -186,7 +185,6 @@
       "name": "replaceRegEx",
       "description": "Replace data in a string based on a regular expression match   utils.replaceRegEx(\"p([a-z]+)ches\", \" I hate peaches !\", \"apples\")",
       "example": "string.replaceRegEx(\"foo.*\", \"Tseafood\", \"People\") => TseaPeople",
-      "varArgs": true,
       "args": [
         {
           "name": "expression",
@@ -209,7 +207,6 @@
       "name": "containsAny",
       "description": "containsAny reports whether any Unicode code points in chars are within inputstring.  utils.containsAny(\"failure\", \"u & i\")",
       "example": "string.containsAny(\"Tseafood\", \"food\") => true",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -228,7 +225,6 @@
       "name": "count",
       "description": "Count counts the number of non-overlapping instances of substring in inputstring. If substring is an empty string, Count returns 1 + the number of Unicode code points in inputstring. utils.count(\"cheese\", \"e\")",
       "example": "string.count(\"hello flogo\", \"o\") => 3",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -247,7 +243,6 @@
       "name": "index",
       "description": "Index returns the index of the first instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.index(\"cheese\", \"e\")",
       "example": "string.index(\"hello flogo\", \"flogo\") => 6",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -266,7 +261,6 @@
       "name": "indexAny",
       "description": "indexAny returns the index of the first instance of any Unicode code point from chars in inputstring, or -1 if no Unicode code point from chars is present in inputstring. utils.indexAny(\"chicken\", \"aeiouy\")",
       "example": "string.indexAny(\"hello flogo\", \"flogo\") => 2",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -285,7 +279,6 @@
       "name": "lastIndex",
       "description": "LastIndex returns the index of the last instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.lastIndex(\"go gopher\", \"go\")",
       "example": "string.lastIndex(\"hello flogo\", \"flogo\") => 6",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -304,7 +297,6 @@
       "name": "repeat",
       "description": "Repeat returns a new string consisting of count copies of the string s. utils.repeat(\"na\", 3)",
       "example": "string.repeat(\"hello flogo\", 2) => hello flogohello flogo",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -322,7 +314,6 @@
     {
       "name": "replace",
       "description": "Replace returns a copy of inputstring with the first count non-overlapping instances of old replaced by new.  If count < 0, there is no limit on the number of replacements  utils.replace(\"oink oink oink\", \"k\", \"ky\", 2)",
-      "varArgs": true,
       "example": "string.replace(\"hello flogo\", \"flogo\", \"world\", -1) => hello world",
       "args": [
         {
@@ -350,7 +341,6 @@
       "name": "replaceAll",
       "description": "replaceAll returns a copy of inputstring with all non-overlapping instances of old replaced by new.  utils.replaceAll(\"oink oink oink\", \"oink\", \"moo\")",
       "example": "string.replaceAll(\"hello flogo\", \"flogo\", \"world\") => hello world",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -373,7 +363,6 @@
       "name": "toLower",
       "description": "toLower returns a copy of inputstring with all Unicode letters mapped to their lower case.  ",
       "example": "string.toLower(\"Hello World\") => hello world",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -388,7 +377,6 @@
       "name": "toUpper",
       "description": "toUpper returns a copy of inputstring with all Unicode letters mapped to their upper case.",
       "example": "string.toUpper(\"Hello World\") => HELLO WORLD",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -403,7 +391,6 @@
       "name": "trim",
       "description": "Trim returns a slice of inputstring with all leading and trailing Unicode code points contained in cutset removed. utils.trim(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
       "example": "string.trim(\" Hello World \", \" \") => Hello World",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -423,7 +410,6 @@
       "name": "trimLeft",
       "description": "trimLeft returns a slice of inputstring with all leading Unicode code points contained in cutset removed. utils.trimLeft(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
       "example": "string.trimLeft(\" Hello World \", \" \") => Hello World ",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -442,7 +428,6 @@
       "name": "trimRight",
       "description": "trimRight returns a slice of inputstring with all trailing Unicode code points contained in cutset removed. utils.trimRight(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
       "example": "string.trimRight(\" Hello World \", \" \") =>  Hello World",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -461,7 +446,6 @@
       "name": "trimPrefix",
       "description": "trimPrefix returns inputstring without the provided leading prefix string. If inputstring doesn't start with prefix, it is returned unchanged. utils.trimPrefix(\"¡¡¡Hello, Gophers!!!\", \"¡¡¡Hello\")",
       "example": "string.trimPrefix(\"Hello World \", \"Hello\") =>  World",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -480,7 +464,6 @@
       "name": "trimSuffix",
       "description": "TrimSuffix returns inputstring without the provided trailing suffix string. If it doesn't end with suffix, it is returned unchanged. utils.trimSuffix(\"¡¡¡Hello, Gophers!!!\", \"Gophers!!!\")",
       "example": "string.trimSuffix(\"Hello World\", \"World\") =>  Hello",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
@@ -499,7 +482,6 @@
       "name": "split",
       "description": "Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators. utils.split(\"a,b,c\", \",\")",
       "example": "string.split(\"Hello,World\", \",\") =>  [Hello,World]",
-      "varArgs": true,
       "args": [
         {
           "name": "inputstring",
