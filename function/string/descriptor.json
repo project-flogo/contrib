@@ -173,7 +173,7 @@
           "type": "string"
         },
         {
-          "name": "input",
+          "name": "str",
           "type": "string"
         }
       ],
@@ -191,11 +191,11 @@
           "type": "string"
         },
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
-          "name": "replacewith",
+          "name": "replace",
           "type": "string"
         }
       ],
@@ -209,11 +209,11 @@
       "example": "string.containsAny(\"Tseafood\", \"food\") => true",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
-          "name": "substring",
+          "name": "substr",
           "type": "string"
         }
       ],
@@ -227,11 +227,11 @@
       "example": "string.count(\"hello flogo\", \"o\") => 3",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
-          "name": "substring",
+          "name": "substr",
           "type": "string"
         }
       ],
@@ -245,11 +245,11 @@
       "example": "string.index(\"hello flogo\", \"flogo\") => 6",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
-          "name": "substring",
+          "name": "substr",
           "type": "string"
         }
       ],
@@ -263,11 +263,11 @@
       "example": "string.indexAny(\"hello flogo\", \"flogo\") => 2",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
-          "name": "substring",
+          "name": "substr",
           "type": "string"
         }
       ],
@@ -281,11 +281,11 @@
       "example": "string.lastIndex(\"hello flogo\", \"flogo\") => 6",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
-          "name": "substring",
+          "name": "substr",
           "type": "string"
         }
       ],
@@ -299,7 +299,7 @@
       "example": "string.repeat(\"hello flogo\", 2) => hello flogohello flogo",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
@@ -317,7 +317,7 @@
       "example": "string.replace(\"hello flogo\", \"flogo\", \"world\", -1) => hello world",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
@@ -343,7 +343,7 @@
       "example": "string.replaceAll(\"hello flogo\", \"flogo\", \"world\") => hello world",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
@@ -365,7 +365,7 @@
       "example": "string.toLower(\"Hello World\") => hello world",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         }
       ],
@@ -379,7 +379,7 @@
       "example": "string.toUpper(\"Hello World\") => HELLO WORLD",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         }
       ],
@@ -391,9 +391,10 @@
       "name": "trim",
       "description": "Trim returns a slice of inputstring with all leading and trailing Unicode code points contained in cutset removed. utils.trim(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
       "example": "string.trim(\" Hello World \", \" \") => Hello World",
+      "varArgs": true,
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
@@ -412,7 +413,7 @@
       "example": "string.trimLeft(\" Hello World \", \" \") => Hello World ",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
@@ -430,7 +431,7 @@
       "example": "string.trimRight(\" Hello World \", \" \") =>  Hello World",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
@@ -448,7 +449,7 @@
       "example": "string.trimPrefix(\"Hello World \", \"Hello\") =>  World",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
@@ -466,7 +467,7 @@
       "example": "string.trimSuffix(\"Hello World\", \"World\") =>  Hello",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
@@ -484,11 +485,11 @@
       "example": "string.split(\"Hello,World\", \",\") =>  [Hello,World]",
       "args": [
         {
-          "name": "inputstring",
+          "name": "str",
           "type": "string"
         },
         {
-          "name": "separator",
+          "name": "sep",
           "type": "string"
         }
       ],
@@ -521,7 +522,7 @@
       "example": "string.substringAfter(\"1999/04/01\", \"/\") => 04/01",
       "args": [
         {
-          "name": "input",
+          "name": "str",
           "type": "string"
         },
         {
@@ -539,7 +540,7 @@
       "example": "string.substringBefore(\"1999/04/01\", \"/\") => 1999",
       "args": [
         {
-          "name": "input",
+          "name": "str",
           "type": "string"
         },
         {
