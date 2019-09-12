@@ -52,7 +52,7 @@
         },
         {
             "name": "formatDatetime",
-            "description": "Format the datetime according to the specified format. The pattern of the formatter contains of MM(month), DD(day), YYYY(year), hh(hours), mm(mins) and ss(seconds) with delimiter and they are case insensitive except MM, MM is case sensitive, upper case MM for month and lower case mm for minutes such as:MM-dd-YYYYdd-MM-yyyy T hh-mm-ss",
+            "description": "Format the datetime according to the specified format. The pattern of the formatter contains of MM(month), DD(day), YYYY(year), hh(hour), mm(minute), ss(second) and delimiter, they are case insensitive except MM, MM is case sensitive, upper case MM for month and lower case mm for minutes such as:MM-dd-YYYYdd-MM-yyyy T hh-mm-ss",
             "example": "datetime.formatDatetime（\"2017-04-10T22:17:32.000+0700\", \"dd/MM/yyyy T hh:mm:ss\") => 10/04/2017 T 22:17:32",
             "args": [
                 {
@@ -70,7 +70,7 @@
         },
         {
             "name": "formatTime",
-            "description": "Format the time according to the specified format. The pattern of the formatter contains of hh(hours), mm(mins) and ss(seconds) with delimiter and they are case insensitive, such as:hh-mm-ss or hh:mm:s",
+            "description": "Format the time according to the specified format. The pattern of the formatter contains of hh(hour), mm(minute), ss(second) and delimiter, they are case insensitive, such as: hh-mm-ss or hh:mm:s",
             "example": "datetime.formatTime（\"10:11:05.00000\", \"hh-mm-ss\") => 10-11-05",
             "args": [
                 {
