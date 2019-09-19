@@ -1,0 +1,37 @@
+{
+    "name": "flogo-run-syncaction",
+    "type": "flogo:activity",
+    "version": "0.9.0",
+    "title": "Run a Sync Action",
+    "description": "Run a SyncAction in activity",
+    "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/sync-action",
+    "settings":[
+      {
+        "name": "ref",
+        "type": "string",
+        "required": true,
+        "description" : "The ref to the syn-action being invoked"
+      },
+      {
+        "name": "resURI",
+        "type": "string",
+        "required": true,
+        "description" : "The reference to the resource URI, either can be res:// or file://"
+      }
+    ],
+    "input":[
+      {
+        "name": "input",
+        "type": "any",
+        "description" : "The input to the action being called"
+      }
+    ],
+    "output":[
+      {
+        "name": "output",
+        "type": "any",
+        "description" : "The output of the action being called"
+      }
+    ]
+  }
+  
