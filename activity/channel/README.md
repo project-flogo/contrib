@@ -18,8 +18,8 @@ flogo install github.com/project-flogo/contrib/activity/channel
 ## Configuration
 
 ### Input:
-| Name     | Type   | Description
-|:---      | :---   | :---    
-| channel  | string | The name of channel to use - **REQUIRED**
-| value    | any    | The data to put on the channel
+| Name    | Type   | Description
+|:---     | :---   | :---    
+| channel | string | The name of channel to use - **REQUIRED**
+| data    | any    | The data to put on the channel
 

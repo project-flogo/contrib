@@ -1,0 +1,99 @@
+{
+    "name": "datetime",
+    "type": "flogo:function",
+    "version": "0.0.1",
+    "title": "datetimeFunctions",
+    "description": "datetimeFunctions",
+    "functions": [
+        {
+            "name": "currentDate",
+            "description": "Returns the current date with UTC time zone.",
+            "example": "datetime.currentDate() => 2017-05-13+00:00",
+            "args": [],
+            "return": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "currentDatetime",
+            "description": "Returns the current datetime with UTC timezone.",
+            "example": "datetime.currentDatetime() => 2017-05-13T22:27:54+00:00",
+            "args": [],
+            "return": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "currentTime",
+            "description": "Returns the current time with UTC timezone.",
+            "example": "datetime.currentTime() => 22:27:54+00:00",
+            "args": [],
+            "return": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "formatDate",
+            "description": "Format the date according to the specified format.",
+            "example": "datetime.formatDate（\"02/08/2017\", \"dd-MM-yyyy\"）=> 08-02-2017",
+            "args": [
+                {
+                    "name": "date",
+                    "type": "string"
+                },
+                {
+                    "name": "format",
+                    "type": "string"
+                }
+            ],
+            "return": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "formatDatetime",
+            "description": "Format the datetime according to the specified format.",
+            "example": "datetime.formatDatetime（\"2017-04-10T22:17:32.000+0700\", \"dd/MM/yyyy T hh:mm:ss\") => 10/04/2017 T 22:17:32",
+            "args": [
+                {
+                    "name": "datetime",
+                    "type": "string"
+                },
+                {
+                    "name": "format",
+                    "type": "string"
+                }
+            ],
+            "return": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "formatTime",
+            "description": "Format the time according to the specified format.",
+            "example": "datetime.formatTime（\"10:11:05.00000\", \"hh-mm-ss\") => 10-11-05",
+            "args": [
+                {
+                    "name": "time",
+                    "type": "string"
+                },
+                {
+                    "name": "format",
+                    "type": "string"
+                }
+            ],
+            "return": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "now",
+            "description": "Returns the current time with UTC timezone.",
+            "example": "datetime.now() => 2017-05-13T15:59:41+00:00",
+            "args": [],
+            "return": {
+                "type": "string"
+            }
+        }
+    ]
+}

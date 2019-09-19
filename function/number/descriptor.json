@@ -9,13 +9,17 @@
     {
       "name": "random",
       "description": "generate a random number",
+      "example": "number.random(100) => 90",
       "varArgs": true,
       "args": [
         {
           "name": "limit",
           "type": "int"
         }
-      ]
+      ],
+      "return": {
+        "type": "int"
+      }
     }
   ]
 }

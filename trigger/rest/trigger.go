@@ -88,7 +88,7 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		}
 
 		//router.OPTIONS(path, handleCorsPreflight) // for CORS
-		router.Handle(method, path, newActionHandler(t, handler))
+		router.Handle(method, path, newActionHandler(t, strings.ToUpper(method), handler))
 	}
 
 	t.logger.Debugf("Configured on port %d", t.settings.Port)
@@ -135,7 +135,7 @@ type IDResponse struct {
 	ID string `json:"id"`
 }
 
-func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
+func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httprouter.Handle {
 
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
@@ -145,6 +145,7 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 		c.WriteCorsActualRequestHeaders(w)
 
 		out := &Output{}
+		out.Method = method
 
 		out.PathParams = make(map[string]string)
 		for _, param := range ps {
@@ -201,7 +202,7 @@ func newActionHandler(rt *Trigger, handler trigger.Handler) httprouter.Handle {
 				case err == io.EOF:
 					// empty body
 					//todo what should handler say if content is expected?
-				case err != nil:
+				default:
 					rt.logger.Debugf("Error parsing json body: %s", err.Error())
 					http.Error(w, err.Error(), http.StatusBadRequest)
 					return

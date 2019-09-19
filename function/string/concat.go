@@ -3,8 +3,8 @@ package string
 import (
 	"bytes"
 	"fmt"
-
 	"github.com/project-flogo/core/data"
+	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/expression/function"
 )
 
@@ -28,10 +28,13 @@ func (fnConcat) Eval(params ...interface{}) (interface{}, error) {
 		var buffer bytes.Buffer
 
 		for _, v := range params {
-			buffer.WriteString(v.(string))
+			s, err := coerce.ToString(v)
+			if err != nil {
+				return nil, fmt.Errorf("concat function parameter [%+v] must be string.", v)
+			}
+			buffer.WriteString(s)
 		}
 		return buffer.String(), nil
 	}
-
 	return "", fmt.Errorf("fnConcat function must have at least two arguments")
 }

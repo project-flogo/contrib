@@ -1,3 +1,7 @@
+<!--
+title: Kafka
+weight: 4701
+-->
 # Kafka Trigger
 
 This trigger subscribes to a topic on Kafka cluster and listens for the messages.

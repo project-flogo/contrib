@@ -2,6 +2,7 @@
 title: Channel
 weight: 4706
 -->
+
 # Channel Trigger
 This trigger provides your flogo application the ability to start an action via a named engine channel
 

@@ -16,9 +16,10 @@ import (
 var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{})
 
 func init() {
-	_ = trigger.Register(&KafkaTrigger{}, &Factory{})
+	_ = trigger.Register(&Trigger{}, &Factory{})
 }
 
+// Factory is a kafka trigger factory
 type Factory struct {
 }
 
@@ -35,16 +36,18 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 		return nil, err
 	}
 
-	return &KafkaTrigger{settings: s}, nil
+	return &Trigger{settings: s}, nil
 }
 
-type KafkaTrigger struct {
+// Trigger is a kafka trigger
+type Trigger struct {
 	settings      *Settings
 	conn          *KafkaConnection
-	kafkaHandlers []*KafkaHandler
+	kafkaHandlers []*Handler
 }
 
-func (t *KafkaTrigger) Initialize(ctx trigger.InitContext) error {
+// Initialize initializes the trigger
+func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
 	var err error
 	t.conn, err = getKafkaConnection(ctx.Logger(), t.settings)
@@ -60,7 +63,8 @@ func (t *KafkaTrigger) Initialize(ctx trigger.InitContext) error {
 	return err
 }
 
-func (t *KafkaTrigger) Start() error {
+// Start starts the kafka trigger
+func (t *Trigger) Start() error {
 
 	for _, handler := range t.kafkaHandlers {
 		_ = handler.Start()
@@ -70,7 +74,7 @@ func (t *KafkaTrigger) Start() error {
 }
 
 // Stop implements ext.Trigger.Stop
-func (t *KafkaTrigger) Stop() error {
+func (t *Trigger) Stop() error {
 
 	for _, handler := range t.kafkaHandlers {
 		_ = handler.Stop()
@@ -80,9 +84,10 @@ func (t *KafkaTrigger) Stop() error {
 	return nil
 }
 
-func NewKafkaHandler(logger log.Logger, handler trigger.Handler, consumer sarama.Consumer) (*KafkaHandler, error) {
+// NewKafkaHandler creates a new kafka handler to handle a topic
+func NewKafkaHandler(logger log.Logger, handler trigger.Handler, consumer sarama.Consumer) (*Handler, error) {
 
-	kafkaHandler := &KafkaHandler{logger: logger, shutdown: make(chan struct{}), handler: handler}
+	kafkaHandler := &Handler{logger: logger, shutdown: make(chan struct{}), handler: handler}
 
 	handlerSetting := &HandlerSettings{}
 	err := metadata.MapToStruct(handler.Settings(), handlerSetting, true)
@@ -106,6 +111,9 @@ func NewKafkaHandler(logger log.Logger, handler trigger.Handler, consumer sarama
 	var partitions []int32
 
 	validPartitions, err := consumer.Partitions(handlerSetting.Topic)
+	if err != nil {
+		return nil, err
+	}
 	logger.Debugf("Valid partitions for topic [%s] detected as: [%v]", handlerSetting.Topic, validPartitions)
 
 	if handlerSetting.Partitions != "" {
@@ -141,14 +149,15 @@ func NewKafkaHandler(logger log.Logger, handler trigger.Handler, consumer sarama
 	return kafkaHandler, nil
 }
 
-type KafkaHandler struct {
+// Handler is a kafka topic handler
+type Handler struct {
 	shutdown  chan struct{}
 	logger    log.Logger
 	handler   trigger.Handler
 	consumers []sarama.PartitionConsumer
 }
 
-func (h *KafkaHandler) consumePartition(consumer sarama.PartitionConsumer) {
+func (h *Handler) consumePartition(consumer sarama.PartitionConsumer) {
 	for {
 		select {
 		case err := <-consumer.Errors():
@@ -179,16 +188,18 @@ func (h *KafkaHandler) consumePartition(consumer sarama.PartitionConsumer) {
 	}
 }
 
-func (h *KafkaHandler) Start() error {
+// Start starts the handler
+func (h *Handler) Start() error {
 
 	for _, consumer := range h.consumers {
-		h.consumePartition(consumer)
+		go h.consumePartition(consumer)
 	}
 
 	return nil
 }
 
-func (h *KafkaHandler) Stop() error {
+// Stop stops the handler
+func (h *Handler) Stop() error {
 
 	close(h.shutdown)
 

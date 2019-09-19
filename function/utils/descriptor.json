@@ -1,0 +1,48 @@
+{
+  "name": "utils",
+  "type": "flogo:function",
+  "version": "0.9.0",
+  "title": "Misc utility functions",
+  "description": "Usefull tools and utilities",
+  "homepage": "https://github.com/project-flogo/contrib/tree/master/function/utils",
+  "functions": [
+    {
+      "name": "uuid",
+      "description": "Returns a random UUID according to RFC 4122. utils.uuid()",
+      "example": "utils.uuid() => 245056b5-0d11-47aa-b564-fbbf3c6e044a",
+      "args": [
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "encodeBase64",
+      "description": "encodeBase64 returns a base 64 encoded string of the input.",
+      "example": "utils.encodeBase64(coerce.ToBytes(\"Hello, World\")) => SGVsbG8sIFdvcmxk",
+      "args": [
+        {
+          "name": "input",
+          "type": "bytes"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "decodeBase64",
+      "description": "decodeBase64 returns the bytes represented by the base 64 encoded input string.  utils.decodeBase64(\"SGVsbG8sIFdvcmxk\")",
+      "example": "utils.decodeBase64(\"SGVsbG8sIFdvcmxk\") => Hello, World",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "bytes"
+      }
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "name": "flogo-tcpudp-trigger",
+  "type": "flogo:trigger",
+  "version": "0.9.0",
+  "title": "Receive TCP or UDP Data",
+  "description": "Simple TCP/UDP Trigger",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/trigger/tcpudp",
+  "settings": [
+    {
+      "name": "network",
+      "type": "string",
+      "description": "Network type",
+      "allowed": ["tcp", "tcp4", "tcp6", "udp", "udp4", "udp6"],
+      "value": "tcp"
+    },
+    {
+      "name": "host",
+      "type": "string",
+      "description": "Host IP or name",
+      "value": "0.0.0.0"
+    },
+    {
+      "name": "port",
+      "type": "string",
+      "required": true,
+      "description": "Port to listen on",
+      "value": "8999"
+    },
+    {
+      "name": "delimiter",
+      "type": "string",
+      "description": "Optional delimiter for read and write. If not set, trigger will read data stream until EOF.",
+      "value": ""
+    },
+    {
+      "name": "timeout",
+      "type": "integer",
+      "description": "Read and Write timeout in milliseconds",
+      "value": 0
+    }
+  ],
+  "output": [
+    {
+      "name": "data",
+      "type": "string",
+      "description": "Incoming data"
+    }
+  ],
+  "reply": [
+    {
+      "name": "reply",
+      "type": "string",
+      "description": "Reply data"
+    }
+  ],
+  "handler": {
+    "settings": [
+    ]
+  }
+}

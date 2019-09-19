@@ -12,8 +12,8 @@ type Settings struct {
 }
 
 type HandlerSettings struct {
-	Method string `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"`  // The HTTP method (ie. GET,POST,PUT,PATCH or DELETE)
-	Path   string `md:"path,required"`                                       // The resource path
+	Method string `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"` // The HTTP method (ie. GET,POST,PUT,PATCH or DELETE)
+	Path   string `md:"path,required"`                                      // The resource path
 }
 
 type Output struct {
@@ -21,11 +21,13 @@ type Output struct {
 	QueryParams map[string]string `md:"queryParams"` // The query parameters (e.g., 'id' in http://.../pet?id=someValue )
 	Headers     map[string]string `md:"headers"`     // The HTTP header parameters
 	Content     interface{}       `md:"content"`     // The content of the request
+	Method      string            `md:"method"`      // The HTTP method used for the request
+
 }
 
 type Reply struct {
-	Code int         `md:"code"`  // The http code to reply with
-	Data interface{} `md:"data"`  // The data to reply with
+	Code int         `md:"code"` // The http code to reply with
+	Data interface{} `md:"data"` // The data to reply with
 }
 
 func (o *Output) ToMap() map[string]interface{} {
@@ -33,6 +35,7 @@ func (o *Output) ToMap() map[string]interface{} {
 		"pathParams":  o.PathParams,
 		"queryParams": o.QueryParams,
 		"headers":     o.Headers,
+		"method":      o.Method,
 		"content":     o.Content,
 	}
 }
@@ -49,6 +52,10 @@ func (o *Output) FromMap(values map[string]interface{}) error {
 		return err
 	}
 	o.Headers, err = coerce.ToParams(values["headers"])
+	if err != nil {
+		return err
+	}
+	o.Method, err = coerce.ToString(values["method"])
 	if err != nil {
 		return err
 	}

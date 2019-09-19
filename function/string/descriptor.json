@@ -9,6 +9,7 @@
     {
       "name": "concat",
       "description": "concatenate a set of string",
+      "example": "string.concat(\"Hello\",' ', \"World\") => Hello World",
       "varArgs": true,
       "args": [
         {
@@ -16,11 +17,32 @@
           "type": "string"
         }
       ],
-      "returnType": "string"
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "endsWith",
+      "description": "Returns whether a string ends with another string.",
+      "example": "string.endsWith(\"Project Flogo\", \"Flogo\") => true",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "substr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "boolean"
+      }
     },
     {
       "name": "equals",
       "description": "check if two strings are equal",
+      "example": "string.equals(\"Hello\",\"Hello2\") => false",
       "args": [
         {
           "name": "str1",
@@ -31,11 +53,14 @@
           "type": "string"
         }
       ],
-      "returnType": "bool"
+      "return": {
+        "type": "bool"
+      }
     },
     {
       "name": "equalsIgnoreCase",
       "description": "check if two strings are equal ignoring case",
+      "example": "string.equalsIgnoreCase(\"Hello\",\"hello\") => true",
       "args": [
         {
           "name": "str1",
@@ -46,11 +71,14 @@
           "type": "string"
         }
       ],
-      "returnType": "bool"
+      "return": {
+        "type": "bool"
+      }
     },
     {
       "name": "contains",
       "description": "check if str2 is within str1",
+      "example": "string.contains(\"foobar\",\"foo\") => true",
       "args": [
         {
           "name": "str1",
@@ -61,44 +89,62 @@
           "type": "string"
         }
       ],
-      "returnType": "bool"
+      "return": {
+        "type": "bool"
+      }
     },
     {
       "name": "float",
       "description": "convert the string to a float",
+      "example": "string.float(\"2.77876542316664548335\",14) => 2.77876542316665",
       "args": [
         {
           "name": "str1",
           "type": "string"
+        },
+        {
+          "name": "precision",
+          "type": "number",
+          "required": false,
+          "value": 16
         }
       ],
-      "returnType": "float64"
+      "return": {
+        "type": "float64"
+      }
     },
     {
       "name": "integer",
       "description": "convert the string to an integer",
+      "example": "string.integer(\"1001\") => 1001",
       "args": [
         {
           "name": "str1",
           "type": "string"
         }
       ],
-      "returnType": "int"
+      "return": {
+        "type": "int"
+      }
     },
     {
       "name": "len",
       "description": "get the length of a string",
+      "example": "string.len(\"hello\") => 5",
       "args": [
         {
           "name": "str1",
           "type": "string"
         }
       ],
-      "returnType": "int"
+      "return": {
+        "type": "int"
+      }
     },
     {
       "name": "substring",
       "description": "get a substring from a string",
+      "example": "string.substring(\"abc\", 1,1) => b",
       "args": [
         {
           "name": "str",
@@ -106,14 +152,405 @@
         },
         {
           "name": "start",
-          "type": "string"
+          "type": "int"
         },
         {
           "name": "end",
+          "type": "int"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "matchRegEx",
+      "description": "Match input against regular expression   utils.matchRegEx(\"p([a-z]+)ch\", \"peach\")",
+      "example": "string.matchRegEx(\"foo.*\", \"Tseafood\") => true",
+      "args": [
+        {
+          "name": "expression",
+          "type": "string"
+        },
+        {
+          "name": "str",
           "type": "string"
         }
       ],
-      "returnType": "string"
+      "return": {
+        "type": "bool"
+      }
+    },
+    {
+      "name": "replaceRegEx",
+      "description": "Replace data in a string based on a regular expression match   utils.replaceRegEx(\"p([a-z]+)ches\", \" I hate peaches !\", \"apples\")",
+      "example": "string.replaceRegEx(\"foo.*\", \"Tseafood\", \"People\") => TseaPeople",
+      "args": [
+        {
+          "name": "expression",
+          "type": "string"
+        },
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "replace",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "containsAny",
+      "description": "containsAny reports whether any Unicode code points in chars are within inputstring",
+      "example": "string.containsAny(\"Tseafood\", \"food\") => true",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "substr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "bool"
+      }
+    },
+    {
+      "name": "count",
+      "description": "Count counts the number of non-overlapping instances of substring in inputstring. If substring is an empty string, Count returns 1 + the number of Unicode code points in inputstring. utils.count(\"cheese\", \"e\")",
+      "example": "string.count(\"hello flogo\", \"o\") => 3",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "substr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "int"
+      }
+    },
+    {
+      "name": "index",
+      "description": "Index returns the index of the first instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.index(\"cheese\", \"e\")",
+      "example": "string.index(\"hello flogo\", \"flogo\") => 6",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "substr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "int"
+      }
+    },
+    {
+      "name": "indexAny",
+      "description": "indexAny returns the index of the first instance of any Unicode code point from chars in inputstring, or -1 if no Unicode code point from chars is present in inputstring. utils.indexAny(\"chicken\", \"aeiouy\")",
+      "example": "string.indexAny(\"hello flogo\", \"flogo\") => 2",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "substr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "int"
+      }
+    },
+    {
+      "name": "lastIndex",
+      "description": "LastIndex returns the index of the last instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.lastIndex(\"go gopher\", \"go\")",
+      "example": "string.lastIndex(\"hello flogo\", \"flogo\") => 6",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "substr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "int"
+      }
+    },
+    {
+      "name": "repeat",
+      "description": "Repeat returns a new string consisting of count copies of the string s. utils.repeat(\"na\", 3)",
+      "example": "string.repeat(\"hello flogo\", 2) => hello flogohello flogo",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "count",
+          "type": "int"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "replace",
+      "description": "Replace returns a copy of inputstring with the first count non-overlapping instances of old replaced by new.  If count < 0, there is no limit on the number of replacements  utils.replace(\"oink oink oink\", \"k\", \"ky\", 2)",
+      "example": "string.replace(\"hello flogo\", \"flogo\", \"world\", -1) => hello world",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "old",
+          "type": "string"
+        },
+        {
+          "name": "new",
+          "type": "string"
+        },
+        {
+          "name": "count",
+          "type": "int"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "replaceAll",
+      "description": "replaceAll returns a copy of inputstring with all non-overlapping instances of old replaced by new.  utils.replaceAll(\"oink oink oink\", \"oink\", \"moo\")",
+      "example": "string.replaceAll(\"hello flogo\", \"flogo\", \"world\") => hello world",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "old",
+          "type": "string"
+        },
+        {
+          "name": "new",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "toLower",
+      "description": "toLower returns a copy of inputstring with all Unicode letters mapped to their lower case.  ",
+      "example": "string.toLower(\"Hello World\") => hello world",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "toUpper",
+      "description": "toUpper returns a copy of inputstring with all Unicode letters mapped to their upper case.",
+      "example": "string.toUpper(\"Hello World\") => HELLO WORLD",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "trim",
+      "description": "Trim returns a slice of inputstring with all leading and trailing Unicode code points contained in cutset removed. utils.trim(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "example": "string.trim(\" Hello World \", \" \") => Hello World",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "cutset",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "trimLeft",
+      "description": "trimLeft returns a slice of inputstring with all leading Unicode code points contained in cutset removed. utils.trimLeft(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "example": "string.trimLeft(\" Hello World \", \" \") => Hello World ",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "cutset",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "trimRight",
+      "description": "trimRight returns a slice of inputstring with all trailing Unicode code points contained in cutset removed. utils.trimRight(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "example": "string.trimRight(\" Hello World \", \" \") =>  Hello World",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "cutset",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "trimPrefix",
+      "description": "trimPrefix returns inputstring without the provided leading prefix string. If inputstring doesn't start with prefix, it is returned unchanged. utils.trimPrefix(\"¡¡¡Hello, Gophers!!!\", \"¡¡¡Hello\")",
+      "example": "string.trimPrefix(\"Hello World \", \"Hello\") =>  World",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "prefix",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "trimSuffix",
+      "description": "TrimSuffix returns inputstring without the provided trailing suffix string. If it doesn't end with suffix, it is returned unchanged. utils.trimSuffix(\"¡¡¡Hello, Gophers!!!\", \"Gophers!!!\")",
+      "example": "string.trimSuffix(\"Hello World\", \"World\") =>  Hello",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "suffix",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "split",
+      "description": "Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators. utils.split(\"a,b,c\", \",\")",
+      "example": "string.split(\"Hello,World\", \",\") =>  [Hello,World]",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "sep",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "array",
+        "valueType": "string"
+      }
+    },
+    {
+      "name": "startsWith",
+      "description": "Returns whether a string begins with another string.",
+      "example": "string.startsWith(\"Project Flogo\", \"Project\") => true",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "substr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "boolean"
+      }
+    },
+    {
+      "name": "substringAfter",
+      "description": "Returns the string that follows after the first occurrence of the second string, or a zero length string if the first string does not contain the second string.",
+      "example": "string.substringAfter(\"1999/04/01\", \"/\") => 04/01",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "afterstr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "substringBefore",
+      "description": "Returns the string that follows before the first occurrence of the second string, or a zero length string if the first string does not contain the second string.",
+      "example": "string.substringBefore(\"1999/04/01\", \"/\") => 1999",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
+        {
+          "name": "beforestr",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
     }
   ]
 }
