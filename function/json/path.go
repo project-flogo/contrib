@@ -29,7 +29,7 @@ func (fnPath) Eval(params ...interface{}) (interface{}, error) {
 	expression := params[0].(string)
 	//tmp fix to take $loop as $. for now
 	if strings.HasPrefix(strings.TrimSpace(expression), "$loop.") {
-		expression = strings.Replace(expression, "$loop", "$", 1)
+		expression = strings.Replace(expression, "$loop", "$", -1)
 	}
 	return jsonpath.JsonPathLookup(params[1], expression)
 }
