@@ -4,6 +4,7 @@ import (
 	"github.com/oliveagle/jsonpath"
 	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/expression/function"
+	"strings"
 )
 
 func init() {
@@ -26,5 +27,9 @@ func (fnPath) Sig() (paramTypes []data.Type, isVariadic bool) {
 // Eval executes the function
 func (fnPath) Eval(params ...interface{}) (interface{}, error) {
 	expression := params[0].(string)
+	//tmp fix to take $loop as $. for now
+	if strings.HasPrefix(strings.TrimSpace(expression), "$loop.") {
+		expression = strings.Replace(expression, "$loop", "$", 1)
+	}
 	return jsonpath.JsonPathLookup(params[1], expression)
 }

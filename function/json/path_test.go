@@ -56,3 +56,14 @@ func TestFnLen_Eval(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 22.99, v)
 }
+
+func TestFnLoop_Eval(t *testing.T) {
+	var data interface{}
+	err := json.Unmarshal([]byte(testJsonData), &data)
+	assert.Nil(t, err)
+
+	f := &fnPath{}
+	v, err := function.Eval(f, "$loop.store.book[?(@.price == 22.99)].price[0]", data)
+	assert.Nil(t, err)
+	assert.Equal(t, 22.99, v)
+}
