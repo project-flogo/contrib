@@ -8,7 +8,7 @@
   "functions": [
     {
       "name": "path",
-      "description": "apply a json path to an object",
+      "description": "Using JSONPath expression to get value from JSON data,  Please refer to https://github.com/oliveagle/jsonpath to get more details of the JSONPath expression format",
       "example": "json.path(\"$.key\",$activity[xxx].data) => value",
       "args": [
         {
