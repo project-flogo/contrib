@@ -5,8 +5,9 @@ import (
 )
 
 type Settings struct {
-	Ref    string `md:"ref"` //The ref to action
-	ResURI string `md:"resURI"`
+	Ref    string `md:"ref,required"` //The ref to action
+	UriType string `md:"uriType,required"`
+	ResURI string `md:"resURI,required"`
 }
 
 type Input struct {
