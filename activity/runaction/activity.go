@@ -9,6 +9,7 @@ import (
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support"
+	"github.com/project-flogo/core/runner"
 )
 
 func init() {
@@ -60,7 +61,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	var act action.Action
 	settingsURI := make(map[string]interface{})
 
-	settingsURI["catalystMlURI"] = a.settings.ResURI //a.settings.ResURI
+	settingsURI[settings.UriType] = a.settings.ResURI //a.settings.ResURI
 
 	act, err = factory.New(&action.Config{Settings: settingsURI})
 
@@ -69,31 +70,32 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return false, err
 	}
 	inputMap := make(map[string]interface{})
+	
 	_, isMap := input.Input.(map[string]interface{})
 	if !isMap {
 		inputMap["input"] = input.Input
 	}
+	
+	engineRunner := runner.NewDirect()
+	
+	var result map[string]interface{}
 
-	if syncAct, ok := act.(action.SyncAction); ok {
-		var result map[string]interface{}
-
-		if !isMap {
-			result, err = syncAct.Run(context.Background(), inputMap)
-		} else {
-			result, err = syncAct.Run(context.Background(), input.Input.(map[string]interface{}))
-		}
-
-		if err != nil {
-			ctx.Logger().Infof("Error in Running of Sync Action %v", err)
-			return true, fmt.Errorf("Error in Running Sync Action: %v", err)
-		}
-
-		out.Output = result
-
-		ctx.SetOutputObject(out)
-
-		return true, nil
+	if !isMap {
+		result, err = engineRunner.RunAction((context.Background(), act ,inputMap)
+	} else {
+		result, err = engineRunner.RunAction((context.Background(), act ,input.Input.(map[string]interface{}))
 	}
 
-	return true, errors.New("Not a Sync Action")
+	if err != nil {
+		ctx.Logger().Infof("Error in Running  Action %v", err)
+		return true, fmt.Errorf("Error in Running Action: %v", err)
+	}
+
+	out.Output = result
+
+	ctx.SetOutputObject(out)
+
+	return true, nil
+
+	
 }
