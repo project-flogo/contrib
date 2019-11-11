@@ -15,6 +15,14 @@
         {
           "name": "str",
           "type": "string"
+        },
+        {
+          "name": "str2",
+          "type": "string"
+        },
+        {
+          "name": "str3",
+          "type": "string"
         }
       ],
       "return": {
@@ -165,7 +173,7 @@
     },
     {
       "name": "matchRegEx",
-      "description": "Match input against regular expression   utils.matchRegEx(\"p([a-z]+)ch\", \"peach\")",
+      "description": "Match input against regular expression   string.matchRegEx(\"p([a-z]+)ch\", \"peach\")",
       "example": "string.matchRegEx(\"foo.*\", \"Tseafood\") => true",
       "args": [
         {
@@ -183,7 +191,7 @@
     },
     {
       "name": "replaceRegEx",
-      "description": "Replace data in a string based on a regular expression match   utils.replaceRegEx(\"p([a-z]+)ches\", \" I hate peaches !\", \"apples\")",
+      "description": "Replace data in a string based on a regular expression match   string.replaceRegEx(\"p([a-z]+)ches\", \" I hate peaches !\", \"apples\")",
       "example": "string.replaceRegEx(\"foo.*\", \"Tseafood\", \"People\") => TseaPeople",
       "args": [
         {
@@ -223,7 +231,7 @@
     },
     {
       "name": "count",
-      "description": "Count counts the number of non-overlapping instances of substring in inputstring. If substring is an empty string, Count returns 1 + the number of Unicode code points in inputstring. utils.count(\"cheese\", \"e\")",
+      "description": "Count counts the number of non-overlapping instances of substring in inputstring. If substring is an empty string, Count returns 1 + the number of Unicode code points in inputstring. string.count(\"cheese\", \"e\")",
       "example": "string.count(\"hello flogo\", \"o\") => 3",
       "args": [
         {
@@ -241,7 +249,7 @@
     },
     {
       "name": "index",
-      "description": "Index returns the index of the first instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.index(\"cheese\", \"e\")",
+      "description": "Index returns the index of the first instance of substring in inputstring, or -1 if substring is not present in inputstring. string.index(\"cheese\", \"e\")",
       "example": "string.index(\"hello flogo\", \"flogo\") => 6",
       "args": [
         {
@@ -259,7 +267,7 @@
     },
     {
       "name": "indexAny",
-      "description": "indexAny returns the index of the first instance of any Unicode code point from chars in inputstring, or -1 if no Unicode code point from chars is present in inputstring. utils.indexAny(\"chicken\", \"aeiouy\")",
+      "description": "indexAny returns the index of the first instance of any Unicode code point from chars in inputstring, or -1 if no Unicode code point from chars is present in inputstring. string.indexAny(\"chicken\", \"aeiouy\")",
       "example": "string.indexAny(\"hello flogo\", \"flogo\") => 2",
       "args": [
         {
@@ -277,7 +285,7 @@
     },
     {
       "name": "lastIndex",
-      "description": "LastIndex returns the index of the last instance of substring in inputstring, or -1 if substring is not present in inputstring. utils.lastIndex(\"go gopher\", \"go\")",
+      "description": "LastIndex returns the index of the last instance of substring in inputstring, or -1 if substring is not present in inputstring. string.lastIndex(\"go gopher\", \"go\")",
       "example": "string.lastIndex(\"hello flogo\", \"flogo\") => 6",
       "args": [
         {
@@ -295,7 +303,7 @@
     },
     {
       "name": "repeat",
-      "description": "Repeat returns a new string consisting of count copies of the string s. utils.repeat(\"na\", 3)",
+      "description": "Repeat returns a new string consisting of count copies of the string s. string.repeat(\"na\", 3)",
       "example": "string.repeat(\"hello flogo\", 2) => hello flogohello flogo",
       "args": [
         {
@@ -313,7 +321,7 @@
     },
     {
       "name": "replace",
-      "description": "Replace returns a copy of inputstring with the first count non-overlapping instances of old replaced by new.  If count < 0, there is no limit on the number of replacements  utils.replace(\"oink oink oink\", \"k\", \"ky\", 2)",
+      "description": "Replace returns a copy of inputstring with the first count non-overlapping instances of old replaced by new.  If count < 0, there is no limit on the number of replacements  string.replace(\"oink oink oink\", \"k\", \"ky\", 2)",
       "example": "string.replace(\"hello flogo\", \"flogo\", \"world\", -1) => hello world",
       "args": [
         {
@@ -339,7 +347,7 @@
     },
     {
       "name": "replaceAll",
-      "description": "replaceAll returns a copy of inputstring with all non-overlapping instances of old replaced by new.  utils.replaceAll(\"oink oink oink\", \"oink\", \"moo\")",
+      "description": "replaceAll returns a copy of inputstring with all non-overlapping instances of old replaced by new.  string.replaceAll(\"oink oink oink\", \"oink\", \"moo\")",
       "example": "string.replaceAll(\"hello flogo\", \"flogo\", \"world\") => hello world",
       "args": [
         {
@@ -389,7 +397,7 @@
     },
     {
       "name": "trim",
-      "description": "Trim returns a slice of inputstring with all leading and trailing Unicode code points contained in cutset removed. utils.trim(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "description": "Trim returns a slice of inputstring with all leading and trailing Unicode code points contained in cutset removed. string.trim(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
       "example": "string.trim(\" Hello World \", \" \") => Hello World",
       "varArgs": true,
       "args": [
@@ -409,7 +417,7 @@
     },
     {
       "name": "trimLeft",
-      "description": "trimLeft returns a slice of inputstring with all leading Unicode code points contained in cutset removed. utils.trimLeft(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "description": "trimLeft returns a slice of inputstring with all leading Unicode code points contained in cutset removed. string.trimLeft(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
       "example": "string.trimLeft(\" Hello World \", \" \") => Hello World ",
       "args": [
         {
@@ -427,7 +435,7 @@
     },
     {
       "name": "trimRight",
-      "description": "trimRight returns a slice of inputstring with all trailing Unicode code points contained in cutset removed. utils.trimRight(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
+      "description": "trimRight returns a slice of inputstring with all trailing Unicode code points contained in cutset removed. string.trimRight(\"¡¡¡Hello, Gophers!!!\", \"!¡\")",
       "example": "string.trimRight(\" Hello World \", \" \") =>  Hello World",
       "args": [
         {
@@ -445,7 +453,7 @@
     },
     {
       "name": "trimPrefix",
-      "description": "trimPrefix returns inputstring without the provided leading prefix string. If inputstring doesn't start with prefix, it is returned unchanged. utils.trimPrefix(\"¡¡¡Hello, Gophers!!!\", \"¡¡¡Hello\")",
+      "description": "trimPrefix returns inputstring without the provided leading prefix string. If inputstring doesn't start with prefix, it is returned unchanged. string.trimPrefix(\"¡¡¡Hello, Gophers!!!\", \"¡¡¡Hello\")",
       "example": "string.trimPrefix(\"Hello World \", \"Hello\") =>  World",
       "args": [
         {
@@ -463,7 +471,7 @@
     },
     {
       "name": "trimSuffix",
-      "description": "TrimSuffix returns inputstring without the provided trailing suffix string. If it doesn't end with suffix, it is returned unchanged. utils.trimSuffix(\"¡¡¡Hello, Gophers!!!\", \"Gophers!!!\")",
+      "description": "TrimSuffix returns inputstring without the provided trailing suffix string. If it doesn't end with suffix, it is returned unchanged. string.trimSuffix(\"¡¡¡Hello, Gophers!!!\", \"Gophers!!!\")",
       "example": "string.trimSuffix(\"Hello World\", \"World\") =>  Hello",
       "args": [
         {
@@ -481,7 +489,7 @@
     },
     {
       "name": "split",
-      "description": "Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators. utils.split(\"a,b,c\", \",\")",
+      "description": "Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators. string.split(\"a,b,c\", \",\")",
       "example": "string.split(\"Hello,World\", \",\") =>  [Hello,World]",
       "args": [
         {
