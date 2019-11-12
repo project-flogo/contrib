@@ -4,7 +4,7 @@
   "version": "0.9.0",
   "title": "Listen to Channel",
   "description": "Listens to Channel",
-  "homepage": "https://github.com/prject-flogo/contrib/tree/master/trigger/channel",
+  "homepage": "https://github.com/project-flogo/contrib/tree/master/trigger/channel",
   "settings": [
   ],
   "output": [
