@@ -3,8 +3,8 @@
 	"type": "flogo:activity",
 	"version": "0.9.0",
 	"title": "",
-  "description": "Flogo Activity for SQL",
-  "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/sqlquery",
+  	"description": "Flogo Activity for SQL",
+  	"homepage": "https://github.com/project-flogo/contrib/tree/master/activity/sqlquery",
 	"settings": [
 		{
 			"name": "dbType",
