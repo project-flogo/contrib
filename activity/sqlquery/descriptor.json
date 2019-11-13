@@ -15,8 +15,8 @@
 				"postres",
 				"sqlite",
 				"sqlserver"
-      ],
-      "description" : "Database Type",
+      		],
+      		"description" : "Database Type",
 			"required": false
 		},
 		{
@@ -27,14 +27,14 @@
 		},
 		{
 			"name": "dataSourceName",
-      "type": "string",
-      "description" : "Data Source Name",
+      		"type": "string",
+      		"description" : "Data Source Name",
 			"required": false
 		},
 		{
 			"name": "query",
-      "type": "string",
-      "description" : "SQL Query to execute",
+      		"type": "string",
+      		"description" : "SQL Query to execute",
 			"required": false
 		},
 		{
