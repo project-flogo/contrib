@@ -27,13 +27,13 @@
 		},
 		{
 			"name": "dataSourceName",
-			"type": "string",
-			"description" : "Data Source Name",
+      "type": "string",
+      "description" : "Data Source Name",
 			"required": false
 		},
 		{
 			"name": "query",
-			"type": "string",
+      "type": "string",
       "description" : "SQL Query to execute",
 			"required": false
 		},
