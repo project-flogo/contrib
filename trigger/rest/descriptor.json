@@ -1,7 +1,7 @@
 {
   "name": "flogo-rest",
   "type": "flogo:trigger",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "title": "Receive HTTP Message",
   "description": "Simple REST Trigger",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/trigger/rest",
@@ -65,6 +65,11 @@
       "name": "data",
       "type": "any",
       "description": "The data to reply with"
+    },
+    {
+      "name": "headers",
+      "type": "params",
+      "description": "The HTTP response headers"
     }
   ],
   "handler": {
