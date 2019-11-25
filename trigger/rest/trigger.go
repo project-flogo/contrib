@@ -268,6 +268,13 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 			return
 		}
 
+		// add response headers
+		if len(reply.Headers) > 0 {
+			for key, value := range reply.Headers {
+				w.Header().Add(key, value)
+			}
+		}
+
 		if reply.Data != nil {
 
 			if reply.Code == 0 {

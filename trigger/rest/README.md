@@ -38,10 +38,11 @@ flogo install github.com/project-flogo/contrib/trigger/rest
 | content     | any    | The content of the request
 
 ### Reply:
-| Name  | Type | Description
-|:---   | :--- | :---        
-| code  | int  | The http code to reply with
-| data  | any  | The data to reply with
+| Name  | Type   | Description
+|:---   | :---   | :---        
+| code  | int    | The http code to reply with
+| data  | any    | The data to reply with
+|headers| params | The HTTP response headers
 
 
 ## Example Configurations
