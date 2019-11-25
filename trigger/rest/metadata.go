@@ -22,12 +22,12 @@ type Output struct {
 	Headers     map[string]string `md:"headers"`     // The HTTP header parameters
 	Content     interface{}       `md:"content"`     // The content of the request
 	Method      string            `md:"method"`      // The HTTP method used for the request
-
 }
 
 type Reply struct {
-	Code int         `md:"code"` // The http code to reply with
-	Data interface{} `md:"data"` // The data to reply with
+	Code    int               `md:"code"`    // The http code to reply with
+	Data    interface{}       `md:"data"`    // The data to reply with
+	Headers map[string]string `md:"headers"` // The HTTP response headers
 }
 
 func (o *Output) ToMap() map[string]interface{} {
@@ -66,8 +66,9 @@ func (o *Output) FromMap(values map[string]interface{}) error {
 
 func (r *Reply) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"code": r.Code,
-		"data": r.Data,
+		"code":    r.Code,
+		"data":    r.Data,
+		"headers": r.Headers,
 	}
 }
 
@@ -79,6 +80,10 @@ func (r *Reply) FromMap(values map[string]interface{}) error {
 		return err
 	}
 	r.Data, _ = values["data"]
+	r.Headers, err = coerce.ToParams(values["headers"])
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
