@@ -216,6 +216,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		logger.Debug("Response status:", resp.Status)
 	}
 
+	respHeaders := make(map[string]string, len(resp.Header))
+
+	for key := range resp.Header {
+		respHeaders[key] = resp.Header.Get(key)
+	}
+
 	var result interface{}
 
 	// Check the HTTP Header Content-Type
@@ -246,7 +252,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		logger.Trace("Response body:", result)
 	}
 
-	output := &Output{Status: resp.StatusCode, Data: result}
+	output := &Output{Status: resp.StatusCode, Data: result, Headers:respHeaders}
 	err = ctx.SetOutputObject(output)
 	if err != nil {
 		return false, err

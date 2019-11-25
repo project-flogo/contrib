@@ -1,7 +1,7 @@
 {
   "name": "flogo-rest",
   "type": "flogo:activity",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "title": "REST Invoke",
   "description": "Invokes a REST Service",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/rest",
@@ -101,6 +101,11 @@
       "name": "data",
       "type": "any",
       "description" : "The HTTP response data"
+    },
+    {
+      "name": "headers",
+      "type": "any",
+      "description" : "The HTTP response headers"
     }
   ]
 }
