@@ -172,9 +172,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return false, err
 	}
 
-
-	req.Cookies()
-
 	if reqBody != nil {
 		req.Header.Set("Content-Type", contentType)
 	}
