@@ -5,16 +5,17 @@ import (
 )
 
 type Settings struct {
-	Method        string                 `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"` // The HTTP method to invoke
-	Uri           string                 `md:"uri,required"`                                       // The URI of the service to invoke
-	Headers       map[string]string      `md:"headers"`                                            // The HTTP header parameters
-	Proxy         string                 `md:"proxy"`                                              // The address of the proxy server to be use
-	Timeout       int                    `md:"timeout"`                                            // The request timeout in seconds
-	SkipSSLVerify bool                   `md:"skipSSLVerify"`                                      // Skip SSL validation
-	CertFile      string                 `md:"certFile"`                                           // Path to PEM encoded client certificate
-	KeyFile       string                 `md:"keyFile"`                                            // Path to PEM encoded client key
-	CAFile        string                 `md:"CAFile"`                                             // Path to PEM encoded root certificates file
-	SSLConfig     map[string]interface{} `md:"sslConfig"`                                          // SSL Configuration
+	Method         string                 `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"` // The HTTP method to invoke
+	Uri            string                 `md:"uri,required"`                                       // The URI of the service to invoke
+	Headers        map[string]string      `md:"headers"`                                            // The HTTP header parameters
+	Proxy          string                 `md:"proxy"`                                              // The address of the proxy server to be use
+	Timeout        int                    `md:"timeout"`                                            // The request timeout in seconds
+	SkipSSLVerify  bool                   `md:"skipSSLVerify"`                                      // Skip SSL validation
+	CertFile       string                 `md:"certFile"`                                           // Path to PEM encoded client certificate
+	KeyFile        string                 `md:"keyFile"`                                            // Path to PEM encoded client key
+	CAFile         string                 `md:"CAFile"`                                             // Path to PEM encoded root certificates file
+	SSLConfig      map[string]interface{} `md:"sslConfig"`                                          // SSL Configuration
+	ExtractCookies bool                   `md:"extractCookies"`                                     // Enable response cookie extraction
 }
 
 type Input struct {
@@ -57,6 +58,7 @@ type Output struct {
 	Status  int               `md:"status"`  // The HTTP status code
 	Data    interface{}       `md:"data"`    // The HTTP response data
 	Headers map[string]string `md:"headers"` // The HTTP response headers
+	Cookies []interface{}     `md:"cookies"` // The response cookies (from 'Set-Cookie')
 }
 
 func (o *Output) ToMap() map[string]interface{} {
@@ -64,6 +66,7 @@ func (o *Output) ToMap() map[string]interface{} {
 		"status":  o.Status,
 		"data":    o.Data,
 		"headers": o.Headers,
+		"cookies": o.Cookies,
 	}
 }
 
@@ -77,6 +80,11 @@ func (o *Output) FromMap(values map[string]interface{}) error {
 	o.Data, _ = values["data"]
 
 	o.Headers, err = coerce.ToParams(values["headers"])
+	if err != nil {
+		return err
+	}
+
+	o.Cookies, err = coerce.ToArray(values["cookies"])
 	if err != nil {
 		return err
 	}

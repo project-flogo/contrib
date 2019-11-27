@@ -4,19 +4,17 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"io"
-	"io/ioutil"
-	"mime/multipart"
-	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
-
 	"github.com/julienschmidt/httprouter"
 	"github.com/project-flogo/contrib/trigger/rest/cors"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -169,7 +167,7 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 		switch contentType {
 		case "application/x-www-form-urlencoded":
 			buf := new(bytes.Buffer)
-			_,err :=buf.ReadFrom(r.Body)
+			_, err := buf.ReadFrom(r.Body)
 			if err != nil {
 				rt.logger.Debugf("Error reading body: %s", err.Error())
 				http.Error(w, err.Error(), http.StatusBadRequest)
@@ -271,7 +269,16 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 		// add response headers
 		if len(reply.Headers) > 0 {
 			for key, value := range reply.Headers {
-				w.Header().Add(key, value)
+				w.Header().Set(key, value)
+			}
+		}
+
+		if len(reply.Cookies) > 0 {
+			err := addCookies(w, reply.Cookies)
+			if err != nil {
+				rt.logger.Debugf("Error handling request: %s", err.Error())
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
 			}
 		}
 
@@ -315,29 +322,4 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 			w.WriteHeader(http.StatusOK)
 		}
 	}
-}
-
-
-func getFileDetails(key string, header *multipart.FileHeader) (map[string]interface{}, error){
-	file, err := header.Open()
-	if err != nil {
-		return nil, err
-	}
-
-	defer file.Close()
-
-	buf := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buf, file); err != nil {
-		return nil, err
-	}
-
-	fileDetails := map[string]interface{}{
-		"key":      key,
-		"fileName": header.Filename,
-		"fileType": header.Header.Get("Content-Type"),
-		"size":     header.Size,
-		"file":     buf.Bytes(),
-	}
-
-	return fileDetails, nil
 }
