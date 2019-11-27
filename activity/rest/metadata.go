@@ -15,7 +15,6 @@ type Settings struct {
 	KeyFile        string                 `md:"keyFile"`                                            // Path to PEM encoded client key
 	CAFile         string                 `md:"CAFile"`                                             // Path to PEM encoded root certificates file
 	SSLConfig      map[string]interface{} `md:"sslConfig"`                                          // SSL Configuration
-	ExtractCookies bool                   `md:"extractCookies"`                                     // Enable response cookie extraction
 }
 
 type Input struct {
