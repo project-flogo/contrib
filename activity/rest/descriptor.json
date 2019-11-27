@@ -35,6 +35,11 @@
       "description" : "The request timeout in seconds"
     },
     {
+      "name": "extractCookies",
+      "type": "bool",
+      "description" : "Enable response cookie extraction"
+    },
+    {
       "name": "sslConfig",
       "type": "object",
       "description" : "Optional SSL Settings",
@@ -104,8 +109,13 @@
     },
     {
       "name": "headers",
-      "type": "any",
+      "type": "params",
       "description" : "The HTTP response headers"
+    },
+    {
+      "name": "cookies",
+      "type": "array",
+      "description" : "The response cookies (from 'Set-Cookie')"
     }
   ]
 }

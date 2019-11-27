@@ -28,6 +28,7 @@ type Reply struct {
 	Code    int               `md:"code"`    // The http code to reply with
 	Data    interface{}       `md:"data"`    // The data to reply with
 	Headers map[string]string `md:"headers"` // The HTTP response headers
+	Cookies []interface{}     `md:"cookies"` // "The response cookies, adds `Set-Cookie` headers"
 }
 
 func (o *Output) ToMap() map[string]interface{} {
@@ -69,6 +70,7 @@ func (r *Reply) ToMap() map[string]interface{} {
 		"code":    r.Code,
 		"data":    r.Data,
 		"headers": r.Headers,
+		"cookies": r.Cookies,
 	}
 }
 
@@ -80,7 +82,13 @@ func (r *Reply) FromMap(values map[string]interface{}) error {
 		return err
 	}
 	r.Data, _ = values["data"]
+
 	r.Headers, err = coerce.ToParams(values["headers"])
+	if err != nil {
+		return err
+	}
+
+	r.Cookies, err = coerce.ToArray(values["cookies"])
 	if err != nil {
 		return err
 	}
