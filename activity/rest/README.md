@@ -45,10 +45,11 @@ flogo install github.com/project-flogo/contrib/activity/rest
 | content     | any    | The message content to send. This is only used in POST, PUT, and PATCH
 
 ### Output:
-| Name   | Type | Description
-|:---    | :--- | :---     
-| status | int  | The HTTP status code
-| data   | any  | The HTTP response data
+| Name    | Type   | Description
+|:---     | :---   | :---     
+| status  | int    | The HTTP status code
+| data    | any    | The HTTP response data
+| headers | params | The HTTP response headers
 
 
 ## Examples

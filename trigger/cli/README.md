@@ -8,7 +8,7 @@ This trigger provides your flogo application the ability to run as a CLI app, th
 ## Installation
 
 ```bash
-flogo install github.com/project-flogo/cli
+flogo install github.com/project-flogo/trigger/cli
 ```
 
 ## Configuration

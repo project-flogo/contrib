@@ -17,6 +17,12 @@
         "type": "string",
         "required": true,
         "description" : "The reference to the resource URI, either can be res:// or file://"
+      },
+      {
+        "name": "uriType",
+        "type": "string",
+        "required": true,
+        "description" : "The type of resource URI. Eg flowURI or catalystmlURI"
       }
     ],
     "input":[

@@ -54,14 +54,16 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 }
 
 type Output struct {
-	Status int         `md:"status"` // The HTTP status code
-	Data   interface{} `md:"data"`   // The HTTP response data
+	Status  int               `md:"status"`  // The HTTP status code
+	Data    interface{}       `md:"data"`    // The HTTP response data
+	Headers map[string]string `md:"headers"` // The HTTP response headers
 }
 
 func (o *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"status": o.Status,
-		"data":   o.Data,
+		"status":  o.Status,
+		"data":    o.Data,
+		"headers": o.Headers,
 	}
 }
 
@@ -73,6 +75,11 @@ func (o *Output) FromMap(values map[string]interface{}) error {
 		return err
 	}
 	o.Data, _ = values["data"]
+
+	o.Headers, err = coerce.ToParams(values["headers"])
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
