@@ -22,6 +22,7 @@
         "name": "uriType",
         "type": "string",
         "required": true,
+        "allowed": [ "flowURI", "catalystMlURI" ],
         "description" : "The type of resource URI. Eg flowURI or catalystmlURI"
       }
     ],

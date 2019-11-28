@@ -5,9 +5,9 @@ import (
 )
 
 type Settings struct {
-	Ref    string `md:"ref,required"` //The ref to action
-	UriType string `md:"uriType,required"`
-	ResURI string `md:"resURI,required"`
+	Ref     string `md:"ref,required"` //The ref to action
+	UriType string `md:"uriType,required,allowed(flowURI,catalystMlURI)"`
+	ResURI  string `md:"resURI,required"`
 }
 
 type Input struct {
