@@ -64,13 +64,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		msg = fmt.Sprintf("'%s' - HostID [%s], HostName [%s], Activity [%s]", msg,
 			ctx.ActivityHost().ID(), ctx.ActivityHost().Name(), ctx.Name())
 	}
+
 	if input.UsePrint {
-
 		fmt.Println(msg)
-
-		return true, nil
+	} else {
+		ctx.Logger().Info(msg)
 	}
-	ctx.Logger().Info(msg)
 
 	return true, nil
 }

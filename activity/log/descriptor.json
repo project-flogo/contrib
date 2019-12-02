@@ -22,7 +22,7 @@
       "name": "usePrint",
       "type": "boolean",
       "value": false,
-      "description": "Use fmt Print instead of built in Logger"
+      "description": "Use Print to stdout instead of built-in logger"
     }
   ]
 }
