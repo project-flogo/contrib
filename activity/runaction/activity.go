@@ -54,16 +54,13 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return true, err
 	}
 
-	ref, _ := support.GetAliasRef("action", a.settings.Ref[1:])
+	ref, _ := support.GetAliasRef("action", a.settings.ActionRef[1:])
 
 	factory := action.GetFactory(ref)
 
 	var act action.Action
-	settingsURI := make(map[string]interface{})
 
-	settingsURI[a.settings.UriType] = a.settings.ResURI //a.settings.ResURI
-
-	act, err = factory.New(&action.Config{Settings: settingsURI})
+	act, err = factory.New(&action.Config{Settings: a.settings.ActionSettings})
 
 	if err != nil || act == nil {
 		ctx.Logger().Infof("Error in Inialtization of Sync Action %v", err)

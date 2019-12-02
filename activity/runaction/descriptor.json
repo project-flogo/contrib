@@ -7,23 +7,16 @@
     "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/sync-action",
     "settings":[
       {
-        "name": "ref",
+        "name": "actionRef",
         "type": "string",
         "required": true,
         "description" : "The ref to the syn-action being invoked"
       },
       {
-        "name": "resURI",
-        "type": "string",
+        "name": "actionSettings",
+        "type": "any",
         "required": true,
-        "description" : "The reference to the resource URI, either can be res:// or file://"
-      },
-      {
-        "name": "uriType",
-        "type": "string",
-        "required": true,
-        "allowed": [ "flowURI", "catalystMlURI" ],
-        "description" : "The type of resource URI. Eg flowURI or catalystmlURI"
+        "description" : "The settings map containing the settings to run action"
       }
     ],
     "input":[
