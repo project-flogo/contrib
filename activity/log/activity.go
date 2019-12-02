@@ -12,8 +12,9 @@ func init() {
 }
 
 type Input struct {
-	Message    string `md:"message"`     // The message to log
-	AddDetails bool   `md:"addDetails"`  // Append contextual execution information to the log message
+	Message    string `md:"message"`    // The message to log
+	AddDetails bool   `md:"addDetails"` // Append contextual execution information to the log message
+	UseStdOut  bool   `md:"stdOut"`
 }
 
 func (i *Input) ToMap() map[string]interface{} {
@@ -63,7 +64,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		msg = fmt.Sprintf("'%s' - HostID [%s], HostName [%s], Activity [%s]", msg,
 			ctx.ActivityHost().ID(), ctx.ActivityHost().Name(), ctx.Name())
 	}
+	if input.UseStdOut {
 
+		fmt.Println(msg)
+
+		return true, nil
+	}
 	ctx.Logger().Info(msg)
 
 	return true, nil
