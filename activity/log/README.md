@@ -20,6 +20,7 @@ flogo install github.com/project-flogo/contrib/activity/log
 |:---        | :---   | :---    
 | message    | string | The message to log
 | addDetails | bool   | Append contextual execution information to the log message
+| usePrint   | bool   | Use Print to stdout instead of the built-in Logger. The built-in logger may not be compatible with some cloud environments. 
 
 ## Examples
 The below example logs a message 'test message':
