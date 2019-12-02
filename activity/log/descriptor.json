@@ -17,6 +17,12 @@
       "type": "boolean",
       "value": false,
       "description": "Append contextual execution information to the log message"
+    },
+    {
+      "name": "stdOut",
+      "type": "boolean",
+      "value": false,
+      "description": "Use Standarad out instead of Logger"
     }
   ]
 }
