@@ -14,7 +14,7 @@
       },
       {
         "name": "actionSettings",
-        "type": "any",
+        "type": "object",
         "required": true,
         "description" : "The settings map containing the settings to run action"
       }
