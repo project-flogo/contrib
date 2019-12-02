@@ -24,9 +24,9 @@ flogo install github.com/project-flogo/contrib/activity/runaction
 
 
 ### Output:
-| Name      | Type   | Description
-|:---       | :---   | :---    
-| output    | object | The output of the action.
+| Name          | Type   | Description
+|:---           | :---   | :---    
+| output        | object | The output of the action.
 
 
 ## Examples
