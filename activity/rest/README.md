@@ -25,7 +25,6 @@ flogo install github.com/project-flogo/contrib/activity/rest
 | timeout       | int    | The request timeout in seconds
 | sslConfig     | object | SSL configuration
 
-
 #### *sslConfig* Object: 
 | Property      | Type   | Description
 |:---           | :---   | :---     
@@ -50,7 +49,7 @@ flogo install github.com/project-flogo/contrib/activity/rest
 | status  | int    | The HTTP status code
 | data    | any    | The HTTP response data
 | headers | params | The HTTP response headers
-
+| cookies | array  | The response cookies (from 'Set-Cookie')
 
 ## Examples
 ### Simple
