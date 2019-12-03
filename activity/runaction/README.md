@@ -10,15 +10,16 @@ flogo install github.com/project-flogo/contrib/activity/runaction
 
 ## Configuration
 
-### Setting:
+### Settings
 | Name          | Type   | Description
 |:---           | :---   | :---    
 | actionRef     | string | The 'ref' to the type of flogo action.
 | actionSettings| object | The settings object of the flogo action. 
 
-// Note : The Inputs should be inputs for the action
+### Input
+The inputs for this activity should be the inputs for the action you are running
 
-### Output:
+### Output
 | Name          | Type   | Description
 |:---           | :---   | :---    
 | output        | object | The output of the action.
