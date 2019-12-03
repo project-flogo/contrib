@@ -17,6 +17,12 @@
       "type": "boolean",
       "value": false,
       "description": "Append contextual execution information to the log message"
+    },
+    {
+      "name": "usePrint",
+      "type": "boolean",
+      "value": false,
+      "description": "Use Print to stdout instead of built-in logger"
     }
   ]
 }
