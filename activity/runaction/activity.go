@@ -2,8 +2,8 @@ package runaction
 
 import (
 	"context"
-
 	"fmt"
+	"os"
 
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/activity"
@@ -22,21 +22,40 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	if err != nil {
 		return nil, err
 	}
+	ref := s.ActionRef
 
-	act := &Activity{settings: s}
+	if ref[0] == '#' {
+		ref, _ = support.GetAliasRef("action", ref[1:])
+	}
 
-	//ctx.Logger().Debugf("flowURI: %+v", s.FlowURI)
+	factory := action.GetFactory(ref)
 
-	return act, nil
+	if factory == nil {
+		return nil, fmt.Errorf("unsupported action: %s", ref)
+	}
+
+	act, err := factory.New(&action.Config{Settings: s.ActionSettings})
+
+	if err != nil {
+		ctx.Logger().Infof("Error in Inialtization of Sync Action %v", err)
+		return nil, err
+	}
+
+	if act == nil {
+		return nil, fmt.Errorf("unable to create action %s", ref)
+	}
+
+	fmt.Println("Actionn..", act)
+	os.Exit(1)
+
+	return &Activity{settings: s, action: act}, nil
 }
 
 var activityMd = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
 
-// Activity is an Activity that is used to log a message to the console
-// inputs : {message, flowInfo}
-// outputs: none
 type Activity struct {
 	settings *Settings
+	action   action.Action
 }
 
 // Metadata returns the activity's metadata
@@ -47,45 +66,21 @@ func (a *Activity) Metadata() *activity.Metadata {
 // Eval implements api.Activity.Eval - Logs the Message
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
-	input := &Input{}
 	out := &Output{}
-	err = ctx.GetInputObject(input)
-	if err != nil {
-		return true, err
-	}
 
-	ref, _ := support.GetAliasRef("action", a.settings.ActionRef[1:])
-
-	factory := action.GetFactory(ref)
-
-	var act action.Action
-
-	act, err = factory.New(&action.Config{Settings: a.settings.ActionSettings})
-
-	if err != nil || act == nil {
-		ctx.Logger().Infof("Error in Inialtization of Sync Action %v", err)
-		return false, err
-	}
 	inputMap := make(map[string]interface{})
 
-	_, isMap := input.Input.(map[string]interface{})
-	if !isMap {
-		inputMap["input"] = input.Input
+	for key, _ := range a.action.IOMetadata().Input {
+		inputMap[key] = ctx.GetInput(key)
 	}
 
 	engineRunner := runner.NewDirect()
 
-	var result map[string]interface{}
-
-	if !isMap {
-		result, err = engineRunner.RunAction(context.Background(), act, inputMap)
-	} else {
-		result, err = engineRunner.RunAction(context.Background(), act, input.Input.(map[string]interface{}))
-	}
+	result, err := engineRunner.RunAction(context.Background(), a.action, inputMap)
 
 	if err != nil {
 		ctx.Logger().Infof("Error in Running  Action %v", err)
-		return true, fmt.Errorf("Error in Running Action: %v", err)
+		return true, err
 	}
 
 	out.Output = result
