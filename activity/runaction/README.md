@@ -41,11 +41,7 @@ The below example logs a message 'test message':
         "actionSettings": { "catalystMlURI" : "file://cml.json" }
     },
     "input": {
-        "input": {
-            "mapping": {
-                "dataIn": "=$.result"
-            }
-        }
+        "dataIn": "=$.result"
     }
 }          
 ```
