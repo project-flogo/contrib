@@ -104,8 +104,13 @@
     },
     {
       "name": "headers",
-      "type": "any",
+      "type": "params",
       "description" : "The HTTP response headers"
+    },
+    {
+      "name": "cookies",
+      "type": "array",
+      "description" : "The response cookies (from 'Set-Cookie')"
     }
   ]
 }

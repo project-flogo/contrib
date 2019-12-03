@@ -1,4 +1,3 @@
-
 # Run Action
 This activity allows you to run flogo actions.
 
@@ -20,8 +19,7 @@ flogo install github.com/project-flogo/contrib/activity/runaction
 ### Input:
 | Name          | Type   | Description
 |:---           | :---   | :---    
-
-
+// Note : The Inputs should be inputs for the action
 
 ### Output:
 | Name          | Type   | Description

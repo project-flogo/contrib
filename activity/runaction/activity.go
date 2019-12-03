@@ -36,7 +36,6 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	act, err := factory.New(&action.Config{Settings: s.ActionSettings})
 
 	if err != nil {
-		ctx.Logger().Infof("Error in Inialtization of Sync Action %v", err)
 		return nil, err
 	}
 
@@ -61,7 +60,6 @@ func (a *Activity) Metadata() *activity.Metadata {
 
 // Eval implements api.Activity.Eval - Logs the Message
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
-
 	out := &Output{}
 
 	inputMap := make(map[string]interface{})

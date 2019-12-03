@@ -14,13 +14,13 @@
       },
       {
         "name": "actionSettings",
-        "type": "object",
+        "type": "any",
         "required": true,
         "description" : "The settings map containing the settings to run action"
       }
     ],
     "input":[
-    
+      
     ],
     "output":[
       {
