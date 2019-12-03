@@ -20,7 +20,7 @@ flogo install github.com/project-flogo/contrib/activity/runaction
 ### Input:
 | Name          | Type   | Description
 |:---           | :---   | :---    
-| input         | any    | The input for the action to run. 
+
 
 
 ### Output:

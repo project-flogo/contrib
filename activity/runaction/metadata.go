@@ -10,7 +10,6 @@ type Settings struct {
 }
 
 type Input struct {
-	Input interface{} `md:"input"`
 }
 
 type Output struct {
@@ -18,14 +17,10 @@ type Output struct {
 }
 
 func (i *Input) ToMap() map[string]interface{} {
-	return map[string]interface{}{
-		"input": i.Input,
-	}
+	return nil
 }
 
 func (i *Input) FromMap(values map[string]interface{}) error {
-
-	i.Input = values["input"]
 
 	return nil
 }

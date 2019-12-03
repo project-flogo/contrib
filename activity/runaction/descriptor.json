@@ -20,11 +20,7 @@
       }
     ],
     "input":[
-      {
-        "name": "input",
-        "type": "any",
-        "description" : "The input to the action being called"
-      }
+    
     ],
     "output":[
       {
