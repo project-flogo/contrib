@@ -283,19 +283,17 @@ func mapToCookie(values map[string]interface{}) (cookie *http.Cookie, err error)
 			if err != nil {
 				return nil, err
 			}
-		case "samsite":
+		case "samesite":
 			if ss, err := coerce.ToInt(value); err == nil {
 				cookie.SameSite = http.SameSite(ss)
 			} else if ss, ok := value.(string); ok {
 				switch strings.ToLower(ss) {
-				case "":
-					cookie.SameSite = http.SameSiteDefaultMode
-				case "none":
-					cookie.SameSite = http.SameSiteNoneMode
 				case "lax":
 					cookie.SameSite = http.SameSiteLaxMode
 				case "strict":
 					cookie.SameSite = http.SameSiteStrictMode
+				default:
+					cookie.SameSite = http.SameSiteDefaultMode
 				}
 			}
 		}
