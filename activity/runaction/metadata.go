@@ -9,20 +9,8 @@ type Settings struct {
 	ActionSettings map[string]interface{} `md:"actionSettings,required"`
 }
 
-type Input struct {
-}
-
 type Output struct {
 	Output map[string]interface{} `md:"output"`
-}
-
-func (i *Input) ToMap() map[string]interface{} {
-	return nil
-}
-
-func (i *Input) FromMap(values map[string]interface{}) error {
-
-	return nil
 }
 
 func (o *Output) ToMap() map[string]interface{} {

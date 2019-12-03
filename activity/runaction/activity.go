@@ -46,7 +46,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	return &Activity{settings: s, action: act}, nil
 }
 
-var activityMd = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
+var activityMd = activity.ToMetadata(&Settings{}, &Output{})
 
 type Activity struct {
 	settings *Settings
