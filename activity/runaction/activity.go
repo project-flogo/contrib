@@ -2,8 +2,8 @@ package runaction
 
 import (
 	"context"
-  "fmt"
-  
+	"fmt"
+
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
@@ -46,7 +46,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	return &Activity{settings: s, action: act}, nil
 }
 
-var activityMd = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
+var activityMd = activity.ToMetadata(&Settings{}, &Output{})
 
 type Activity struct {
 	settings *Settings
@@ -60,7 +60,7 @@ func (a *Activity) Metadata() *activity.Metadata {
 
 // Eval implements api.Activity.Eval - Logs the Message
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
-  out := &Output{}
+	out := &Output{}
 
 	inputMap := make(map[string]interface{})
 
