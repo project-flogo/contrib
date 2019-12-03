@@ -3,7 +3,6 @@ package runaction
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/activity"
@@ -44,9 +43,6 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	if act == nil {
 		return nil, fmt.Errorf("unable to create action %s", ref)
 	}
-
-	fmt.Println("Actionn..", act)
-	os.Exit(1)
 
 	return &Activity{settings: s, action: act}, nil
 }
