@@ -168,7 +168,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	req, err := http.NewRequest(method, uri, reqBody)
-
 	if err != nil {
 		return false, err
 	}
@@ -177,11 +176,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		req.Header.Set("Content-Type", contentType)
 	}
 
-	headers := input.Headers
-
-	if len(headers) == 0 {
-		headers = a.settings.Headers
-	}
+	headers := a.getHeaders(input.Headers)
 
 	// Set headers
 	if len(headers) > 0 {
@@ -222,6 +217,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		respHeaders[key] = resp.Header.Get(key)
 	}
 
+	var cookies []interface{}
+
+	for _, cookie := range resp.Header["Set-Cookie"] {
+		cookies = append(cookies, cookie)
+	}
+
 	var result interface{}
 
 	// Check the HTTP Header Content-Type
@@ -252,7 +253,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		logger.Trace("Response body:", result)
 	}
 
-	output := &Output{Status: resp.StatusCode, Data: result, Headers:respHeaders}
+
+	output := &Output{Status: resp.StatusCode, Data: result, Headers:respHeaders, Cookies:cookies}
 	err = ctx.SetOutputObject(output)
 	if err != nil {
 		return false, err
@@ -263,6 +265,28 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Utils
+
+func (a *Activity) getHeaders(inputHeaders map[string]string) map[string]string {
+
+	if len(inputHeaders) == 0 {
+		return a.settings.Headers
+	}
+
+	if len(a.settings.Headers) == 0 {
+		return inputHeaders
+	}
+
+	headers := make(map[string]string)
+	for key, value := range a.settings.Headers {
+		headers[key] = value
+	}
+	for key, value := range inputHeaders {
+		headers[key] = value
+	}
+
+	return headers
+}
+
 
 //todo just make contentType a setting
 func getContentType(replyData interface{}) string {

@@ -2,12 +2,13 @@ package runaction
 
 import (
 	"context"
-	"errors"
+
 	"fmt"
 
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
+	"github.com/project-flogo/core/engine/runner"
 	"github.com/project-flogo/core/support"
 )
 
@@ -53,47 +54,44 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return true, err
 	}
 
-	ref, _ := support.GetAliasRef("action", a.settings.Ref[1:])
+	ref, _ := support.GetAliasRef("action", a.settings.ActionRef[1:])
 
 	factory := action.GetFactory(ref)
 
 	var act action.Action
-	settingsURI := make(map[string]interface{})
 
-	settingsURI["catalystMlURI"] = a.settings.ResURI //a.settings.ResURI
-
-	act, err = factory.New(&action.Config{Settings: settingsURI})
+	act, err = factory.New(&action.Config{Settings: a.settings.ActionSettings})
 
 	if err != nil || act == nil {
 		ctx.Logger().Infof("Error in Inialtization of Sync Action %v", err)
 		return false, err
 	}
 	inputMap := make(map[string]interface{})
+
 	_, isMap := input.Input.(map[string]interface{})
 	if !isMap {
 		inputMap["input"] = input.Input
 	}
 
-	if syncAct, ok := act.(action.SyncAction); ok {
-		var result map[string]interface{}
+	engineRunner := runner.NewDirect()
 
-		if !isMap {
-			result, err = syncAct.Run(context.Background(), inputMap)
-		} else {
-			result, err = syncAct.Run(context.Background(), input.Input.(map[string]interface{}))
-		}
+	var result map[string]interface{}
 
-		if err != nil {
-			ctx.Logger().Infof("Error in Running of Sync Action %v", err)
-			return true, fmt.Errorf("Error in Running Sync Action: %v", err)
-		}
-
-		out.Output = result
-
-		ctx.SetOutputObject(out)
-
-		return true, nil
+	if !isMap {
+		result, err = engineRunner.RunAction(context.Background(), act, inputMap)
+	} else {
+		result, err = engineRunner.RunAction(context.Background(), act, input.Input.(map[string]interface{}))
 	}
 
-	return true, errors.New("Not a Sync Action")
+	if err != nil {
+		ctx.Logger().Infof("Error in Running  Action %v", err)
+		return true, fmt.Errorf("Error in Running Action: %v", err)
+	}
+
+	out.Output = result
+
+	ctx.SetOutputObject(out)
+
+	return true, nil
+
 }

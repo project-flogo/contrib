@@ -1,36 +1,87 @@
 {
-  "name": "SQL Activity",
-  "type": "flogo:activity",
-  "version": "0.9.0",
-  "title": "SQL Database Activity",
-  "description": "SQL Database Activity",
-  "homepage": "https://github.com/project-flogo/contrib/sql",
-  "settings": [
-    {
-      "name": "dataSourceName",
-      "type": "string",
-      "required": true
-    },
-    {
-      "name": "query",
-      "type": "string",
-      "required": true
-    },
-    {
-      "name": "columnTypes",
-      "type": "params"
-    }
-  ],
-  "input":[
-    {
-      "name": "params",
-      "type": "object"
-    }
-  ],
-  "output": [
-    {
-      "name": "results",
-      "type": "array"
-    }
-  ]
+	"name": "sqlquery-activity",
+	"type": "flogo:activity",
+	"version": "0.9.0",
+	"title": "SQL Database Activity",
+  	"description": "Flogo Activity for SQL",
+  	"homepage": "https://github.com/project-flogo/contrib/tree/master/activity/sqlquery",
+	"settings": [
+		{
+			"name": "dbType",
+			"type": "string",
+			"allowed": [
+				"mysql",
+				"oracle",
+				"postres",
+				"sqlite",
+				"sqlserver"
+      		],
+      		"description" : "Database Type",
+			"required": false
+		},
+		{
+			"name": "driverName",
+			"type": "string",
+			"description" : "Driver Type",
+			"required": false
+		},
+		{
+			"name": "dataSourceName",
+      		"type": "string",
+      		"description" : "Data Source Name",
+			"required": false
+		},
+		{
+			"name": "query",
+      		"type": "string",
+      		"description" : "SQL Query to execute",
+			"required": false
+		},
+		{
+			"name": "maxOpenConnections",
+			"type": "int",
+			"description" : "Maximum Open Connections Allowed",
+			"required": false
+		},
+		{
+			"name": "maxIdleConnections",
+			"type": "int",
+			"description" : "Maximum Idle Connections Allowed",
+			"required": false
+		},
+		{
+			"name": "disablePrepared",
+			"type": "bool",
+			"description" : "Disabel ",
+			"required": false
+		},
+		{
+			"name": "labeledResults",
+			"type": "bool",
+			"description" : "Label Results",
+			"required": false
+		}
+	],
+	"input": [
+		{
+			"name": "params",
+			"type": "any",
+			"description" : "Parameters for query.",
+			"required": false
+		}
+	],
+	"output": [
+		{
+			"name": "columnNames",
+			"type": "any",
+			"description" : "Column Names ",
+			"required": false
+		},
+		{
+			"name": "results",
+			"type": "any",
+			"description" : "Result of SQL Query.",
+			"required": false
+		}
+	]
 }

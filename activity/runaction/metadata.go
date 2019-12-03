@@ -5,8 +5,8 @@ import (
 )
 
 type Settings struct {
-	Ref    string `md:"ref"` //The ref to action
-	ResURI string `md:"resURI"`
+	ActionRef      string                 `md:"actionRef,required"` //The ref to action
+	ActionSettings map[string]interface{} `md:"actionSettings,required"`
 }
 
 type Input struct {

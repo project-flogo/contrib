@@ -1,0 +1,94 @@
+{
+  "name": "http",
+  "type": "flogo:function",
+  "version": "0.9.0",
+  "title": "HTTP Functions",
+  "description": "HTTP Functions",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/http",
+  "functions": [
+    {
+      "name": "reqCookieToParams",
+      "description": "Converts the 'Cookie' request header value string to Params object.",
+      "example": "http.reqCookieToParams($.headers[\"Cookie\"]) => { \"cookie1\":\"value1\", \"cookie2\":\"value2\" }",
+      "args": [
+        {
+          "name": "cookies",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "params"
+      }
+    },
+    {
+      "name": "reqCookieFromParams",
+      "description": "Converts a Params object to a string suitable for setting 'Cookie' request header value.",
+      "example": "http.reqCookieFromParams($flow.myCookies) => \"cookie1=value1;cookie2=value2\"",
+      "args": [
+        {
+          "name": "cookies",
+          "type": "params"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "resCookieToObject",
+      "description": "Converts a cookie from a 'Set-Cookie' response header value to an object.",
+      "example": "http.resCookieToObject($activity[rest].cookies[0]) => { \"Name\":\"cookie1\", \"Value\":\"value1\", \"Secure\":true }",
+      "args": [
+        {
+          "name": "cookie",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "resCookieFromObject",
+      "description": "Converts an Object to a string suitable for setting 'Set-Cookie' response header value.",
+      "example": "http.resCookieFromObject($flow.myCookie) => \"cookie1=value1;Secure\" }",
+      "args": [
+        {
+          "name": "cookie",
+          "type": "any"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "resCookiesToObjectMap",
+      "description": "Converts an array of response cookies to a map of cookie objects.",
+      "example": "http.resCookiesToObjectMap($activity[rest].cookies) => { \"cookie1\":{ \"Name\":\"cookie1\", \"Value\":\"value1\", \"Secure\":true }}",
+      "args": [
+        {
+          "name": "cookies",
+          "type": "array"
+        }
+      ],
+      "return": {
+        "type": "map"
+      }
+    },
+    {
+      "name": "resCookiesFromObjectMap",
+      "description": "Converts a map of cookie objects to an array of cookie strings suitable for setting 'Set-Cookie' response header values.",
+      "example": "http.resCookiesFromObjectMap($flow.myCookies) => [\"cookie1=value1;Secure\"] }",
+      "args": [
+        {
+          "name": "cookies",
+          "type": "map"
+        }
+      ],
+      "return": {
+        "type": "array"
+      }
+    }
+  ]
+}
