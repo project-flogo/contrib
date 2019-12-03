@@ -37,16 +37,12 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	act, err := factory.New(&action.Config{Settings: s.ActionSettings})
 
 	if err != nil {
-		ctx.Logger().Infof("Error in Inialtization of Sync Action %v", err)
 		return nil, err
 	}
 
 	if act == nil {
 		return nil, fmt.Errorf("unable to create action %s", ref)
 	}
-
-	fmt.Println("Actionn..", act)
-	os.Exit(1)
 
 	return &Activity{settings: s, action: act}, nil
 }
