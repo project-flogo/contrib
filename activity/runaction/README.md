@@ -1,4 +1,4 @@
-# Run Action
+# RunAction
 This activity allows you to run flogo actions.
 
 ## Installation
