@@ -2,6 +2,8 @@ package runaction
 
 import (
 	"context"
+	"fmt"
+	"os"
 
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/activity"
@@ -20,17 +22,31 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	if err != nil {
 		return nil, err
 	}
+	ref := s.ActionRef
 
-	ref, _ := support.GetAliasRef("action", s.ActionRef[1:])
+	if ref[0] == '#' {
+		ref, _ = support.GetAliasRef("action", ref[1:])
+	}
 
 	factory := action.GetFactory(ref)
 
+	if factory == nil {
+		return nil, fmt.Errorf("unsupported action: %s", ref)
+	}
+
 	act, err := factory.New(&action.Config{Settings: s.ActionSettings})
 
-	if err != nil || act == nil {
+	if err != nil {
 		ctx.Logger().Infof("Error in Inialtization of Sync Action %v", err)
 		return nil, err
 	}
+
+	if act == nil {
+		return nil, fmt.Errorf("unable to create action %s", ref)
+	}
+
+	fmt.Println("Actionn..", act)
+	os.Exit(1)
 
 	return &Activity{settings: s, action: act}, nil
 }
