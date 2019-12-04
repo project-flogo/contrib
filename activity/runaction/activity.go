@@ -6,6 +6,7 @@ import (
 
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/engine/runner"
 	"github.com/project-flogo/core/support"
@@ -15,12 +16,16 @@ func init() {
 	_ = activity.Register(&Activity{}, New)
 }
 
+var activityMd = activity.ToMetadata(&Settings{}, &Output{})
+var actionRunner = runner.NewDirect()
+
 func New(ctx activity.InitContext) (activity.Activity, error) {
 	s := &Settings{}
 	err := metadata.MapToStruct(ctx.Settings(), s, true)
 	if err != nil {
 		return nil, err
 	}
+
 	ref := s.ActionRef
 
 	if ref[0] == '#' {
@@ -28,13 +33,11 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	}
 
 	factory := action.GetFactory(ref)
-
 	if factory == nil {
 		return nil, fmt.Errorf("unsupported action: %s", ref)
 	}
 
 	act, err := factory.New(&action.Config{Settings: s.ActionSettings})
-
 	if err != nil {
 		return nil, err
 	}
@@ -43,14 +46,25 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, fmt.Errorf("unable to create action %s", ref)
 	}
 
-	return &Activity{settings: s, action: act}, nil
+	md := act.IOMetadata()
+
+	if md == nil && act.Metadata() != nil {
+		md = act.Metadata().IOMetadata
+	}
+
+	var mdInput map[string]data.TypedValue
+
+	if md != nil {
+		mdInput = md.Input
+	}
+
+	return &Activity{settings: s, actionToRun: act, mdInput: mdInput}, nil
 }
 
-var activityMd = activity.ToMetadata(&Settings{}, &Output{})
-
 type Activity struct {
-	settings *Settings
-	action   action.Action
+	settings    *Settings
+	actionToRun action.Action
+	mdInput     map[string]data.TypedValue
 }
 
 // Metadata returns the activity's metadata
@@ -60,27 +74,25 @@ func (a *Activity) Metadata() *activity.Metadata {
 
 // Eval implements api.Activity.Eval - Logs the Message
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
-	out := &Output{}
 
 	inputMap := make(map[string]interface{})
 
-	for key, _ := range a.action.IOMetadata().Input {
+	for key, _ := range a.mdInput {
 		inputMap[key] = ctx.GetInput(key)
 	}
 
-	engineRunner := runner.NewDirect()
-
-	result, err := engineRunner.RunAction(context.Background(), a.action, inputMap)
-
+	result, err := actionRunner.RunAction(context.Background(), a.actionToRun, inputMap)
 	if err != nil {
-		ctx.Logger().Infof("Error in Running  Action %v", err)
 		return true, err
 	}
 
+	out := &Output{}
 	out.Output = result
 
-	ctx.SetOutputObject(out)
+	err = ctx.SetOutputObject(out)
+	if err != nil {
+		return true, err
+	}
 
 	return true, nil
-
 }
