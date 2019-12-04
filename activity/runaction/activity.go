@@ -65,7 +65,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	md := a.actionToRun.IOMetadata()
 
-	if md == nil {
+	if md == nil && a.actionToRun.Metadata() != nil {
 		md = a.actionToRun.Metadata().IOMetadata
 	}
 
