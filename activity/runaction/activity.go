@@ -3,10 +3,10 @@ package runaction
 import (
 	"context"
 	"fmt"
-	"github.com/project-flogo/core/data"
 
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/engine/runner"
 	"github.com/project-flogo/core/support"
@@ -58,13 +58,13 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		mdInput = md.Input
 	}
 
-	return &Activity{settings: s, actionToRun: act, mdInput:mdInput}, nil
+	return &Activity{settings: s, actionToRun: act, mdInput: mdInput}, nil
 }
 
 type Activity struct {
 	settings    *Settings
 	actionToRun action.Action
-	mdInput map[string]data.TypedValue
+	mdInput     map[string]data.TypedValue
 }
 
 // Metadata returns the activity's metadata
