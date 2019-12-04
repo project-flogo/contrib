@@ -3,6 +3,7 @@ package runaction
 import (
 	"context"
 	"fmt"
+	"github.com/project-flogo/core/data"
 
 	"github.com/project-flogo/core/action"
 	"github.com/project-flogo/core/activity"
@@ -45,12 +46,25 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, fmt.Errorf("unable to create action %s", ref)
 	}
 
-	return &Activity{settings: s, actionToRun: act}, nil
+	md := act.IOMetadata()
+
+	if md == nil && act.Metadata() != nil {
+		md = act.Metadata().IOMetadata
+	}
+
+	var mdInput map[string]data.TypedValue
+
+	if md != nil {
+		mdInput = md.Input
+	}
+
+	return &Activity{settings: s, actionToRun: act, mdInput:mdInput}, nil
 }
 
 type Activity struct {
 	settings    *Settings
 	actionToRun action.Action
+	mdInput map[string]data.TypedValue
 }
 
 // Metadata returns the activity's metadata
@@ -63,16 +77,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	inputMap := make(map[string]interface{})
 
-	md := a.actionToRun.IOMetadata()
-
-	if md == nil && a.actionToRun.Metadata() != nil {
-		md = a.actionToRun.Metadata().IOMetadata
-	}
-
-	if md != nil && md.Input != nil {
-		for key, _ := range md.Input {
-			inputMap[key] = ctx.GetInput(key)
-		}
+	for key, _ := range a.mdInput {
+		inputMap[key] = ctx.GetInput(key)
 	}
 
 	result, err := actionRunner.RunAction(context.Background(), a.actionToRun, inputMap)
