@@ -137,9 +137,11 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-		rt.logger.Debugf("Received request for id '%s'", rt.id)
+		logger := rt.logger
 
-		c := cors.New(CorsPrefix, rt.logger)
+		logger.Debugf("Received request for id '%s'", rt.id)
+
+		c := cors.New(CorsPrefix, logger)
 		c.WriteCorsActualRequestHeaders(w)
 
 		out := &Output{}
@@ -169,7 +171,7 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 			buf := new(bytes.Buffer)
 			_, err := buf.ReadFrom(r.Body)
 			if err != nil {
-				rt.logger.Debugf("Error reading body: %s", err.Error())
+				logger.Debugf("Error reading body: %s", err.Error())
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -177,7 +179,7 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 			s := buf.String()
 			m, err := url.ParseQuery(s)
 			if err != nil {
-				rt.logger.Debugf("Error parsing query string: %s", err.Error())
+				logger.Debugf("Error parsing query string: %s", err.Error())
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -201,7 +203,7 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 					// empty body
 					//todo what should handler say if content is expected?
 				default:
-					rt.logger.Debugf("Error parsing json body: %s", err.Error())
+					logger.Debugf("Error parsing json body: %s", err.Error())
 					http.Error(w, err.Error(), http.StatusBadRequest)
 					return
 				}
@@ -212,7 +214,7 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 				// need to still extract the body, only handling the multipart data for now...
 
 				if err := r.ParseMultipartForm(32); err != nil {
-					rt.logger.Debugf("Error parsing multipart form: %s", err.Error())
+					logger.Debugf("Error parsing multipart form: %s", err.Error())
 					http.Error(w, err.Error(), http.StatusBadRequest)
 					return
 				}
@@ -224,7 +226,7 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 
 						fileDetails, err := getFileDetails(key, header)
 						if err != nil {
-							rt.logger.Debugf("Error getting attached file details: %s", err.Error())
+							logger.Debugf("Error getting attached file details: %s", err.Error())
 							http.Error(w, err.Error(), http.StatusBadRequest)
 							return
 						}
@@ -242,7 +244,7 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 			} else {
 				b, err := ioutil.ReadAll(r.Body)
 				if err != nil {
-					rt.logger.Debugf("Error reading body: %s", err.Error())
+					logger.Debugf("Error reading body: %s", err.Error())
 					http.Error(w, err.Error(), http.StatusBadRequest)
 					return
 				}
@@ -253,39 +255,56 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 
 		results, err := handler.Handle(context.Background(), out)
 		if err != nil {
-			rt.logger.Debugf("Error handling request: %s", err.Error())
+			logger.Debugf("Error handling request: %s", err.Error())
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
+		}
+
+		if logger.TraceEnabled() {
+			logger.Tracef("Action Results: %#v", results)
 		}
 
 		reply := &Reply{}
 		err = reply.FromMap(results)
 		if err != nil {
-			rt.logger.Debugf("Error mapping results: %s", err.Error())
+			logger.Debugf("Error mapping results: %s", err.Error())
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// add response headers
 		if len(reply.Headers) > 0 {
+			if logger.TraceEnabled() {
+				logger.Tracef("Adding Headers")
+			}
+
 			for key, value := range reply.Headers {
 				w.Header().Set(key, value)
 			}
 		}
 
 		if len(reply.Cookies) > 0 {
+			if logger.TraceEnabled() {
+				logger.Tracef("Adding Cookies")
+			}
+
 			err := addCookies(w, reply.Cookies)
 			if err != nil {
-				rt.logger.Debugf("Error handling request: %s", err.Error())
+				logger.Debugf("Error handling request: %s", err.Error())
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 		}
 
+		if reply.Code == 0 {
+			reply.Code = http.StatusOK
+		}
+
 		if reply.Data != nil {
 
-			if reply.Code == 0 {
-				reply.Code = 200
+			if logger.DebugEnabled() {
+				logger.Debugf("The reply http code is: %d", reply.Code)
+				logger.Debugf("The http reply data is: %#v: ", reply.Data)
 			}
 
 			switch t := reply.Data.(type) {
@@ -303,23 +322,20 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 				w.WriteHeader(reply.Code)
 				_, err = w.Write([]byte(t))
 				if err != nil {
-					rt.logger.Debugf("Error writing body: %s", err.Error())
+					logger.Debugf("Error writing body: %s", err.Error())
 				}
 				return
 			default:
 				w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 				w.WriteHeader(reply.Code)
 				if err := json.NewEncoder(w).Encode(reply.Data); err != nil {
-					rt.logger.Debugf("Error encoding json reply: %s", err.Error())
+					logger.Debugf("Error encoding json reply: %s", err.Error())
 				}
 				return
 			}
 		}
 
-		if reply.Code > 0 {
-			w.WriteHeader(reply.Code)
-		} else {
-			w.WriteHeader(http.StatusOK)
-		}
+		logger.Debugf("The reply http code is: %d", reply.Code)
+		w.WriteHeader(reply.Code)
 	}
 }
