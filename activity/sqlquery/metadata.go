@@ -3,7 +3,7 @@ package sqlquery
 import "github.com/project-flogo/core/data/coerce"
 
 type Settings struct {
-	DbType          string `md:"dbType,allowed(mysql,oracle,postres,sqlite,sqlserver), required"`
+	DbType          string `md:"dbType,allowed(mysql,oracle,postgres,sqlite,sqlserver), required"`
 	DriverName      string `md:"driverName,required"`
 	DataSourceName  string `md:"dataSourceName,required"`
 	Query           string `md:"query,required"`
