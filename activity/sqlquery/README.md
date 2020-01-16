@@ -18,7 +18,7 @@ flogo install github.com/project-flogo/activity/sqlquery
 ### Settings:
 | Name               | Type   | Description
 |:---                | :---   | :---    
-| dbType             | string | The type of database (mysql, oracle, postres, sqlite, sqlserver) - **REQUIRED**         
+| dbType             | string | The type of database (mysql, oracle, postgres, sqlite, sqlserver) - **REQUIRED**         
 | driverName         | string | The database driver name - **REQUIRED**
 | dataSourceName     | string | The database DataSource name - **REQUIRED**
 | maxOpenConnections | int    | Max open connections (default is unlimited)
