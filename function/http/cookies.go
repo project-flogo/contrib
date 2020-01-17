@@ -18,6 +18,7 @@ func init() {
 	_ = function.Register(&fnResCookieFromObject{})
 	_ = function.Register(&fnResCookiesToObjectMap{})
 	_ = function.Register(&fnResCookiesFromObjectMap{})
+	_ = function.Register(&fnRewriteCookies{})
 }
 
 type fnReqCookiesToParams struct {
@@ -301,4 +302,70 @@ func mapToCookie(values map[string]interface{}) (cookie *http.Cookie, err error)
 	}
 
 	return cookie, nil
+}
+
+type fnRewriteCookies struct {
+}
+
+func (fnRewriteCookies) Name() string {
+	return "rewriteCookies"
+}
+
+func (fnRewriteCookies) Sig() (paramTypes []data.Type, isVariadic bool) {
+	return []data.Type{data.TypeArray, data.TypeString, data.TypeString, data.TypeString}, false
+}
+
+func (fnRewriteCookies) Eval(params ...interface{}) (interface{}, error) {
+	
+	// get the input params
+	
+	cookies, err := coerce.ToArray(params[0])
+	if err != nil {
+		return nil, fmt.Errorf("Error in cookies array input")
+	}
+	cookieName, err := coerce.ToString(params[1])
+	if err != nil {
+		return nil, fmt.Errorf("Error in cookieName input")
+	}
+	domain, err := coerce.ToString(params[2])
+	if err != nil {
+		return nil, fmt.Errorf("Error in domain input ")
+	}
+	path, err := coerce.ToString(params[3])
+	if err != nil {
+		return nil, fmt.Errorf("Error in path input ")
+	}
+
+	/*
+	fmt.Printf("cookies: %v\n", cookies)
+	fmt.Printf("cookieName: %v\n", cookieName)
+	fmt.Printf("domain: %v\n", domain)
+	fmt.Printf("path: %v\n", path)
+*/
+
+	// process each cookie replacing the path and domain as per parameters
+	for index, cookie := range cookies {
+		cookiestr := cookie.(string)
+		if strings.HasPrefix(strings.ToUpper(cookiestr), strings.ToUpper((cookieName + "="))) {
+			cookie := strings.Split(cookiestr, ";")	
+			
+			// replace domain and path
+			for idx, part := range cookie {
+				if idx == 0 { 
+					// dont apply this to the first part of the cookie as this is the name and cookie content
+					continue
+				}
+				if (strings.HasPrefix(strings.ToUpper(part), strings.ToUpper(" Domain=")) || strings.HasPrefix(strings.ToUpper(part), strings.ToUpper("Domain="))) {
+					cookie[idx] = " Domain=" + domain
+				}
+				if (strings.HasPrefix(strings.ToUpper(part), strings.ToUpper(" Path=")) || strings.HasPrefix(strings.ToUpper(part), strings.ToUpper("Path="))) {
+					cookie[idx] = " Path=" + path
+				}
+			}
+			rewrittenCookie := strings.Join(cookie, ";")
+			cookies[index] = rewrittenCookie
+			break
+		}
+	}	
+	return cookies, nil
 }
