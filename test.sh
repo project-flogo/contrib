@@ -1,5 +1,6 @@
 #  List all the components in activity, trigger and function
-#  Append './' and run tests.
+#  Run tests.
+
 val=true
 for i in $(ls -d */*/ | awk '{dir=$0 ;pre="/";home=ENVIRON["PWD"] ; ldir= home pre dir; print ldir }')
 do 

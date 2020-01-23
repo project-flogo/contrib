@@ -1,7 +1,6 @@
 package string
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,7 +16,6 @@ func TestStaticFunc_Split(t *testing.T) {
 	assert.Equal(t, "Integrator", final[2])
 
 	final2, _ := sp.Eval("TIBCO。网路。Integrator", "。")
-	fmt.Println(final2)
 	final = final2.([]string)
 
 	assert.Equal(t, "TIBCO", final[0])

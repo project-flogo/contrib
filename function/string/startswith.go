@@ -2,10 +2,11 @@ package string
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/support/log"
-	"strings"
 
 	"github.com/project-flogo/core/data/expression/function"
 )
@@ -41,7 +42,7 @@ func (s *StartsWith) Eval(params ...interface{}) (interface{}, error) {
 		return nil, fmt.Errorf("string.startsWith function second parameter [%+v] must be string", params[1])
 	}
 
-	log.RootLogger().Infof("Reports whether \"%s\" begins with \"%s\"", str, substr)
+	log.RootLogger().Debugf("Reports whether \"%s\" begins with \"%s\"", str, substr)
 
 	return strings.HasPrefix(str, substr), nil
 }

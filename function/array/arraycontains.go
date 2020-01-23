@@ -1,8 +1,9 @@
 package array
 
 import (
-	"github.com/project-flogo/core/support/log"
 	"reflect"
+
+	"github.com/project-flogo/core/support/log"
 
 	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/expression/function"
@@ -26,7 +27,7 @@ func (Contains) Sig() (paramTypes []data.Type, isVariadic bool) {
 func (s *Contains) Eval(params ...interface{}) (interface{}, error) {
 	array := params[0]
 	item := params[1]
-	log.RootLogger().Infof("Looking for \"%s\" in \"%s\"", item, array)
+	log.RootLogger().Debugf("Looking for \"%s\" in \"%s\"", item, array)
 	if array == nil || item == nil {
 		return false, nil
 	}

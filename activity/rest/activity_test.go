@@ -1,17 +1,15 @@
 package rest
 
 import (
-	"encoding/json"
-	"fmt"
+	"net/http"
+	"testing"
+
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/mapper"
 	"github.com/project-flogo/core/data/resolve"
 	"github.com/project-flogo/core/support/test"
 	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
-
 
 func TestRegister(t *testing.T) {
 
@@ -64,14 +62,8 @@ func TestSimplePost(t *testing.T) {
 
 	//eval
 	act.Eval(tc)
-	val := tc.GetOutput("result")
+	assert.NotNil(t, tc.GetOutput("data"))
 
-	fmt.Printf("result: %v\n", val)
-
-	res := val.(map[string]interface{})
-
-	petID = res["id"].(json.Number).String()
-	fmt.Println("petID:", petID)
 }
 
 func TestSimpleGet(t *testing.T) {
@@ -88,8 +80,8 @@ func TestSimpleGet(t *testing.T) {
 	//eval
 	act.Eval(tc)
 
-	val := tc.GetOutput("result")
-	fmt.Printf("result: %v\n", val)
+	assert.NotNil(t, tc.GetOutput("data"))
+
 }
 
 func TestSimpleGetWithHeaders(t *testing.T) {
@@ -112,7 +104,7 @@ func TestSimpleGetWithHeaders(t *testing.T) {
 
 	output := &Output{}
 	tc.GetOutputObject(output)
-	assert.Equal(t, http.StatusNotFound, output.Status)
+	assert.Equal(t, http.StatusOK, output.Status)
 
 }
 
@@ -135,8 +127,8 @@ func TestParamGet(t *testing.T) {
 	//eval
 	act.Eval(tc)
 
-	val := tc.GetOutput("result")
-	fmt.Printf("result: %v\n", val)
+	assert.NotNil(t, tc.GetOutput("data"))
+
 }
 
 //func TestSimpleGetWithProxy(t *testing.T) {
@@ -179,8 +171,7 @@ func TestSimpleGetQP(t *testing.T) {
 	//eval
 	act.Eval(tc)
 
-	val := tc.GetOutput("result")
-	fmt.Printf("result: %v\n", val)
+	assert.NotNil(t, tc.GetOutput("data"))
 }
 
 func TestBuildURI(t *testing.T) {
@@ -193,7 +184,7 @@ func TestBuildURI(t *testing.T) {
 
 	newURI := BuildURI(uri, params)
 
-	fmt.Println(newURI)
+	assert.NotNil(t, newURI)
 }
 
 func TestBuildURI2(t *testing.T) {
@@ -206,8 +197,7 @@ func TestBuildURI2(t *testing.T) {
 	}
 
 	newURI := BuildURI(uri, params)
-
-	fmt.Println(newURI)
+	assert.NotNil(t, newURI)
 }
 
 func TestBuildURI3(t *testing.T) {
@@ -220,7 +210,7 @@ func TestBuildURI3(t *testing.T) {
 
 	newURI := BuildURI(uri, params)
 
-	fmt.Println(newURI)
+	assert.NotNil(t, newURI)
 }
 
 func TestBuildURI4(t *testing.T) {
@@ -234,5 +224,5 @@ func TestBuildURI4(t *testing.T) {
 
 	newURI := BuildURI(uri, params)
 
-	fmt.Println(newURI)
+	assert.NotNil(t, newURI)
 }

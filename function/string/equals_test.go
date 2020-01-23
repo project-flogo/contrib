@@ -1,7 +1,6 @@
 package string
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/project-flogo/core/data/expression/function"
@@ -23,11 +22,9 @@ func TestFnEquals_Eval(t *testing.T) {
 
 func TestStaticFunc_Eq(t *testing.T) {
 	final1, _ := eq.Eval("TIBCO Web", "TIBCO")
-	fmt.Println(final1)
 	assert.Equal(t, false, final1)
 
 	final2, _ := eq.Eval("123T", "123t")
-	fmt.Println(final2)
 	assert.Equal(t, false, final2)
 
 }
