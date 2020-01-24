@@ -2,22 +2,19 @@
 #  Run tests.
 setup_kafka () {
     
-    cd $1/activity/kafka
     docker-compose up -d
-    cd $1
+    
 }
 destroy_kafka () {
-   
-    cd $1/activity/kafka
+   cd $1
     docker-compose stop
-    cd $1
+    
 }
-
 pwd=$(pwd)
-setup_kafka $pwd
+setup_kafka 
 val=true
 
-for i in $(ls -d */*/ | awk '{dir=$0 ;pre="/";home=ENVIRON["PWD"] ; ldir= home pre dir; print ldir }')
+for i in $(ls -d ../*/*/ | awk '{dir=$0 ;pre="/";home=ENVIRON["PWD"] ; ldir= home pre dir; print ldir }')
 do 
    cd $i
    err=$(go test); echo $err
