@@ -103,7 +103,7 @@ func (s *Server) Start() error {
 
 		go func() {
 
-			log.RootLogger().Infof("Listening on https://%s", fullAddr)
+			log.RootLogger().Infof("Rest Trigger listening on https://%s", fullAddr)
 
 			if err := s.srv.ListenAndServeTLS(s.certFile, s.keyFile); err != nil {
 				s.running = false
@@ -115,7 +115,7 @@ func (s *Server) Start() error {
 	} else {
 		go func() {
 
-			log.RootLogger().Infof("Listening on http://%s", fullAddr)
+			log.RootLogger().Infof("Rest Trigger listening on http://%s", fullAddr)
 
 			if err := s.srv.ListenAndServe(); err != nil {
 				s.running = false
