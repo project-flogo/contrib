@@ -34,7 +34,7 @@ flogo install github.com/project-flogo/contrib/trigger/rest
 | pathParams  | params | The path parameters (e.g., 'id' in http://.../pet/:id/name )
 | queryParams | params | The query parameters (e.g., 'id' in http://.../pet?id=someValue )
 | headers     | params | The HTTP header parameters
-| method     | string  | The HTTP method used for the request
+| method      | string  | The HTTP method used for the request
 | content     | any    | The content of the request
 
 ### Reply:
