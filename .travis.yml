@@ -11,4 +11,5 @@ git:
 install: skip  
 
 script:
-  - bash .travis/test.sh
+  - cd .travis/
+  - bash test.sh
