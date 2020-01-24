@@ -12,10 +12,11 @@ destroy_kafka () {
     docker-compose stop
     cd $1
 }
+
 pwd=$(pwd)
 setup_kafka $pwd
-
 val=true
+
 for i in $(ls -d */*/ | awk '{dir=$0 ;pre="/";home=ENVIRON["PWD"] ; ldir= home pre dir; print ldir }')
 do 
    cd $i
@@ -27,7 +28,9 @@ done
 
 destroy_kafka $pwd
 
-if [[ !$val ]]; then
-    exit 1
-fi 
+case $val in
+    (true) exit 0;;
+    (false) exit 1;;
+esac
+
 
