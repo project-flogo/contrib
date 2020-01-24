@@ -50,8 +50,8 @@ github.com/project-flogo/contrib/function/string v0.0.0-20190318145021-54b560253
 github.com/project-flogo/contrib/function/string v0.0.0-20190318145021-54b56025362c/go.mod h1:r9BdpzbQx9un7zwUwlnPGIbgC3yejuFxw74rVky/t94=
 github.com/project-flogo/contrib/trigger/channel v0.0.0-20190318145021-54b56025362c/go.mod h1:2E59vHxQcNEhkLUrTPJM0BdTcIBFyjEcZAeTUsF+KEM=
 github.com/project-flogo/contrib/trigger/rest v0.0.0-20190318145021-54b56025362c/go.mod h1:k0U1vznzbRJ4A4NLoYVl+UQDoxIl/ANqfbtRjSO7xP0=
-github.com/project-flogo/contrib/trigger/rest v0.0.0-20190322142340-97da16e70f7d h1:BQGS892sC6GAmOsu9zrn/HyTCYzSJeIvZ/W6GuzcvOY=
-github.com/project-flogo/contrib/trigger/rest v0.0.0-20190322142340-97da16e70f7d/go.mod h1:HGVa79rraAQaL7vewmfF61rAeqNzRSjpvgekTEHBtHU=
+github.com/project-flogo/contrib/trigger/rest v0.9.0 h1:3e9uLWLmg8VG8fcf8Fi4MrLptPc6WI1ZpaylC8eQ3Pk=
+github.com/project-flogo/contrib/trigger/rest v0.9.0/go.mod h1:vxFRTpssjn5eF1fXdCc+L6+PxZOKm5iqkTZPA4lUIsY=
 github.com/project-flogo/core v0.9.0-alpha.6/go.mod h1:eB+hMcq51lOIeJ93K8Nvvm/vC3OI60ZaEgBbA4gtk8k=
 github.com/project-flogo/core v0.9.0-alpha.6.0.20190315150153-4c57a9c50a67/go.mod h1:eB+hMcq51lOIeJ93K8Nvvm/vC3OI60ZaEgBbA4gtk8k=
 github.com/project-flogo/core v0.9.0-beta.1 h1:tiRv5Lv6U1SnDJh6vB10y8AnEdF8/Zmahj8WgCDqS6I=
@@ -65,7 +65,6 @@ github.com/square-it/jsonschema v1.9.1/go.mod h1:80WJHSuy3YnokzfFopfx+MAt5lVVnVp
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
-github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/ulule/limiter v2.2.0+incompatible/go.mod h1:VJx/ZNGmClQDS5F6EmsGqK8j3jz1qJYZ6D9+MdAD+kw=
 github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f h1:J9EGpcZtP0E/raorCMxlFGSTBrsSlaDGf3jU/qvAE2c=

@@ -4,17 +4,18 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/julienschmidt/httprouter"
-	"github.com/project-flogo/contrib/trigger/rest/cors"
-	"github.com/project-flogo/core/data/metadata"
-	"github.com/project-flogo/core/support/log"
-	"github.com/project-flogo/core/trigger"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	"github.com/julienschmidt/httprouter"
+	"github.com/project-flogo/contrib/trigger/rest/cors"
+	"github.com/project-flogo/core/data/metadata"
+	"github.com/project-flogo/core/support/log"
+	"github.com/project-flogo/core/trigger"
 )
 
 const (
@@ -48,10 +49,11 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 
 // Trigger REST trigger struct
 type Trigger struct {
-	server   *Server
-	settings *Settings
-	id       string
-	logger   log.Logger
+	server           *Server
+	settings         *Settings
+	id               string
+	logger           log.Logger
+//	serverInstanceID string
 }
 
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
@@ -102,6 +104,9 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		return err
 	}
 
+	//hostname, _ := os.Hostname()
+	//t.serverInstanceID = fmt.Sprintf("%x", md5.Sum([]byte(hostname+addr)))
+
 	t.server = server
 
 	return nil
@@ -143,6 +148,9 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 
 		c := cors.New(CorsPrefix, logger)
 		c.WriteCorsActualRequestHeaders(w)
+
+		//add server instance id to response
+		//w.Header().Add("X-Server-Instance-Id", rt.serverInstanceID)
 
 		out := &Output{}
 		out.Method = method
@@ -303,8 +311,8 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 		if reply.Data != nil {
 
 			if logger.DebugEnabled() {
-				logger.Debugf("The reply http code is: %d", reply.Code)
-				logger.Debugf("The http reply data is: %#v: ", reply.Data)
+				logger.Debugf("The http reply code is: %d", reply.Code)
+				logger.Debugf("The http reply data is: %#v", reply.Data)
 			}
 
 			switch t := reply.Data.(type) {
