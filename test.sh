@@ -1,19 +1,19 @@
 #  List all the components in activity, trigger and function
 #  Run tests.
 setup_kafka () {
-    pwd=$(pwd)
-    cd $pwd/activity/kafka
+    
+    cd $1/activity/kafka
     docker-compose up -d
-    cd $pwd
+    cd $1
 }
 destroy_kafka () {
-    pwd=$(pwd)
+   
     cd $pwd/activity/kafka
     docker-compose stop
     cd $pwd
 }
-
-setup_kafka
+pwd=$(pwd)
+setup_kafka $pwd
 
 val=true
 for i in $(ls -d */*/ | awk '{dir=$0 ;pre="/";home=ENVIRON["PWD"] ; ldir= home pre dir; print ldir }')
@@ -25,7 +25,7 @@ do
     fi    
 done 
 
-destroy_kafka
+destroy_kafka $pwd
 
 if [[ !$val ]]; then
     exit 1
