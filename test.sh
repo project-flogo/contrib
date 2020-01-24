@@ -8,9 +8,9 @@ setup_kafka () {
 }
 destroy_kafka () {
    
-    cd $pwd/activity/kafka
+    cd $1/activity/kafka
     docker-compose stop
-    cd $pwd
+    cd $1
 }
 pwd=$(pwd)
 setup_kafka $pwd
@@ -20,7 +20,7 @@ for i in $(ls -d */*/ | awk '{dir=$0 ;pre="/";home=ENVIRON["PWD"] ; ldir= home p
 do 
    cd $i
    err=$(go test); echo $err
-    if [[ $err != *"PASS"* ]] ; then
+    if [[ $err == *"FAIL"* ]] ; then
         val=false
     fi    
 done 
