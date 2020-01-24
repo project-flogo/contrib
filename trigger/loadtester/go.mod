@@ -1,3 +1,8 @@
 module github.com/project-flogo/contrib/trigger/loadtester
 
-require github.com/project-flogo/core v0.9.0
+require (
+	github.com/pkg/errors v0.9.1 // indirect
+	github.com/project-flogo/core v0.9.4
+)
+
+go 1.12

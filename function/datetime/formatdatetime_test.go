@@ -31,7 +31,6 @@ func TestFormatDatetime_Eval2(t *testing.T) {
 //	date, err := n.Eval("2017-04-10T22:17:32.000+0000", GetDatetimeFormat())
 //	assert.Nil(t, err)
 //	assert.NotNil(t, date)
-//	logrus.Info(date)
 //	assert.Equal(t, "2017-04-10T22:17:32+00:00", date)
 //	fmt.Println(date)
 //}
