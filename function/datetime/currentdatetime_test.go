@@ -1,7 +1,6 @@
 package datetime
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
@@ -17,7 +16,6 @@ func TestCurrentDatetime_Eval(t *testing.T) {
 	n := CurrentDatetime{}
 	datetime, _ := n.Eval(nil)
 	assert.NotNil(t, datetime)
-	fmt.Println(datetime)
 }
 
 func TestDatetime_CDT(t *testing.T) {

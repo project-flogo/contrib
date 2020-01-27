@@ -1,8 +1,6 @@
 package array
 
 import (
-	"fmt"
-	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,8 +12,6 @@ func TestStaticAppend(t *testing.T) {
 	Original := []string{"Cat", "Dog", "Snake"}
 	expectedResult := []string{"Cat", "Dog", "Snake", "Mouse"}
 	final, _ := s.Eval(Original, "Mouse")
-	fmt.Println(reflect.TypeOf(final))
-	fmt.Println(final)
 	for i, item := range final.([]string) {
 		assert.Equal(t, item, expectedResult[i])
 	}

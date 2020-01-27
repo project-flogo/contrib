@@ -1,7 +1,6 @@
 package datetime
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,7 +13,7 @@ func TestFormatDatetime_Eval(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, date)
 	assert.Equal(t, "2017-04-12 22:15:09", date)
-	fmt.Println(date)
+
 }
 
 func TestFormatDatetime_Eval2(t *testing.T) {
@@ -23,7 +22,7 @@ func TestFormatDatetime_Eval2(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, date)
 	assert.Equal(t, "2017-04-10 22:17:32", date)
-	fmt.Println(date)
+
 }
 
 //func TestFormatDatetime_Default(t *testing.T) {

@@ -8,6 +8,7 @@ import (
 	"github.com/project-flogo/core/data/mapper"
 	"github.com/project-flogo/core/data/metadata"
 	logger "github.com/project-flogo/core/support/log"
+	"github.com/project-flogo/core/support/trace"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -34,6 +35,9 @@ func (i *initContext) MapperFactory() mapper.Factory {
 
 func (i *initContext) Logger() logger.Logger {
 	return logger.RootLogger()
+}
+func (i *initContext) GetTracingContext() trace.TracingContext {
+	return nil
 }
 
 type activityContext struct {
@@ -83,6 +87,9 @@ func (a *activityContext) GetSharedTempData() map[string]interface{} {
 
 func (a *activityContext) ID() string {
 	return "test"
+}
+func (a *activityContext) GetTracingContext() trace.TracingContext {
+	return nil
 }
 
 func (a *activityContext) IOMetadata() *metadata.IOMetadata {

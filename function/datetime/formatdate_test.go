@@ -1,9 +1,9 @@
 package datetime
 
 import (
-	"fmt"
-	"github.com/project-flogo/core/data/expression/function"
 	"testing"
+
+	"github.com/project-flogo/core/data/expression/function"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -19,7 +19,6 @@ func TestFormatDate_Eval(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, date)
 	assert.Equal(t, "20170208", date)
-	fmt.Println(date)
 }
 
 func TestFormatDate_Eval2(t *testing.T) {
@@ -28,7 +27,6 @@ func TestFormatDate_Eval2(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, date)
 	assert.Equal(t, "2017-08-02", date)
-	fmt.Println(date)
 }
 
 func TestFormatDate_Eval3(t *testing.T) {
@@ -37,7 +35,6 @@ func TestFormatDate_Eval3(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, date)
 	assert.Equal(t, "02-08-2017", date)
-	fmt.Println(date)
 }
 
 func TestFormatDateYYYYDDDD(t *testing.T) {
