@@ -1,9 +1,9 @@
 {
   "name": "utils",
   "type": "flogo:function",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "title": "Misc utility functions",
-  "description": "Usefull tools and utilities",
+  "description": "Useful tools and utilities",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/function/utils",
   "functions": [
     {

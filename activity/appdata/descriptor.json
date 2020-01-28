@@ -1,7 +1,7 @@
 {
   "name": "flogo-appdata",
   "type": "flogo:activity",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "title": "Use global App attribute",
   "description": "Use global App attribute",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/appdata",

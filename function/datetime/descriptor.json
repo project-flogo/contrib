@@ -1,7 +1,7 @@
 {
     "name": "datetime",
     "type": "flogo:function",
-    "version": "0.0.1",
+    "version": "0.10.0",
     "title": "datetimeFunctions",
     "description": "datetimeFunctions",
     "functions": [

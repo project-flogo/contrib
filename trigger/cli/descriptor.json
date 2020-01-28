@@ -2,7 +2,7 @@
   "name": "flogo-cli",
   "type": "flogo:trigger",
   "shim": "main",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "title": "CLI Trigger",
   "description": "Simple CLI Trigger",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/trigger/cli",
