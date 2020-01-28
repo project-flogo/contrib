@@ -1,7 +1,7 @@
 {
   "name": "coerce",
   "type": "flogo:function",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "title": "Coerce Type Functions",
   "description": "Function for type coercion/conversion",
   "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/coerce",

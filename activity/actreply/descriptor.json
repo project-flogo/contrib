@@ -1,7 +1,7 @@
 {
   "name": "flogo-reply",
   "type": "flogo:activity",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "title": "Reply To Trigger",
   "description": "Replies to Trigger",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/actreply",

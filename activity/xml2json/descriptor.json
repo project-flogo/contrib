@@ -2,7 +2,7 @@
   "name": "flogo-xml2json",
   "type": "flogo:activity",
   "ref": "github.com/project-flogo/contrib/activity/xml2json",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "title": "XML2JSON Activity",
   "description": "Converts given XML into JSON",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/xml2json",

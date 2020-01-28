@@ -1,7 +1,7 @@
 {
   "name": "flogo-channel",
   "type": "flogo:trigger",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "title": "Listen to Channel",
   "description": "Listens to Channel",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/trigger/channel",
