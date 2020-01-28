@@ -52,8 +52,8 @@ github.com/project-flogo/contrib/trigger/rest v0.9.0/go.mod h1:vxFRTpssjn5eF1fXd
 github.com/project-flogo/core v0.9.0-alpha.6/go.mod h1:eB+hMcq51lOIeJ93K8Nvvm/vC3OI60ZaEgBbA4gtk8k=
 github.com/project-flogo/core v0.9.0-alpha.6.0.20190315150153-4c57a9c50a67/go.mod h1:eB+hMcq51lOIeJ93K8Nvvm/vC3OI60ZaEgBbA4gtk8k=
 github.com/project-flogo/core v0.9.0/go.mod h1:QGWi7TDLlhGUaYH3n/16ImCuulbEHGADYEXyrcHhX7U=
-github.com/project-flogo/core v0.9.4 h1:WGvXbfVi00Weys+jR2pR3M2hEkxjPpO4NW+WiJJ6Lgg=
-github.com/project-flogo/core v0.9.4/go.mod h1:QGWi7TDLlhGUaYH3n/16ImCuulbEHGADYEXyrcHhX7U=
+github.com/project-flogo/core v0.9.4-hf.1 h1:qjwXVpTL38yAgMFDDhb+SdOzye0qGoR2jOhkZiWgLh0=
+github.com/project-flogo/core v0.9.4-hf.1/go.mod h1:QGWi7TDLlhGUaYH3n/16ImCuulbEHGADYEXyrcHhX7U=
 github.com/project-flogo/microgateway v0.0.0-20190319203104-747b5cae041f h1:2HJ7qCJmrNvCZ56mdY/7dWCroHbnervMi9QSwnkF7Bc=
 github.com/project-flogo/microgateway v0.0.0-20190319203104-747b5cae041f/go.mod h1:3hJTjH3ri5CAaa1orStplPYQ1RxM2brIziLM16XHgyo=
 github.com/square-it/jsonschema v1.9.1/go.mod h1:80WJHSuy3YnokzfFopfx+MAt5lVVnVpS6w2Avv+svHk=
