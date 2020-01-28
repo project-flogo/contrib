@@ -2,7 +2,7 @@
     "name": "flogo-run-action",
     "type": "flogo:activity",
     "version": "0.10.0",
-    "title": "Run anAction",
+    "title": "Run an Action",
     "description": "Run an Action in activity",
     "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/runaction",
     "settings":[
@@ -10,23 +10,22 @@
         "name": "actionRef",
         "type": "string",
         "required": true,
-        "description" : "The ref to the syn-action being invoked"
+        "description" : "The 'ref' to the action to be run"
       },
       {
         "name": "actionSettings",
-        "type": "any",
+        "type": "object",
         "required": true,
-        "description" : "The settings map containing the settings to run action"
+        "description" : "The settings of the action"
       }
     ],
     "input":[
-      
     ],
     "output":[
       {
         "name": "output",
-        "type": "any",
-        "description" : "The output of the action being called"
+        "type": "object",
+        "description" : "The output of the action."
       }
     ]
   }
