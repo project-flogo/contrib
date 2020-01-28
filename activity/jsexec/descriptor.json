@@ -1,7 +1,7 @@
 {
   "name": "flogo-jsexec",
   "type": "flogo:activity",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "title": "JSExec Activity",
   "description": "Executes JS",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/jsexec",
