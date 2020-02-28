@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 
+	. "github.com/project-flogo/contrib/function/coerce"
 	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/robertkrimen/otto"
 )
@@ -74,7 +76,10 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		output.ErrorMessage = err.Error()
 		return false, err
 	}
-	output.Result = result.(map[string]interface{})
+	output.Result, err = coerce.ToObject(result)
+	if err != nil {
+		return false, err
+	}
 
 	err = ctx.SetOutputObject(&output)
 	if err != nil {
