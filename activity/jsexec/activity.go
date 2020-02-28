@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 
-	. "github.com/project-flogo/contrib/function/coerce"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/metadata"
