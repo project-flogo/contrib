@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/dop251/goja"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
+	"github.com/robertkrimen/otto"
 )
 
 var activityMetadata = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
@@ -52,7 +52,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	output := Output{}
-	result := make(map[string]interface{})
 	vm, err := NewVM(nil)
 	if err != nil {
 		output.Error = true
@@ -61,21 +60,21 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 	//todo is ok to ignore the errors for the SetInVM calls?
 	_ = vm.SetInVM("parameters", input.Parameters)
-	_ = vm.SetInVM("result", result)
+	_ = vm.SetInVM("result", map[string]interface{}{})
 
-	_, err = vm.vm.RunScript("JSServiceScript", a.script)
+	_, err = vm.vm.Run(a.script)
 	if err != nil {
 		output.Error = true
 		output.ErrorMessage = err.Error()
 		return false, err
 	}
-	err = vm.GetFromVM("result", &result)
+	result, err := vm.GetFromVM("result")
 	if err != nil {
 		output.Error = true
 		output.ErrorMessage = err.Error()
 		return false, err
 	}
-	output.Result = result
+	output.Result = result.(map[string]interface{})
 
 	err = ctx.SetOutputObject(&output)
 	if err != nil {
@@ -87,13 +86,13 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 // VM represents a VM object.
 type VM struct {
-	vm *goja.Runtime
+	vm *otto.Otto
 }
 
 // NewVM initializes a new VM with defaults.
 func NewVM(defaults map[string]interface{}) (vm *VM, err error) {
 	vm = &VM{}
-	vm.vm = goja.New()
+	vm.vm = otto.New()
 	for k, v := range defaults {
 		if v != nil {
 			vm.vm.Set(k, v)
@@ -107,13 +106,12 @@ func (vm *VM) EvaluateToBool(condition string) (truthy bool, err error) {
 	if condition == "" {
 		return true, nil
 	}
-	var res goja.Value
-	res, err = vm.vm.RunString(condition)
+	res, err := vm.vm.Run(condition)
 	if err != nil {
 		return false, err
 	}
-	truthy, ok := res.Export().(bool)
-	if !ok {
+	truthy, err = res.ToBoolean()
+	if err != nil {
 		err = errors.New("condition does not evaluate to bool")
 		return false, err
 	}
@@ -137,20 +135,11 @@ func (vm *VM) SetInVM(name string, object interface{}) (err error) {
 }
 
 // GetFromVM extracts the current object value from the VM.
-func (vm *VM) GetFromVM(name string, object interface{}) (err error) {
-	var valueJSON json.RawMessage
-	var vmObject map[string]interface{}
-	_ = vm.vm.ExportTo(vm.vm.Get(name), &vmObject) //todo is ok to ignore the error?
+func (vm *VM) GetFromVM(name string) (object interface{}, err error) {
+	obj, _ := vm.vm.Object(name) //todo is ok to ignore the error?
 
-	valueJSON, err = json.Marshal(vmObject)
-	if err != nil {
-		return err
-	}
-	err = json.Unmarshal(valueJSON, object)
-	if err != nil {
-		return err
-	}
-	return err
+	object, err = obj.Value().Export()
+	return object, err
 }
 
 // SetPrimitiveInVM sets primitive value in VM.
