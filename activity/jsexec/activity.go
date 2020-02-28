@@ -58,9 +58,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		output.ErrorMessage = err.Error()
 		return false, err
 	}
-	//todo is ok to ignore the errors for the SetInVM calls?
-	_ = vm.SetInVM("parameters", input.Parameters)
-	_ = vm.SetInVM("result", map[string]interface{}{})
+	//todo is ok to ignore the errors for the setInVM calls?
+	_ = vm.setInVM("parameters", input.Parameters)
+	_ = vm.setInVM("result", map[string]interface{}{})
 
 	_, err = vm.vm.Run(a.script)
 	if err != nil {
@@ -68,7 +68,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		output.ErrorMessage = err.Error()
 		return false, err
 	}
-	result, err := vm.GetFromVM("result")
+	result, err := vm.getFromVM("result")
 	if err != nil {
 		output.Error = true
 		output.ErrorMessage = err.Error()
@@ -106,11 +106,11 @@ func (vm *VM) EvaluateToBool(condition string) (truthy bool, err error) {
 	if condition == "" {
 		return true, nil
 	}
-	res, err := vm.vm.Run(condition)
+	res, err := vm.vm.Object(condition)
 	if err != nil {
 		return false, err
 	}
-	truthy, err = res.ToBoolean()
+	truthy, err = res.Value().ToBoolean()
 	if err != nil {
 		err = errors.New("condition does not evaluate to bool")
 		return false, err
@@ -118,8 +118,8 @@ func (vm *VM) EvaluateToBool(condition string) (truthy bool, err error) {
 	return truthy, err
 }
 
-// SetInVM sets the object name and value in the VM.
-func (vm *VM) SetInVM(name string, object interface{}) (err error) {
+// setInVM sets the object name and value in the VM.
+func (vm *VM) setInVM(name string, object interface{}) (err error) {
 	var valueJSON json.RawMessage
 	var vmObject map[string]interface{}
 	valueJSON, err = json.Marshal(object)
@@ -130,19 +130,21 @@ func (vm *VM) SetInVM(name string, object interface{}) (err error) {
 	if err != nil {
 		return err
 	}
-	vm.vm.Set(name, vmObject)
-	return err
+	return vm.vm.Set(name, vmObject)
 }
 
-// GetFromVM extracts the current object value from the VM.
-func (vm *VM) GetFromVM(name string) (object interface{}, err error) {
-	obj, _ := vm.vm.Object(name) //todo is ok to ignore the error?
+// getFromVM extracts the current object value from the VM.
+func (vm *VM) getFromVM(name string) (object interface{}, err error) {
+	obj, err := vm.vm.Object(name) //todo is ok to ignore the error?
+	if err != nil {
+		return object, err
+	}
 
 	object, err = obj.Value().Export()
 	return object, err
 }
 
-// SetPrimitiveInVM sets primitive value in VM.
-func (vm *VM) SetPrimitiveInVM(name string, primitive interface{}) {
-	vm.vm.Set(name, primitive)
+// setPrimitiveInVM sets primitive value in VM.
+func (vm *VM) setPrimitiveInVM(name string, primitive interface{}) error {
+	return vm.vm.Set(name, primitive)
 }
