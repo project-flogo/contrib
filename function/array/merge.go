@@ -1,6 +1,7 @@
 package array
 
 import (
+	"fmt"
 	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/expression/function"
 	"github.com/project-flogo/core/support/log"
@@ -23,30 +24,35 @@ func (mergeFunc) Sig() (paramTypes []data.Type, isVariadic bool) {
 }
 
 func (mergeFunc) Eval(params ...interface{}) (interface{}, error) {
-	items := params[0]
-	items2 := params[1]
-
-	log.RootLogger().Debugf("Start array mergeFunc function with parameters %+v and %+v", items, items2)
-
-	if items == nil {
-		//Do nothing
-		return items2, nil
-	} else if items2 == nil {
-		return items, nil
+	if len(params) < 2 {
+		return nil, fmt.Errorf("array merge must have at least 2 arrays")
 	}
 
-	arrV := reflect.ValueOf(items)
-	if arrV.Kind() == reflect.Slice {
-		item := reflect.ValueOf(items2)
-		if item.Kind() == reflect.Slice {
-			for i := 0; i < item.Len(); i++ {
-				arrV = reflect.Append(arrV, item.Index(i))
+	log.RootLogger().Debugf("Start array mergeFunc function with parameters %+v and %+v", params)
+
+	finalArrayValue := reflect.Value{}
+	for _, arg := range params {
+		if arg != nil {
+			arrV := reflect.ValueOf(arg)
+			if arrV.Kind() == reflect.Slice {
+				if !finalArrayValue.IsValid() {
+					finalArrayValue = arrV
+					continue
+				} else {
+					item := reflect.ValueOf(arg)
+					if item.Kind() == reflect.Slice {
+						for i := 0; i < item.Len(); i++ {
+							finalArrayValue = reflect.Append(finalArrayValue, item.Index(i))
+						}
+					} else {
+						finalArrayValue = reflect.Append(finalArrayValue, item)
+					}
+				}
+
 			}
-		} else {
-			arrV = reflect.Append(arrV, item)
 		}
 	}
 
-	log.RootLogger().Debugf("array append function done, final array %+v", arrV.Interface())
-	return arrV.Interface(), nil
+	log.RootLogger().Debugf("array append function done, final array %+v", finalArrayValue.Interface())
+	return finalArrayValue.Interface(), nil
 }

@@ -91,9 +91,13 @@ func TestReverseFunc_Eval(t *testing.T) {
 
 func TestMergeFunc_Eval(t *testing.T) {
 
+	obj := map[string]string{"key1": "value1", "key2": "value2"}
+	obj2 := map[string]string{"key3": "value3", "key4": "value4"}
+
 	tests := []struct {
 		Array  []interface{}
 		Array2 []interface{}
+		Array3 []interface{}
 		Result []interface{}
 	}{
 		{
@@ -106,11 +110,22 @@ func TestMergeFunc_Eval(t *testing.T) {
 			Array2: []interface{}{7.7, 6.6, 5.5},
 			Result: []interface{}{5.5, 6.6, 7.7, 7.7, 6.6, 5.5},
 		},
+		{
+			Array:  []interface{}{obj, obj},
+			Array2: []interface{}{obj2},
+			Result: []interface{}{obj, obj, obj2},
+		},
+		{
+			Array:  []interface{}{obj, obj},
+			Array2: []interface{}{obj2},
+			Array3: []interface{}{obj2},
+			Result: []interface{}{obj, obj, obj2, obj2},
+		},
 	}
 
 	fn := &mergeFunc{}
 	for _, v := range tests {
-		result, err := fn.Eval(v.Array, v.Array2)
+		result, err := fn.Eval(v.Array, v.Array2, v.Array3)
 		assert.Nil(t, err)
 		assert.Equal(t, v.Result, result)
 	}
