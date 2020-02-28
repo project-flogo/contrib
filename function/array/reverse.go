@@ -33,13 +33,14 @@ func (reverseFunc) Eval(params ...interface{}) (interface{}, error) {
 
 	arrV := reflect.ValueOf(items)
 	if arrV.Kind() == reflect.Slice {
-		for i, j := 0, arrV.Len(); i < j; i, j = i+1, j-1 {
-			left := arrV.Index(i)
-			right := arrV.Index(j)
-			left.Set(right)
-			right.Set(left)
+		for i, j := 0, arrV.Len()-1; i < j; i, j = i+1, j-1 {
+			left := arrV.Index(i).Interface()
+			right := arrV.Index(j).Interface()
+			arrV.Index(i).Set(reflect.ValueOf(right))
+			arrV.Index(j).Set(reflect.ValueOf(left))
 		}
 	}
-	log.RootLogger().Debugf("array append reverseFunc done, final array %+v", arrV.Interface())
+
+	log.RootLogger().Debugf("array append function done, final array %+v", arrV.Interface())
 	return arrV.Interface(), nil
 }
