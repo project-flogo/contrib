@@ -1,0 +1,47 @@
+{
+	"name": "pulsar-activity",
+	"type": "flogo:activity",
+	"version": "0.0.1",
+	"title": "Apache Pulsar activity",
+	"description": "A Simple activity to produce messages on apache pulsar",
+	"settings": [
+		{
+			"name": "url",
+			"type": "string",
+			"allowed": null,
+			"required": true
+		},
+		{
+			"name": "topic",
+			"type": "string",
+			"allowed": null,
+			"required": true
+		},
+		{
+			"name": "athenzauth",
+			"type": "string",
+			"allowed": null,
+			"required": false
+		},
+		{
+			"name": "certFile",
+			"type": "string",
+			"allowed": null,
+			"required": false
+		},
+		{
+			"name": "keyFile",
+			"type": "string",
+			"allowed": null,
+			"required": false
+		}
+	],
+	"input": [
+		{
+			"name": "payload",
+			"type": "string",
+			"allowed": null,
+			"required": false
+		}
+	]
+}
