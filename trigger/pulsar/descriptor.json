@@ -1,0 +1,58 @@
+{
+	"name": "pulsar-trigger",
+	"type": "flogo:trigger",
+	"version": "0.0.1",
+	"title": "Apache Pulsar Trigger",
+	"description": "A simple pulsar trigger which reads messages from apache pulsar queue",
+	"settings": [
+		{
+			"name": "url",
+			"type": "string",
+			"allowed": null,
+			"required": true
+		},
+		{
+			"name": "athenzauth",
+			"type": "string",
+			"allowed": null,
+			"required": false
+		},
+		{
+			"name": "certFile",
+			"type": "string",
+			"allowed": null,
+			"required": false
+		},
+		{
+			"name": "keyFile",
+			"type": "string",
+			"allowed": null,
+			"required": false
+		}
+	],
+	"input": null,
+	"output": [
+		{
+			"name": "message",
+			"type": "string",
+			"allowed": null,
+			"required": false
+		}
+	],
+	"handler": {
+		"settings": [
+			{
+				"name": "topic",
+				"type": "string",
+				"allowed": null,
+				"required": true
+			},
+			{
+				"name": "subscription",
+				"type": "string",
+				"allowed": null,
+				"required": true
+			}
+		]
+	}
+}
