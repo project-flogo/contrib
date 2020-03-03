@@ -4,6 +4,12 @@ setup_kafka () {
     
     docker-compose up -d
     
+   
+    
+}
+setup_pulsar() {
+    wget https://archive.apache.org/dist/pulsar/pulsar-2.5.0/apache-pulsar-2.5.0-bin.tar.gz
+    tar xvfz apache-pulsar-2.5.0-bin.tar.gz
 }
 destroy_kafka () {
    cd $1
@@ -12,6 +18,7 @@ destroy_kafka () {
 }
 pwd=$(pwd)
 setup_kafka 
+setup_pulsar
 val=true
 
 for i in $(ls -d ../*/*/ | awk '{dir=$0 ;pre="/";home=ENVIRON["PWD"] ; ldir= home pre dir; print ldir }')
