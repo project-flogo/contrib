@@ -44,7 +44,11 @@ func TestSliceFunc_Eval(t *testing.T) {
 			End:    3,
 			Result: []interface{}{2, 3},
 		},
-
+		{
+			Array:  []interface{}{1, 2, 3, 4, 5, 6, 7},
+			Start:  1,
+			Result: []interface{}{2, 3, 4, 5, 6, 7},
+		},
 		{
 			Array:  []interface{}{1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7},
 			Start:  0,
