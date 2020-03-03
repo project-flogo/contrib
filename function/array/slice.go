@@ -21,32 +21,42 @@ func (a *sliceFunc) Name() string {
 }
 
 func (sliceFunc) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeAny, data.TypeInt, data.TypeInt}, false
+	return []data.Type{data.TypeAny, data.TypeInt}, true
 }
 
 func (sliceFunc) Eval(params ...interface{}) (interface{}, error) {
 	array := params[0]
-	start, err := coerce.ToInt(params[1])
-	if err != nil {
-		return nil, fmt.Errorf("array slice second arguments must be a integer")
-	}
-	len, err := coerce.ToInt(params[2])
-	if err != nil {
-		return nil, fmt.Errorf("array slice third arguments must be a integer")
-	}
-
-	log.RootLogger().Debugf("Start array slice function with parameters %+v, %d and %d", array, start, len)
+	log.RootLogger().Debugf("Start array slice function with parameters %+v", array)
 	if array == nil {
 		//Do nothing
 		return array, nil
 	}
 
+	start, err := coerce.ToInt(params[1])
+	if err != nil {
+		return nil, fmt.Errorf("array slice second arguments must be a integer")
+	}
+
 	arrV := reflect.ValueOf(array)
 	if arrV.Kind() == reflect.Slice {
-		if arrV.Len() < len {
+		var le int
+		if len(params) >= 3 {
+			le, err = coerce.ToInt(params[2])
+			if err != nil {
+				return nil, fmt.Errorf("array slice third arguments must be a integer")
+			}
+			if le == 0 {
+				le = arrV.Len()
+			}
+		} else {
+			le = arrV.Len()
+		}
+
+		if arrV.Len() < le {
 			return nil, fmt.Errorf("array slice end index out of bound")
 		}
-		v := arrV.Slice(start, len)
+
+		v := arrV.Slice(start, le)
 		log.RootLogger().Debugf("array slice function done, final array %+v", v.Interface())
 		return v.Interface(), nil
 	}
