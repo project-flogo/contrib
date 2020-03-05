@@ -135,7 +135,7 @@
         },
         {
             "name": "slice",
-            "description": "returns a slice/subset of the array, this selects a half-open range which includes the first element, but excludes the last one, and last one is optional.",
+            "description": "Extracts a part an array by specifying a half-open range with start index and an end index (the element at the end index is excluded).",
             "example": "array.slice(array.create(1,2,3,4,5), 1, 3) => [2,3]",
             "args": [
                {
