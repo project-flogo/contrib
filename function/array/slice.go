@@ -39,24 +39,24 @@ func (sliceFunc) Eval(params ...interface{}) (interface{}, error) {
 
 	arrV := reflect.ValueOf(array)
 	if arrV.Kind() == reflect.Slice {
-		var le int
+		var end int
 		if len(params) >= 3 {
-			le, err = coerce.ToInt(params[2])
+			end, err = coerce.ToInt(params[2])
 			if err != nil {
 				return nil, fmt.Errorf("array slice third arguments must be a integer")
 			}
-			if le == 0 {
-				le = arrV.Len()
+			if end == 0 {
+				end = arrV.Len()
 			}
 		} else {
-			le = arrV.Len()
+			end = arrV.Len()
 		}
 
-		if arrV.Len() < le {
+		if arrV.Len() < end {
 			return nil, fmt.Errorf("array slice end index out of bound")
 		}
 
-		v := arrV.Slice(start, le)
+		v := arrV.Slice(start, end)
 		log.RootLogger().Debugf("array slice function done, final array %+v", v.Interface())
 		return v.Interface(), nil
 	}
