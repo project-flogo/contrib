@@ -1,0 +1,20 @@
+{
+  "name": "flogo-updobject",
+  "type": "flogo:activity",
+  "version": "0.10.0",
+  "title": "Update Object Value",
+  "description": "Update the values of an object",
+  "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/updobject",
+  "input": [
+    {
+      "name": "object",
+      "type": "object",
+      "description": "The object to update"
+    },
+    {
+      "name": "values",
+      "type": "object",
+      "description": "The key and values to update or add"
+    }
+  ]
+}
