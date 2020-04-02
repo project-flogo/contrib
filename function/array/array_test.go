@@ -1,6 +1,7 @@
 package array
 
 import (
+	"encoding/json"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -94,6 +95,7 @@ func TestReverseFunc_Eval(t *testing.T) {
 }
 
 func TestMergeFunc_Eval(t *testing.T) {
+	fn := &mergeFunc{}
 
 	obj := map[string]string{"key1": "value1", "key2": "value2"}
 	obj2 := map[string]string{"key3": "value3", "key4": "value4"}
@@ -127,10 +129,50 @@ func TestMergeFunc_Eval(t *testing.T) {
 		},
 	}
 
-	fn := &mergeFunc{}
 	for _, v := range tests {
 		result, err := fn.Eval(v.Array, v.Array2, v.Array3)
 		assert.Nil(t, err)
 		assert.Equal(t, v.Result, result)
 	}
+}
+
+func TestNestedMergeFunc(t *testing.T) {
+
+	fn := &mergeFunc{}
+
+	str := `[
+  [
+    {
+      "id": 1
+    }
+  ],
+  [
+    {
+      "id": 2
+    },
+    {
+      "id": 3
+    }
+  ]
+]`
+
+	var d interface{}
+	err := json.Unmarshal([]byte(str), &d)
+	assert.Nil(t, err)
+	final, err := fn.Eval(d)
+	assert.Nil(t, err)
+	assert.Equal(t, 3, len(final.([]interface{})))
+
+	obj := map[string]string{"key1": "value1", "key2": "value2"}
+
+	var aa = []interface{}{[]interface{}{obj}, []interface{}{obj}, []interface{}{obj}}
+	final, err = fn.Eval(aa)
+	assert.Nil(t, err)
+	assert.Equal(t, 3, len(final.([]interface{})))
+
+	obj = map[string]string{"key1": "value1", "key2": "value2"}
+	aa = []interface{}{obj}
+	final, err = fn.Eval(aa)
+	assert.Nil(t, err)
+	assert.Equal(t, aa, final)
 }
