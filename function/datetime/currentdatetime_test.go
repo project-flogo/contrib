@@ -1,7 +1,6 @@
 package datetime
 
 import (
-	"os"
 	"testing"
 
 	"github.com/project-flogo/core/data/expression/function"
@@ -19,7 +18,6 @@ func TestCurrentDatetime_Eval(t *testing.T) {
 }
 
 func TestDatetime_CDT(t *testing.T) {
-	os.Setenv(WI_DATETIME_LOCATION, "US/Central")
 	n := CurrentDatetime{}
 	date, _ := n.Eval(nil)
 	assert.NotNil(t, date)

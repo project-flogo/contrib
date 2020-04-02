@@ -15,11 +15,11 @@ func init() {
 }
 
 func (s *fnCreate) Name() string {
-	return "add"
+	return "create"
 }
 
 func (s *fnCreate) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeInt, data.TypeInt, data.TypeInt, data.TypeInt, data.TypeInt, data.TypeInt, data.TypeInt, data.TypeInt}, false
+	return []data.Type{data.TypeInt, data.TypeInt, data.TypeInt, data.TypeInt, data.TypeInt, data.TypeInt, data.TypeInt, data.TypeString}, false
 }
 
 func (s *fnCreate) Eval(in ...interface{}) (interface{}, error) {
@@ -63,5 +63,5 @@ func (s *fnCreate) Eval(in ...interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	return time.Date(years, time.Month(months), days, hh, mm, ss, nsec, l).Format(time.RFC3339), nil
+	return time.Date(years, time.Month(months), days, hh, mm, ss, nsec, l), nil
 }

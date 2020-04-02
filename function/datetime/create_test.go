@@ -4,6 +4,7 @@ import (
 	"github.com/project-flogo/core/data/expression/function"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func init() {
@@ -44,6 +45,6 @@ func TestFnCreate_Eval(t *testing.T) {
 	for _, d := range tests {
 		final, err := in.Eval(d.Years, d.Months, d.Days, d.HH, d.MM, d.SS, d.NS, d.Loc)
 		assert.Nil(t, err)
-		assert.Equal(t, d.Expected, final)
+		assert.Equal(t, d.Expected, FormatDateWithRFC3339(final.(time.Time)))
 	}
 }

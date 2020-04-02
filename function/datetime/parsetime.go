@@ -16,24 +16,19 @@ func init() {
 }
 
 func (s *fnParseTIme) Name() string {
-	return "parseTime"
-}
-
-func (s *fnParseTIme) GetCategory() string {
-	return "datetime"
+	return "parse"
 }
 
 func (s *fnParseTIme) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeString, data.TypeString}, true
+	return []data.Type{data.TypeAny, data.TypeString}, true
 }
 
 func (s *fnParseTIme) Eval(params ...interface{}) (interface{}, error) {
 
-	parsedTime, err := ParseTime(params[0])
+	parsedTime, err := coerce.ToDateTime(params[0])
 	if err != nil {
 		return nil, err
 	}
-
 	if len(params) >= 2 {
 		zone, err := coerce.ToString(params[1])
 		if err != nil {
@@ -46,8 +41,10 @@ func (s *fnParseTIme) Eval(params ...interface{}) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		parsedTime = parsedTime.In(loc)
+		newTime := parsedTime.In(loc)
+		parsedTime = newTime
+
 	}
 
-	return parsedTime.Format(time.RFC3339), nil
+	return parsedTime, nil
 }

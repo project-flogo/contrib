@@ -19,11 +19,11 @@ func (s *fnAdd) Name() string {
 }
 
 func (s *fnAdd) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeString, data.TypeInt, data.TypeInt, data.TypeInt}, false
+	return []data.Type{data.TypeDateTime, data.TypeInt, data.TypeInt, data.TypeInt}, false
 }
 
 func (s *fnAdd) Eval(in ...interface{}) (interface{}, error) {
-	startDate, err := ParseTime(in[0])
+	startDate, err := coerce.ToDateTime(in[0])
 	if err != nil {
 		return nil, err
 	}
