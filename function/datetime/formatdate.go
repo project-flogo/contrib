@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// Deprecated
 type FormatDate struct {
 }
 

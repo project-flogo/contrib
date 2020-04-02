@@ -7,27 +7,26 @@ import (
 	"github.com/project-flogo/core/data/expression/function"
 )
 
-// Deprecated
-type FormatDatetime struct {
+type fnFormat struct {
 }
 
 func init() {
-	function.Register(&FormatDatetime{})
+	function.Register(&fnFormat{})
 }
 
-func (s *FormatDatetime) Name() string {
-	return "formatDatetime"
+func (s *fnFormat) Name() string {
+	return "format"
 }
 
-func (s *FormatDatetime) GetCategory() string {
+func (s *fnFormat) GetCategory() string {
 	return "datetime"
 }
 
-func (s *FormatDatetime) Sig() (paramTypes []data.Type, isVariadic bool) {
+func (s *fnFormat) Sig() (paramTypes []data.Type, isVariadic bool) {
 	return []data.Type{data.TypeDateTime, data.TypeString}, false
 }
 
-func (s *FormatDatetime) Eval(params ...interface{}) (interface{}, error) {
+func (s *fnFormat) Eval(params ...interface{}) (interface{}, error) {
 	date, err := coerce.ToDateTime(params[0])
 	if err != nil {
 		return nil, fmt.Errorf("Format datetime first argument must be string")

@@ -35,6 +35,6 @@ func (s *fnAddSeconds) Eval(in ...interface{}) (interface{}, error) {
 	}
 
 	newT := startDate.Add(time.Duration(seconds) * time.Second)
-	return newT.Format(time.RFC3339), nil
+	return newT, nil
 
 }
