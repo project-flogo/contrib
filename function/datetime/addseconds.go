@@ -19,12 +19,12 @@ func (s *fnAddSeconds) Name() string {
 }
 
 func (s *fnAddSeconds) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeString, data.TypeInt}, false
+	return []data.Type{data.TypeDateTime, data.TypeInt}, false
 }
 
 func (s *fnAddSeconds) Eval(in ...interface{}) (interface{}, error) {
 
-	startDate, err := ParseTime(in[0])
+	startDate, err := coerce.ToDateTime(in[0])
 	if err != nil {
 		return nil, err
 	}

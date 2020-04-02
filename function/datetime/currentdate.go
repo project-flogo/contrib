@@ -27,14 +27,5 @@ func (s *CurrentDate) Sig() (paramTypes []data.Type, isVariadic bool) {
 
 func (s *CurrentDate) Eval(d ...interface{}) (interface{}, error) {
 	log.RootLogger().Debugf("Returns the current date with timezone")
-	var currentTime time.Time
-	location, err := time.LoadLocation(GetLocation())
-	if err != nil {
-		log.RootLogger().Errorf("Load location %s error %s", GetLocation(), err.Error())
-		location = time.UTC
-		currentTime = time.Now().UTC()
-	} else {
-		currentTime = time.Now().In(location)
-	}
-	return currentTime.Format(DateFormatDefault), nil
+	return time.Now().UTC().Format(DateFormatDefault), nil
 }

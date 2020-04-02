@@ -26,13 +26,23 @@ func (s *FormatTime) GetCategory() string {
 }
 
 func (s *FormatTime) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeString, data.TypeString}, false
+	return []data.Type{data.TypeAny, data.TypeString}, false
 }
 
 func (s *FormatTime) Eval(params ...interface{}) (interface{}, error) {
-	date, err := coerce.ToString(params[0])
+	date, err := coerce.ToDateTime(params[0])
 	if err != nil {
-		return nil, fmt.Errorf("Format time first argument must be string")
+		//For backward compatible.
+		p, err := parsetime.NewParseTime("UTC")
+		if err != nil {
+			return nil, fmt.Errorf("parse time [%s] error: %s", params[0], err.Error())
+		}
+
+		dStr, _ := coerce.ToString(params[0])
+		date, err = p.Parse(dStr)
+		if err != nil {
+			return nil, fmt.Errorf("parse time [%s] error: %s", params[0], err.Error())
+		}
 	}
 	format, err := coerce.ToString(params[1])
 	if err != nil {
@@ -40,17 +50,7 @@ func (s *FormatTime) Eval(params ...interface{}) (interface{}, error) {
 	}
 
 	log.RootLogger().Debugf("Format time %s to format %s", date, format)
-	p, err := parsetime.NewParseTime(GetLocation())
-	if err != nil {
-		log.RootLogger().Errorf("New time parser %s error %s", date, err.Error())
-		return date, err
-	}
-	t, err := p.Parse(date)
-	if err != nil {
-		log.RootLogger().Errorf("Parsing time %s error %s", date, err.Error())
-		return date, err
-	}
-	return t.Format(convertTimeFormater(format)), nil
+	return date.Format(convertTimeFormater(format)), nil
 }
 
 //var formater = map[string]string{"DD": "02", "MM": "01", "YYYY": "2006", "HH": "15", "mm": "04", "ss": "05"}

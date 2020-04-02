@@ -6,7 +6,6 @@ import (
 	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/expression/function"
 	"github.com/project-flogo/core/support/log"
-	"github.com/tkuchiki/parsetime"
 	"strings"
 )
 
@@ -26,11 +25,11 @@ func (s *FormatDate) GetCategory() string {
 }
 
 func (s *FormatDate) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeString, data.TypeString}, false
+	return []data.Type{data.TypeDateTime, data.TypeString}, false
 }
 
 func (s *FormatDate) Eval(params ...interface{}) (interface{}, error) {
-	date, err := coerce.ToString(params[0])
+	date, err := coerce.ToDateTime(params[0])
 	if err != nil {
 		return nil, fmt.Errorf("Format date first argument must be string")
 	}
@@ -41,21 +40,7 @@ func (s *FormatDate) Eval(params ...interface{}) (interface{}, error) {
 
 	format = convertDateFormater(format)
 	log.RootLogger().Debugf("Format date %s to format %s", date, format)
-	p, err := parsetime.NewParseTime(GetLocation())
-	if err != nil {
-		log.RootLogger().Errorf("New date parser %s error %s", date, err.Error())
-		return date, err
-	}
-	t, err := p.US(date)
-	if err != nil {
-		//Try toresolved it with just parse
-		t, err = p.Parse(date)
-		if err != nil {
-			log.RootLogger().Errorf("Parsing date %s error %s", date, err.Error())
-			return date, err
-		}
-	}
-	return t.Format(format), nil
+	return date.Format(format), nil
 }
 
 func convertDateFormater(format string) string {

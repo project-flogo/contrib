@@ -4,8 +4,6 @@ import (
 	"github.com/project-flogo/core/data/expression/function"
 	"testing"
 
-	"os"
-
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,7 +18,6 @@ func TestCurrectDaye_Eval(t *testing.T) {
 }
 
 func TestNow_CDT(t *testing.T) {
-	os.Setenv(WI_DATETIME_LOCATION, "US/Central")
 	n := CurrentDate{}
 	date, _ := n.Eval(nil)
 	assert.NotNil(t, date)
