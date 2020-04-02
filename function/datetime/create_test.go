@@ -1,6 +1,7 @@
 package datetime
 
 import (
+	"fmt"
 	"github.com/project-flogo/core/data/expression/function"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -45,6 +46,7 @@ func TestFnCreate_Eval(t *testing.T) {
 	for _, d := range tests {
 		final, err := in.Eval(d.Years, d.Months, d.Days, d.HH, d.MM, d.SS, d.NS, d.Loc)
 		assert.Nil(t, err)
+		fmt.Println(final)
 		assert.Equal(t, d.Expected, FormatDateWithRFC3339(final.(time.Time)))
 	}
 }

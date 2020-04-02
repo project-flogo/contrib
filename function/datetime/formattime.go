@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// Deprecated
 type FormatTime struct {
 }
 

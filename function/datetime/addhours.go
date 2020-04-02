@@ -32,5 +32,5 @@ func (s *fnAddHours) Eval(in ...interface{}) (interface{}, error) {
 		return nil, err
 	}
 	newT := startDate.Add(time.Duration(hours) * time.Hour)
-	return newT.Format(time.RFC3339), nil
+	return newT, nil
 }

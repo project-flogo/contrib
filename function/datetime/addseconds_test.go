@@ -4,6 +4,7 @@ import (
 	"github.com/project-flogo/core/data/expression/function"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func init() {
@@ -37,6 +38,6 @@ func TestFnAddSeconds_Eval(t *testing.T) {
 	for _, d := range tests {
 		final, err := in.Eval(d.Date, d.Days)
 		assert.Nil(t, err)
-		assert.Equal(t, d.Expected, final)
+		assert.Equal(t, d.Expected, final.(time.Time).Format(time.RFC3339))
 	}
 }

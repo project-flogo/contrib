@@ -4,7 +4,6 @@ import (
 	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/expression/function"
-	"time"
 )
 
 type fnAdd struct {
@@ -40,6 +39,6 @@ func (s *fnAdd) Eval(in ...interface{}) (interface{}, error) {
 		return nil, err
 	}
 	newT := startDate.AddDate(years, months, days)
-	return newT.Format(time.RFC3339), nil
+	return newT, nil
 
 }
