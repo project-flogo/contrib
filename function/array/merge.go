@@ -20,7 +20,7 @@ func (a *mergeFunc) Name() string {
 }
 
 func (mergeFunc) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeAny, data.TypeAny}, false
+	return []data.Type{data.TypeAny, data.TypeAny}, true
 }
 
 func (mergeFunc) Eval(params ...interface{}) (interface{}, error) {
