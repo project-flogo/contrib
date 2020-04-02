@@ -1,4 +1,6 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
+github.com/araddon/dateparse v0.0.0-20190622164848-0fb0a474d195 h1:c4mLfegoDw6OhSJXTd2jUEQgZUQuJWtocudb97Qn9EM=
+github.com/araddon/dateparse v0.0.0-20190622164848-0fb0a474d195/go.mod h1:SLqhdZcd+dF3TEVL2RMoob5bBP5R1P1qkox+HtCBgGI=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -15,6 +17,7 @@ github.com/project-flogo/core v0.9.4-hf.1 h1:qjwXVpTL38yAgMFDDhb+SdOzye0qGoR2jOh
 github.com/project-flogo/core v0.9.4-hf.1/go.mod h1:QGWi7TDLlhGUaYH3n/16ImCuulbEHGADYEXyrcHhX7U=
 github.com/project-flogo/core v0.10.2 h1:w+OweLultHbY5712r3fiXHFTMw7HJ0vCDmdKRoN0gus=
 github.com/project-flogo/core v0.10.2/go.mod h1:4DhTlZ5re1DKHBXYwNZmUswiakcD2E4v3FzlZT/rAI8=
+github.com/project-flogo/core v0.11.0-rc.1/go.mod h1:dt3AJeC/QzrgGSoPoZBEdyqR6UAqSMRppz4E47FWmYU=
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
@@ -24,6 +27,8 @@ github.com/tkuchiki/go-timezone v0.1.3 h1:R/CrkIi31jEKlOuEe4sNRoWrgwJozHaSMOUeae
 github.com/tkuchiki/go-timezone v0.1.3/go.mod h1:b1Ean9v2UXtxSq4TZF0i/TU9NuoWa9hOzOKoGCV2zqY=
 github.com/tkuchiki/parsetime v0.0.0-20160517140325-bece749572a8 h1:D/JRgW+fqBVZKYlnDtUfSoYjeDvRJmMsOtcPKwWQfpM=
 github.com/tkuchiki/parsetime v0.0.0-20160517140325-bece749572a8/go.mod h1:lyFzkHaB7gqrI+ron+B8biAk0dke6Tvbpw/tfDjQ+r4=
+github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb/go.mod h1:N2zxlSyiKSe5eX1tZViRH5QA0qijqEDrYZiPEAiq3wU=
+github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415/go.mod h1:GwrjFmJcFw6At/Gs6z4yjiIwzuJ1/+UwLxMQDVQXShQ=
 github.com/xeipuuv/gojsonschema v1.1.0/go.mod h1:5yf86TLmAcydyeJq5YvxkGPE2fm/u4myDekKRoLuqhs=
 go.uber.org/atomic v1.4.0 h1:cxzIVoETapQEqDhQu3QfnvXAV4AlzcvUCxkVUFw3+EU=
 go.uber.org/atomic v1.4.0/go.mod h1:gD2HeocX3+yG+ygLZcrzQJaqmWj9AIm7n08wl/qW/PE=
