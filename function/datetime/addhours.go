@@ -1,9 +1,11 @@
 package datetime
 
 import (
+	"fmt"
 	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/expression/function"
+	"strconv"
 	"time"
 )
 
@@ -19,7 +21,7 @@ func (s *fnAddHours) Name() string {
 }
 
 func (s *fnAddHours) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeDateTime, data.TypeInt}, false
+	return []data.Type{data.TypeDateTime, data.TypeFloat64}, false
 }
 
 func (s *fnAddHours) Eval(in ...interface{}) (interface{}, error) {
@@ -27,10 +29,15 @@ func (s *fnAddHours) Eval(in ...interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	hours, err := coerce.ToInt64(in[1])
+	hours, err := coerce.ToFloat64(in[1])
 	if err != nil {
 		return nil, err
 	}
-	newT := startDate.Add(time.Duration(hours) * time.Hour)
+
+	d, err := time.ParseDuration(strconv.FormatFloat(hours, 'f', -1, 64) + "h")
+	if err != nil {
+		return nil, fmt.Errorf("Invalid hours [%f]", hours)
+	}
+	newT := startDate.Add(d)
 	return newT, nil
 }
