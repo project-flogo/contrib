@@ -9,22 +9,22 @@ import (
 	"time"
 )
 
-type fnSubMins struct {
+type fnAddMins struct {
 }
 
 func init() {
-	function.Register(&fnSubMins{})
+	function.Register(&fnAddMins{})
 }
 
-func (s *fnSubMins) Name() string {
-	return "subMins"
+func (s *fnAddMins) Name() string {
+	return "addMins"
 }
 
-func (s *fnSubMins) Sig() (paramTypes []data.Type, isVariadic bool) {
+func (s *fnAddMins) Sig() (paramTypes []data.Type, isVariadic bool) {
 	return []data.Type{data.TypeDateTime, data.TypeFloat64}, false
 }
 
-func (s *fnSubMins) Eval(in ...interface{}) (interface{}, error) {
+func (s *fnAddMins) Eval(in ...interface{}) (interface{}, error) {
 	t, err := coerce.ToDateTime(in[0])
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (s *fnSubMins) Eval(in ...interface{}) (interface{}, error) {
 		return nil, err
 	}
 
-	d, err := time.ParseDuration("-" + strconv.FormatFloat(mins, 'f', -1, 64) + "m")
+	d, err := time.ParseDuration(strconv.FormatFloat(mins, 'f', -1, 64) + "m")
 	if err != nil {
 		return nil, fmt.Errorf("Invalid minutes [%f]", mins)
 	}

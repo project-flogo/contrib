@@ -4,6 +4,7 @@ import (
 	"github.com/project-flogo/core/data/expression/function"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func init() {
@@ -14,26 +15,31 @@ func TestFnSubSecond_Eval(t *testing.T) {
 
 	tests := []struct {
 		Time     string
-		Time2    string
-		Expected float64
+		Seconds  float64
+		Expected string
 	}{
 		{
 			Time:     "2020-03-19T15:02:03",
-			Time2:    "2020-03-19T15:07:22",
-			Expected: float64(319),
+			Seconds:  10,
+			Expected: "2020-03-19T15:01:53Z",
 		},
 		{
 			Time:     "2020-03-19T15:02:03",
-			Time2:    "2020-03-22T12:05:03",
-			Expected: float64(248580),
+			Seconds:  30,
+			Expected: "2020-03-19T15:01:33Z",
+		},
+		{
+			Time:     "2020-03-19T15:02:03",
+			Seconds:  20.5,
+			Expected: "2020-03-19T15:01:42Z",
 		},
 	}
 
 	in := &fnSubSecond{}
 
 	for _, d := range tests {
-		final, err := in.Eval(d.Time, d.Time2)
+		final, err := in.Eval(d.Time, d.Seconds)
 		assert.Nil(t, err)
-		assert.Equal(t, d.Expected, final)
+		assert.Equal(t, d.Expected, final.(time.Time).Format(time.RFC3339))
 	}
 }

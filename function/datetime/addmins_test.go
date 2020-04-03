@@ -11,7 +11,7 @@ func init() {
 	function.ResolveAliases()
 }
 
-func TestFnSubMins_Eval(t *testing.T) {
+func TestFnAddMins_Eval(t *testing.T) {
 
 	tests := []struct {
 		Time     string
@@ -21,22 +21,21 @@ func TestFnSubMins_Eval(t *testing.T) {
 		{
 			Time:     "2020-03-19T15:02:03",
 			Mins:     10,
-			Expected: "2020-03-19T14:52:03Z",
+			Expected: "2020-03-19T15:12:03Z",
 		},
 		{
 			Time:     "2020-03-19T15:02:03",
 			Mins:     30,
-			Expected: "2020-03-19T14:32:03Z",
+			Expected: "2020-03-19T15:32:03Z",
 		},
 		{
 			Time:     "2020-03-19T15:02:03",
 			Mins:     20.5,
-			Expected: "2020-03-19T14:41:33Z",
+			Expected: "2020-03-19T15:22:33Z",
 		},
 	}
 
-	in := &fnSubMins{}
-
+	in := &fnAddMins{}
 	for _, d := range tests {
 		final, err := in.Eval(d.Time, d.Mins)
 		assert.Nil(t, err)
