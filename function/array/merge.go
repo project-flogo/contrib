@@ -30,7 +30,7 @@ func (mergeFunc) Eval(params ...interface{}) (interface{}, error) {
 	}
 
 	finalArrayValue := reflect.Value{}
-	log.RootLogger().Debugf("Start array mergeFunc function with parameters %+v", params)
+	log.RootLogger().Trace("Start array mergeFunc function with parameters %+v", params)
 	for _, arg := range params {
 		if arg != nil {
 			arrV := reflect.ValueOf(arg)
