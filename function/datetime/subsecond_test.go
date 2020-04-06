@@ -15,7 +15,7 @@ func TestFnSubSecond_Eval(t *testing.T) {
 
 	tests := []struct {
 		Time     string
-		Seconds  float64
+		Seconds  int
 		Expected string
 	}{
 		{

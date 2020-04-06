@@ -15,7 +15,7 @@ func TestFnSubHours_Eval(t *testing.T) {
 
 	tests := []struct {
 		Time     string
-		Hours    float64
+		Hours    int
 		Expected string
 	}{
 		{

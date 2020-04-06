@@ -15,7 +15,7 @@ func TestFnSubMins_Eval(t *testing.T) {
 
 	tests := []struct {
 		Time     string
-		Mins     float64
+		Mins     int
 		Expected string
 	}{
 		{
