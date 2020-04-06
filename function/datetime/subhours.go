@@ -21,7 +21,7 @@ func (s *fnSubHours) Name() string {
 }
 
 func (s *fnSubHours) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeDateTime, data.TypeFloat64}, false
+	return []data.Type{data.TypeDateTime, data.TypeInt}, false
 }
 
 func (s *fnSubHours) Eval(in ...interface{}) (interface{}, error) {
@@ -29,13 +29,13 @@ func (s *fnSubHours) Eval(in ...interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	hours, err := coerce.ToFloat64(in[1])
+	hours, err := coerce.ToInt(in[1])
 	if err != nil {
 		return nil, err
 	}
-	d, err := time.ParseDuration("-" + strconv.FormatFloat(hours, 'f', -1, 64) + "h")
+	d, err := time.ParseDuration("-" + strconv.Itoa(hours) + "h")
 	if err != nil {
-		return nil, fmt.Errorf("Invalid hours [%f]", hours)
+		return nil, fmt.Errorf("Invalid hours [%d]", hours)
 	}
 	return t.Add(d), nil
 }

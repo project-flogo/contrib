@@ -28,11 +28,6 @@ func TestFnSubMins_Eval(t *testing.T) {
 			Mins:     30,
 			Expected: "2020-03-19T14:32:03Z",
 		},
-		{
-			Time:     "2020-03-19T15:02:03",
-			Mins:     20.5,
-			Expected: "2020-03-19T14:41:33Z",
-		},
 	}
 
 	in := &fnSubMins{}

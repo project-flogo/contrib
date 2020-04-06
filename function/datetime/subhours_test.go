@@ -28,11 +28,6 @@ func TestFnSubHours_Eval(t *testing.T) {
 			Hours:    3,
 			Expected: "2020-03-19T12:02:03Z",
 		},
-		{
-			Time:     "2020-03-19T15:02:03",
-			Hours:    2.5,
-			Expected: "2020-03-19T12:32:03Z",
-		},
 	}
 
 	in := &fnSubHours{}
