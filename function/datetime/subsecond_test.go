@@ -28,11 +28,6 @@ func TestFnSubSecond_Eval(t *testing.T) {
 			Seconds:  30,
 			Expected: "2020-03-19T15:01:33Z",
 		},
-		{
-			Time:     "2020-03-19T15:02:03",
-			Seconds:  20.5,
-			Expected: "2020-03-19T15:01:42Z",
-		},
 	}
 
 	in := &fnSubSecond{}

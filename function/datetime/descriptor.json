@@ -351,7 +351,7 @@
                 },
                 {
                     "name": "hours",
-                    "type": "float64"
+                    "type": "int"
                 }
             ],
             "return": {
@@ -372,7 +372,7 @@
                 },
                 {
                     "name": "mins",
-                    "type": "float64"
+                    "type": "int"
                 }
             ],
             "return": {
@@ -393,7 +393,7 @@
                 },
                 {
                     "name": "seconds",
-                    "type": "float64"
+                    "type": "int"
                 }
             ],
             "return": {

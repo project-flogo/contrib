@@ -21,7 +21,7 @@ func (s *fnSubSecond) Name() string {
 }
 
 func (s *fnSubSecond) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeDateTime, data.TypeFloat64}, false
+	return []data.Type{data.TypeDateTime, data.TypeInt}, false
 }
 
 func (s *fnSubSecond) Eval(in ...interface{}) (interface{}, error) {
@@ -29,14 +29,14 @@ func (s *fnSubSecond) Eval(in ...interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	seconds, err := coerce.ToFloat64(in[1])
+	seconds, err := coerce.ToInt(in[1])
 	if err != nil {
 		return nil, err
 	}
 
-	d, err := time.ParseDuration("-" + strconv.FormatFloat(seconds, 'f', -1, 64) + "s")
+	d, err := time.ParseDuration("-" + strconv.Itoa(seconds) + "s")
 	if err != nil {
-		return nil, fmt.Errorf("Invalid minutes [%f]", seconds)
+		return nil, fmt.Errorf("Invalid minutes [%d]", seconds)
 	}
 	return t.Add(d), nil
 }

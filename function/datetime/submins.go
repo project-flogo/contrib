@@ -21,7 +21,7 @@ func (s *fnSubMins) Name() string {
 }
 
 func (s *fnSubMins) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeDateTime, data.TypeFloat64}, false
+	return []data.Type{data.TypeDateTime, data.TypeInt}, false
 }
 
 func (s *fnSubMins) Eval(in ...interface{}) (interface{}, error) {
@@ -29,14 +29,14 @@ func (s *fnSubMins) Eval(in ...interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	mins, err := coerce.ToFloat64(in[1])
+	mins, err := coerce.ToInt(in[1])
 	if err != nil {
 		return nil, err
 	}
 
-	d, err := time.ParseDuration("-" + strconv.FormatFloat(mins, 'f', -1, 64) + "m")
+	d, err := time.ParseDuration("-" + strconv.Itoa(mins) + "m")
 	if err != nil {
-		return nil, fmt.Errorf("Invalid minutes [%f]", mins)
+		return nil, fmt.Errorf("Invalid minutes [%d]", mins)
 	}
 	return t.Add(d), nil
 
