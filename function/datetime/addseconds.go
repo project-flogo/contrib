@@ -1,11 +1,9 @@
 package datetime
 
 import (
-	"fmt"
 	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/expression/function"
-	"strconv"
 	"time"
 )
 
@@ -21,7 +19,7 @@ func (s *fnAddSeconds) Name() string {
 }
 
 func (s *fnAddSeconds) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeDateTime, data.TypeFloat64}, false
+	return []data.Type{data.TypeDateTime, data.TypeInt}, false
 }
 
 func (s *fnAddSeconds) Eval(in ...interface{}) (interface{}, error) {
@@ -31,15 +29,9 @@ func (s *fnAddSeconds) Eval(in ...interface{}) (interface{}, error) {
 		return nil, err
 	}
 
-	seconds, err := coerce.ToFloat64(in[1])
+	seconds, err := coerce.ToInt(in[1])
 	if err != nil {
 		return nil, err
 	}
-
-	d, err := time.ParseDuration(strconv.FormatFloat(seconds, 'f', -1, 64) + "s")
-	if err != nil {
-		return nil, fmt.Errorf("Invalid minutes [%f]", seconds)
-	}
-	return t.Add(d), nil
-
+	return t.Add(time.Duration(seconds) * time.Second), nil
 }

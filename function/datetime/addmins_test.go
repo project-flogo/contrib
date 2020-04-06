@@ -15,7 +15,7 @@ func TestFnAddMins_Eval(t *testing.T) {
 
 	tests := []struct {
 		Time     string
-		Mins     float64
+		Mins     int
 		Expected string
 	}{
 		{
@@ -27,11 +27,6 @@ func TestFnAddMins_Eval(t *testing.T) {
 			Time:     "2020-03-19T15:02:03",
 			Mins:     30,
 			Expected: "2020-03-19T15:32:03Z",
-		},
-		{
-			Time:     "2020-03-19T15:02:03",
-			Mins:     20.5,
-			Expected: "2020-03-19T15:22:33Z",
 		},
 	}
 

@@ -15,7 +15,7 @@ func TestFnAddHours_Eval(t *testing.T) {
 	var in = &fnAddHours{}
 	tests := []struct {
 		Date     string
-		Hours    float64
+		Hours    int
 		Expected string
 	}{
 		{
@@ -32,11 +32,6 @@ func TestFnAddHours_Eval(t *testing.T) {
 			Date:     "2020-03-19T15:02:03-05:00",
 			Hours:    3,
 			Expected: "2020-03-19T18:02:03-05:00",
-		},
-		{
-			Date:     "2020-03-19T15:02:03-05:00",
-			Hours:    3.5,
-			Expected: "2020-03-19T18:32:03-05:00",
 		},
 	}
 
