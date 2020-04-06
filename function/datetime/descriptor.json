@@ -48,7 +48,7 @@
                 },
                 {
                     "name": "hours",
-                    "type": "float64",
+                    "type": "int",
                     "value":0
                 }
             ],
@@ -70,7 +70,7 @@
                 },
                 {
                     "name": "mins",
-                    "type": "float64",
+                    "type": "int",
                     "value":0
                 }
             ],
@@ -92,7 +92,7 @@
                 },
                 {
                     "name": "seconds",
-                    "type": "float64",
+                    "type": "int",
                     "value":0
                 }
             ],
