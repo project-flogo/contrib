@@ -39,7 +39,6 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 
 	// Initialize action.
 	err = factory.Initialize(getContext())
-
 	if err != nil {
 		return nil, err
 	}
