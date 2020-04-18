@@ -37,6 +37,14 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, fmt.Errorf("unsupported action: %s", ref)
 	}
 
+	// Initialize action.
+	err = factory.Initialize(getContext())
+
+	if err != nil {
+		return nil, err
+	}
+
+	//Create action instance.
 	act, err := factory.New(&action.Config{Settings: s.ActionSettings})
 	if err != nil {
 		return nil, err
