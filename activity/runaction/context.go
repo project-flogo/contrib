@@ -24,7 +24,7 @@ func (a actionInitContext) RuntimeSettings() map[string]interface{} {
 	return a.settings
 }
 
-func getContext() action.InitContext {
+func getInitContext() action.InitContext {
 
 	//Deafult size.
 	resources := make(map[string]*resource.Resource, 10)
