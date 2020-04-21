@@ -9,26 +9,26 @@ import (
 )
 
 
-type curremtFn struct {
+type currentFn struct {
 }
 
 func init() {
-	function.Register(&curremtFn{})
+	function.Register(&currentFn{})
 }
 
-func (s *curremtFn) Name() string {
+func (s *currentFn) Name() string {
 	return "current"
 }
 
-func (s *curremtFn) GetCategory() string {
+func (s *currentFn) GetCategory() string {
 	return "datetime"
 }
 
-func (s *curremtFn) Sig() (paramTypes []data.Type, isVariadic bool) {
+func (s *currentFn) Sig() (paramTypes []data.Type, isVariadic bool) {
 	return []data.Type{}, false
 }
 
-func (s *curremtFn) Eval(d ...interface{}) (interface{}, error) {
+func (s *currentFn) Eval(d ...interface{}) (interface{}, error) {
 	log.RootLogger().Debugf("Returns the current datetime with UTC timezone")
 	return time.Now().UTC(), nil
 }
