@@ -13,7 +13,7 @@ func init() {
 }
 
 func TestCurrentDate_Eval(t *testing.T) {
-	n := CurrentDatetime{}
+	n := currentFn{}
 	datetime, _ := n.Eval(nil)
 	fmt.Println(datetime)
 	assert.NotNil(t, datetime)
