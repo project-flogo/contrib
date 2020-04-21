@@ -154,6 +154,15 @@
             }
         },
         {
+            "name": "current",
+            "description": "Returns the current datetime with UTC timezone",
+            "example": "datetime.current() => 2020-04-21T03:16:44+00:00",
+            "args": [],
+            "return": {
+                "type": "datetime"
+            }
+        },
+        {
             "name": "currentDate",
             "description": "Returns the current date with UTC time zone.",
             "example": "datetime.currentDate() => 2017-05-13+00:00",
@@ -283,7 +292,7 @@
             "example": "datetime.now() => 2017-05-13T15:59:41+00:00",
             "args": [],
             "return": {
-                "type": "datetime"
+                "type": "string"
             }
         },
         {
