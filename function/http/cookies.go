@@ -40,7 +40,7 @@ func (fnReqCookiesToParams) Eval(params ...interface{}) (interface{}, error) {
 	}
 
 	//dummy request to parse cookie string
-	r := &http.Request{}
+	r := &http.Request{Header: make(map[string][]string)}
 	r.Header.Set("Cookie", cookies)
 	cos := r.Cookies()
 	cAsParams := make(map[string]string, len(cos))
@@ -70,10 +70,10 @@ func (fnReqCookiesFromParams) Eval(params ...interface{}) (interface{}, error) {
 	}
 
 	//dummy request to construct cookie string
-	r := &http.Request{}
+	r := &http.Request{Header: make(map[string][]string)}
 
 	for name, value := range cAsParams {
-		r.AddCookie(&http.Cookie{Name:name, Value:value})
+		r.AddCookie(&http.Cookie{Name: name, Value: value})
 	}
 
 	cookies := r.Header.Get("Cookie")
@@ -81,9 +81,7 @@ func (fnReqCookiesFromParams) Eval(params ...interface{}) (interface{}, error) {
 	return cookies, nil
 }
 
-
 type fnResCookieToObject struct {
-
 }
 
 func (fnResCookieToObject) Name() string {
@@ -102,7 +100,7 @@ func (fnResCookieToObject) Eval(params ...interface{}) (interface{}, error) {
 	}
 
 	//dummy request to parse cookie string
-	r := &http.Response{}
+	r := &http.Response{Header: make(map[string][]string)}
 	r.Header.Set("Set-Cookie", cookie)
 	cos := r.Cookies()
 
@@ -156,7 +154,7 @@ func (fnResCookiesToObjectMap) Eval(params ...interface{}) (interface{}, error) 
 	}
 
 	//dummy response to parse cookie string
-	r := &http.Response{}
+	r := &http.Response{Header: make(map[string][]string)}
 	for _, cookie := range cookies {
 
 		cookieStr, err := coerce.ToString(cookie)
@@ -212,7 +210,7 @@ func (fnResCookiesFromObjectMap) Eval(params ...interface{}) (interface{}, error
 	return cookies, nil
 }
 
-func toCookieString(co interface{}) (string, error){
+func toCookieString(co interface{}) (string, error) {
 	strCookie := ""
 
 	if c, ok := co.(*http.Cookie); ok {
@@ -237,7 +235,6 @@ func toCookieString(co interface{}) (string, error){
 
 	return strCookie, nil
 }
-
 
 func mapToCookie(values map[string]interface{}) (cookie *http.Cookie, err error) {
 
@@ -316,9 +313,9 @@ func (fnRewriteCookies) Sig() (paramTypes []data.Type, isVariadic bool) {
 }
 
 func (fnRewriteCookies) Eval(params ...interface{}) (interface{}, error) {
-	
+
 	// get the input params
-	
+
 	cookies, err := coerce.ToArray(params[0])
 	if err != nil {
 		return nil, fmt.Errorf("Error in cookies array input")
@@ -337,28 +334,28 @@ func (fnRewriteCookies) Eval(params ...interface{}) (interface{}, error) {
 	}
 
 	/*
-	fmt.Printf("cookies: %v\n", cookies)
-	fmt.Printf("cookieName: %v\n", cookieName)
-	fmt.Printf("domain: %v\n", domain)
-	fmt.Printf("path: %v\n", path)
-*/
+		fmt.Printf("cookies: %v\n", cookies)
+		fmt.Printf("cookieName: %v\n", cookieName)
+		fmt.Printf("domain: %v\n", domain)
+		fmt.Printf("path: %v\n", path)
+	*/
 
 	// process each cookie replacing the path and domain as per parameters
 	for index, cookie := range cookies {
 		cookiestr := cookie.(string)
 		if strings.HasPrefix(strings.ToUpper(cookiestr), strings.ToUpper((cookieName + "="))) {
-			cookie := strings.Split(cookiestr, ";")	
-			
+			cookie := strings.Split(cookiestr, ";")
+
 			// replace domain and path
 			for idx, part := range cookie {
-				if idx == 0 { 
+				if idx == 0 {
 					// dont apply this to the first part of the cookie as this is the name and cookie content
 					continue
 				}
-				if (strings.HasPrefix(strings.ToUpper(part), strings.ToUpper(" Domain=")) || strings.HasPrefix(strings.ToUpper(part), strings.ToUpper("Domain="))) {
+				if strings.HasPrefix(strings.ToUpper(part), strings.ToUpper(" Domain=")) || strings.HasPrefix(strings.ToUpper(part), strings.ToUpper("Domain=")) {
 					cookie[idx] = " Domain=" + domain
 				}
-				if (strings.HasPrefix(strings.ToUpper(part), strings.ToUpper(" Path=")) || strings.HasPrefix(strings.ToUpper(part), strings.ToUpper("Path="))) {
+				if strings.HasPrefix(strings.ToUpper(part), strings.ToUpper(" Path=")) || strings.HasPrefix(strings.ToUpper(part), strings.ToUpper("Path=")) {
 					cookie[idx] = " Path=" + path
 				}
 			}
@@ -366,6 +363,6 @@ func (fnRewriteCookies) Eval(params ...interface{}) (interface{}, error) {
 			cookies[index] = rewrittenCookie
 			break
 		}
-	}	
+	}
 	return cookies, nil
 }
