@@ -285,7 +285,7 @@
     },
     {
       "name": "join",
-      "description": "Convert array to string array and join concatenates the elements of items to create a single string. The separator string sep is placed between elements in the resulting string",
+      "description": "Converts an array to its string representation and concatenates its elements using the specified separator between each element",
       "example": "string.join(array.create(\"a\", \"b\"), \"-\") => a-b",
       "args": [
         {
