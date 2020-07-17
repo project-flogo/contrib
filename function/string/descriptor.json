@@ -284,6 +284,26 @@
       }
     },
     {
+      "name": "join",
+      "description": "Convert array to string array and join concatenates the elements of items to create a single string. The separator string sep is placed between elements in the resulting string",
+      "example": "string.join(array.create(\"a\", \"b\"), \"-\") => a-b",
+      "args": [
+        {
+          "name": "items",
+          "type": "array",
+          "valueType": "any"
+        },
+        {
+          "name": "separator",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "array",
+        "valueType": "any"
+      }
+    },
+    {
       "name": "lastIndex",
       "description": "LastIndex returns the index of the last instance of substring in inputstring, or -1 if substring is not present in inputstring. string.lastIndex(\"go gopher\", \"go\")",
       "example": "string.lastIndex(\"hello flogo\", \"flogo\") => 6",
@@ -362,6 +382,20 @@
           "name": "new",
           "type": "string"
         }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "title",
+      "description": "returns the string with all Unicode letters that begin words",
+      "example": "string.title(\"hello world\") => Hello World",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
       ],
       "return": {
         "type": "string"
