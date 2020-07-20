@@ -388,9 +388,9 @@
       }
     },
     {
-      "name": "title",
-      "description": "returns the string with all Unicode letters that begin words",
-      "example": "string.title(\"hello world\") => Hello World",
+      "name": "toTitleCase",
+      "description": "returns the string to capitalize the first letter of every word",
+      "example": "string.toTitleCase(\"hello world\") => Hello World",
       "args": [
         {
           "name": "str",

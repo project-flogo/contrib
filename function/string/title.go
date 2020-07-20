@@ -16,7 +16,7 @@ type fnTitle struct {
 }
 
 func (fnTitle) Name() string {
-	return "title"
+	return "toTitleCase"
 }
 
 func (fnTitle) Sig() (paramTypes []data.Type, isVariadic bool) {
@@ -26,7 +26,7 @@ func (fnTitle) Sig() (paramTypes []data.Type, isVariadic bool) {
 func (fnTitle) Eval(params ...interface{}) (interface{}, error) {
 	str, err := coerce.ToString(params[0])
 	if err != nil {
-		return nil, fmt.Errorf("error converting string.toTite's argument [%+v] to string: %s", params[0], err.Error())
+		return nil, fmt.Errorf("error converting string.toTitleCase's argument [%+v] to string: %s", params[0], err.Error())
 	}
 	return strings.Title(str), nil
 }
