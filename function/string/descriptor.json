@@ -284,6 +284,26 @@
       }
     },
     {
+      "name": "join",
+      "description": "Converts an array to its string representation and concatenates its elements using the specified separator between each element",
+      "example": "string.join(array.create(\"a\", \"b\"), \"-\") => a-b",
+      "args": [
+        {
+          "name": "items",
+          "type": "array",
+          "valueType": "any"
+        },
+        {
+          "name": "separator",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "array",
+        "valueType": "any"
+      }
+    },
+    {
       "name": "lastIndex",
       "description": "LastIndex returns the index of the last instance of substring in inputstring, or -1 if substring is not present in inputstring. string.lastIndex(\"go gopher\", \"go\")",
       "example": "string.lastIndex(\"hello flogo\", \"flogo\") => 6",
@@ -362,6 +382,20 @@
           "name": "new",
           "type": "string"
         }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "toTitleCase",
+      "description": "returns the string to capitalize the first letter of every word",
+      "example": "string.toTitleCase(\"hello world\") => Hello World",
+      "args": [
+        {
+          "name": "str",
+          "type": "string"
+        },
       ],
       "return": {
         "type": "string"
