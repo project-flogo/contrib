@@ -395,7 +395,7 @@
         {
           "name": "str",
           "type": "string"
-        },
+        }
       ],
       "return": {
         "type": "string"
