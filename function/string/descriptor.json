@@ -299,8 +299,7 @@
         }
       ],
       "return": {
-        "type": "array",
-        "valueType": "any"
+        "type": "string"
       }
     },
     {
