@@ -5,7 +5,10 @@
   "title": "Log",
   "description": "Logs a message",
   "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/log",
-  "input":[
+  "display": {
+    "icon": "log-icon.svg"
+  },
+  "input": [
     {
       "name": "message",
       "type": "string",
