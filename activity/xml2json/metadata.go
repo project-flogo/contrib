@@ -5,7 +5,7 @@ import (
 )
 
 type Input struct {
-	XmlData string `md:"xmlData"` //
+	XmlData interface{} `md:"xmlData"` //
 }
 
 func (i *Input) ToMap() map[string]interface{} {
@@ -15,9 +15,8 @@ func (i *Input) ToMap() map[string]interface{} {
 }
 
 func (i *Input) FromMap(values map[string]interface{}) error {
-
 	var err error
-	i.XmlData, err = coerce.ToString(values["xmlData"])
+	i.XmlData, err = coerce.ToAny(values["xmlData"])
 	if err != nil {
 		return err
 	}
