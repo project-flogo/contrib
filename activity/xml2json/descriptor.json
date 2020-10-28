@@ -9,7 +9,7 @@
   "input": [
     {
       "name": "xmlData",
-      "type": "string",
+      "type": "any",
       "required": true
     }
   ],

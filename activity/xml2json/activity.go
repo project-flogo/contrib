@@ -1,11 +1,10 @@
 package xml2json
 
 import (
-	"encoding/json"
-	"strings"
-
-	xj "github.com/basgys/goxml2json"
+	"fmt"
+	"github.com/clbanning/mxj"
 	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/data/coerce"
 )
 
 // Activity is an activity that converts XML data into JSON object.
@@ -34,24 +33,18 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 	if err != nil {
 		return false, err
 	}
-	xmlData := input.XmlData
-
 	output := &Output{}
 
-	xml := strings.NewReader(xmlData)
-
-	jsonData, err := xj.Convert(xml, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.String, xj.Null))
+	xmlData, err := coerce.ToBytes(input.XmlData)
+	if err != nil {
+		return false, activity.NewError(fmt.Sprintf("Failed to convert input data to bytes: %s", err.Error()), "", nil)
+	}
+	s, err := mxj.NewMapXml(xmlData)
 	if err != nil {
 		context.Logger().Error(err)
-		return false, activity.NewError("Failed to convert XML data", "", nil)
+		return false, activity.NewError(fmt.Sprintf("Failed to convert XML data: %s", err.Error()), "", nil)
 	}
-
-	err = json.Unmarshal(jsonData.Bytes(), &output.JsonObject)
-	if err != nil {
-		context.Logger().Error(err)
-		return false, activity.NewError("Failed to parse JSON data", "", nil)
-	}
-
+	output.JsonObject = s.Old()
 	err = context.SetOutputObject(output)
 	if err != nil {
 		return false, err
