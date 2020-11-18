@@ -20,7 +20,7 @@ func TestEncryptDecrypt(t *testing.T) {
 
 func TestDecryptError(t *testing.T) {
 	passphrase := "passphrase"
-	encrypt := "5458e21d7dfe11bdf8249bffb24c1dc9211e3e677d2788bf0fa4f07c830a93cceba9a203c4sdf"
+	encrypt := "5558e21d7dfe11bdf8249bffb24c1dc9211e3e677d2788bf0fa4f07c830a93cceba9a203c4sdf"
 	fmt.Printf("Encrypted %s EncryptedLength: %d\n", encrypt, len(encrypt))
 
 	_, err := DecryptString(encrypt, passphrase)
