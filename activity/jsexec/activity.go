@@ -57,25 +57,28 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	if err != nil {
 		output.Error = true
 		output.ErrorMessage = err.Error()
-		return true, nil
 	}
-	//todo is ok to ignore the errors for the SetInVM calls?
-	_ = vm.SetInVM("parameters", input.Parameters)
-	_ = vm.SetInVM("result", result)
+	if vm != nil {
+		//todo is ok to ignore the errors for the SetInVM calls?
+		_ = vm.SetInVM("parameters", input.Parameters)
+		_ = vm.SetInVM("result", result)
 
-	_, err = vm.vm.RunScript("JSServiceScript", a.script)
-	if err != nil {
-		output.Error = true
-		output.ErrorMessage = err.Error()
-		return true, nil
-	}
-	err = vm.GetFromVM("result", &result)
-	if err != nil {
-		output.Error = true
-		output.ErrorMessage = err.Error()
-		return true, nil
-	}
-	output.Result = result
+		_, err = vm.vm.RunScript("JSServiceScript", a.script)
+		if err != nil {
+			output.Error = true
+			output.ErrorMessage = err.Error()
+		} else {
+			err = vm.GetFromVM("result", &result)
+			if err != nil {
+				output.Error = true
+				output.ErrorMessage = err.Error()
+			} else {
+				output.Error = false
+				output.ErrorMessage = ""
+				output.Result = result
+			}
+		}
+	}		
 
 	err = ctx.SetOutputObject(&output)
 	if err != nil {
