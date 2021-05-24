@@ -1,0 +1,46 @@
+{
+  "name": "crypto",
+  "type": "flogo:function",
+  "version": "0.0.1",
+  "title": "Crypto utility functions",
+  "description": "Useful tools and utilities for encryption and decryption",
+  "homepage": "https://github.com/d-sauer/contrib/function/crypto",
+  "functions": [
+    {
+      "name": "encrypt",
+      "description": "Encrypt payload by default with AES-256 GCM algorithm",
+      "example": "..",
+      "args": [
+        {
+          "name": "key",
+          "type": "bytes"
+        },
+        {
+          "name": "plaintext",
+          "type": "bytes"
+        }
+      ],
+      "return": {
+        "type": "bytes"
+      }
+    },
+    {
+      "name": "decrypt",
+      "description": "Decrypt payload by default with AES-256 GCM algorithm",
+      "example": "..",
+      "args": [
+        {
+          "name": "key",
+          "type": "bytes"
+        },
+        {
+          "name": "ciphertext",
+          "type": "bytes"
+        }
+      ],
+      "return": {
+        "type": "bytes"
+      }
+    }
+  ]
+}
