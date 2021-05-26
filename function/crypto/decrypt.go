@@ -27,14 +27,11 @@ func (fnDecrypt) Eval(params ...interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, fmt.Errorf("decrypt function first parameter (key) [%+v] must be bytes", params[0])
 	}
-	// TODO: Check size of the keys (128 or 256 bits)
 
 	ciphertext, err := coerce.ToBytes(params[1])
 	if err != nil {
 		return nil, fmt.Errorf("decrypt function second parameter (ciphertext) [%+v] must be byte", params[1])
 	}
 
-	var decr []byte
-
-	return decr, err
+	return Decrypt(key, ciphertext)
 }

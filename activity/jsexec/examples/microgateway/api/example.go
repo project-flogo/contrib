@@ -1,10 +1,10 @@
 package api
 
 import (
+	"github.com/project-flogo/contrib/activity/jsexec"
 	trigger "github.com/project-flogo/contrib/trigger/rest"
 	"github.com/project-flogo/core/api"
 	"github.com/project-flogo/core/engine"
-	"github.com/project-flogo/contrib/activity/jsexec"
 	"github.com/project-flogo/microgateway"
 	microapi "github.com/project-flogo/microgateway/api"
 )

@@ -27,14 +27,11 @@ func (fnEncrypt) Eval(params ...interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, fmt.Errorf("encrypt function first parameter (key) [%+v] must be bytes", params[0])
 	}
-	// TODO: Check size of the keys (128 or 256 bits)
 
 	plaintext, err := coerce.ToBytes(params[1])
 	if err != nil {
 		return nil, fmt.Errorf("encrypt function second parameter (plaintext) [%+v] must be byte", params[1])
 	}
 
-	var cr []byte
-
-	return cr, err
+	return Encrypt(key, plaintext)
 }

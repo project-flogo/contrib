@@ -5,6 +5,9 @@
   "title": "Crypto utility functions",
   "description": "Useful tools and utilities for encryption and decryption",
   "homepage": "https://github.com/d-sauer/contrib/function/crypto",
+  "display": {
+    "icon": "crypto-icon.svg"
+  },
   "functions": [
     {
       "name": "encrypt",
