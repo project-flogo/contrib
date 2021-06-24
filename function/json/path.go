@@ -1,10 +1,11 @@
 package json
 
 import (
+	"strings"
+
 	"github.com/oliveagle/jsonpath"
 	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/expression/function"
-	"strings"
 )
 
 func init() {
