@@ -24,13 +24,13 @@ Get value of associated key from json object
 
 
 ## length()
-Get the number of elements in a json object
+Get the number of elements in json object or array
 
 ### Input Args
 
-| Arg      | Type   | Description                        |
-|:---------|:-------|:-----------------------------------|
-| object   | any    | The json object                    |
+| Arg               | Type   | Description                        |
+|:------------------|:-------|:-----------------------------------|
+| jsonObjectOrArray | any    | The json object or array           |
 
 ### Output
 
@@ -39,19 +39,19 @@ Get the number of elements in a json object
 | returnVal | int    | The length items in the json object |
 
 ## numbersToString()
-Convert every number type to string in a json object
+Convert every number type to string in a json object or array
 
 ### Input Args
 
-| Arg      | Type   | Description                        |
-|:---------|:-------|:-----------------------------------|
-| object   | any    | The json object                    |
+| Arg                 | Type   | Description                        |
+|:--------------------|:-------|:-----------------------------------|
+| jsonObjectOrArray   | any    | The json object or array           |
 
 ### Output
 
-| Arg       | Type   | Description                                     |
-|:----------|:-------|:------------------------------------------------|
-| returnVal | any    | The json object with numbers encoded as strings |
+| Arg       | Type   | Description                                              |
+|:----------|:-------|:---------------------------------------------------------|
+| returnVal | any    | The json object or array with numbers encoded as strings |
 
 ## objKeys()
 Get the list of top level keys of json object

@@ -26,12 +26,12 @@
     },
     {
       "name": "length",
-      "description": "Get the number of elements in a json object",
-      "example": "json.length(jsonObject) => value",
+      "description": "Get the number of elements in json object or array",
+      "example": "json.length(jsonObjectOrArray) => value",
       "args": [
         {
-          "name": "jsonObject",
-          "type": "object"
+          "name": "jsonObjectOrArray",
+          "type": "any"
         }
       ],
       "return": {
@@ -40,11 +40,11 @@
     },
     {
       "name": "numbersToString",
-      "description": "Convert every number type to string in a json object",
-      "example": "json.numbersToString(jsonObject) => value",
+      "description": "Convert every number type to string in a json object or array",
+      "example": "json.numbersToString(jsonObjectOrArray) => value",
       "args": [
         {
-          "name": "jsonObject",
+          "name": "jsonObjectOrArray",
           "type": "any"
         }
       ],
