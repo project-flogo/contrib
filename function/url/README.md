@@ -22,7 +22,7 @@ Returns the URL encoded form of input string
 | returnVal | string | The url encoded string |
 
 
-## escapePath()
+## escapedPath()
 Returns the escaped path part of the URL, stripping everything except the PATH after hostname.
 
 ### Input Args
@@ -36,22 +36,6 @@ Returns the escaped path part of the URL, stripping everything except the PATH a
 | Arg       | Type   | Description                               |
 |:----------|:-------|:------------------------------------------|
 | returnVal | string | The escaped PATH part of the rawURLString |
-
-
-## escapeQuery()
-Encodes the input string so it can be safely placed inside a URL query. Please note, this does not create the full query string.
-
-### Input Args
-
-| Arg        | Type   | Description     |
-|:-----------|:-------|:----------------|
-| queryValue | string | URL query value |
-
-### Output
-
-| Arg       | Type   | Description                    |
-|:----------|:-------|:-------------------------------|
-| returnVal | string | The escaped value of the input |
 
 
 ## hostname()
@@ -86,6 +70,22 @@ Returns the path part of URL
 | returnVal | any    | The path part of URL |
 
 
+## pathEscape()
+Returns the escaped string so it can be safely placed inside a URL path segment, replacing special characters (including /) with %XX sequences as needed.
+
+### Input Args
+
+| Arg        | Type   | Description     |
+|:-----------|:-------|:----------------|
+| pathString | string | The path string |
+
+### Output
+
+| Arg       | Type   | Description             |
+|:----------|:-------|:------------------------|
+| returnVal | string | The escaped PATH string |
+
+
 ## port()
 Returns the port part of URL, without the leading colon. If URL doesn't contain a valid numeric port, port returns an empty string.
 
@@ -117,6 +117,22 @@ Returns the encoded query string if second parameter is true else returns an obj
 | Arg       | Type   | Description                        |
 |:----------|:-------|:-----------------------------------|
 | returnVal | any    | The encoded query string or object |
+
+
+## queryEscape()
+Encodes the input string so it can be safely placed inside a URL query. Please note, this does not create the full query string.
+
+### Input Args
+
+| Arg        | Type   | Description     |
+|:-----------|:-------|:----------------|
+| queryValue | string | URL query value |
+
+### Output
+
+| Arg       | Type   | Description                    |
+|:----------|:-------|:-------------------------------|
+| returnVal | string | The escaped value of the input |
 
 
 ## scheme()

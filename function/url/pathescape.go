@@ -10,27 +10,27 @@ import (
 )
 
 func init() {
-	_ = function.Register(&fnEscapeQuery{})
+	_ = function.Register(&fnPathEscape{})
 }
 
-type fnEscapeQuery struct {
+type fnPathEscape struct {
 }
 
 // Name returns the name of the function
-func (fnEscapeQuery) Name() string {
-	return "escapeQuery"
+func (fnPathEscape) Name() string {
+	return "pathEscape"
 }
 
 // Sig returns the function signature
-func (fnEscapeQuery) Sig() (paramTypes []data.Type, isVariadic bool) {
+func (fnPathEscape) Sig() (paramTypes []data.Type, isVariadic bool) {
 	return []data.Type{data.TypeString}, false
 }
 
 // Eval executes the function
-func (fnEscapeQuery) Eval(params ...interface{}) (interface{}, error) {
+func (fnPathEscape) Eval(params ...interface{}) (interface{}, error) {
 	rawString, err := coerce.ToString(params[0])
 	if err != nil {
 		return nil, fmt.Errorf("Unable to coerce [%+v] to string: %s", params[0], err.Error())
 	}
-	return url.QueryEscape(rawString), nil
+	return url.PathEscape(rawString), nil
 }

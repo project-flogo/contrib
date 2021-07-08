@@ -10,24 +10,24 @@ import (
 )
 
 func init() {
-	_ = function.Register(&fnEscapePath{})
+	_ = function.Register(&fnEscapedPath{})
 }
 
-type fnEscapePath struct {
+type fnEscapedPath struct {
 }
 
 // Name returns the name of the function
-func (fnEscapePath) Name() string {
-	return "escapePath"
+func (fnEscapedPath) Name() string {
+	return "escapedPath"
 }
 
 // Sig returns the function signature
-func (fnEscapePath) Sig() (paramTypes []data.Type, isVariadic bool) {
+func (fnEscapedPath) Sig() (paramTypes []data.Type, isVariadic bool) {
 	return []data.Type{data.TypeString}, false
 }
 
 // Eval executes the function
-func (fnEscapePath) Eval(params ...interface{}) (interface{}, error) {
+func (fnEscapedPath) Eval(params ...interface{}) (interface{}, error) {
 	rawString, err := coerce.ToString(params[0])
 	if err != nil {
 		return nil, fmt.Errorf("Unable to coerce [%+v] to string: %s", params[0], err.Error())

@@ -7,9 +7,9 @@ import (
 )
 
 func TestFnEscapeQuery(t *testing.T) {
-	f := &fnEscapeQuery{}
-	input := "hello + world"
+	f := &fnQueryEscape{}
+	input := "hello world"
 	v, err := f.Eval(input)
 	assert.Nil(t, err)
-	assert.Equal(t, "hello+%2B+world", v)
+	assert.Equal(t, "hello+world", v)
 }
