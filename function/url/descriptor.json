@@ -1,0 +1,140 @@
+{
+  "name": "url",
+  "type": "flogo:function",
+  "version": "0.1.0",
+  "title": "URL Functions",
+  "description": "URL Functions",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/url",
+  "functions": [
+    {
+      "name": "encode",
+      "description": "Returns the URL encoded form of input string",
+      "example": "url.encode(\"https://subdomain.example.com/path?q=hello world#fragment with space\") => \"https://subdomain.example.com/path?q=hello+world#fragment%20with%20space\"",
+      "args": [
+        {
+          "name": "rawURLString",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "escapedPath",
+      "description": "Returns the escaped path part of the URL, stripping everything except the PATH after hostname",
+      "example": "url.escapedPath(\"https://example.com:8080/root-path/sub%2Fpath?query=example+query+%2F+question#fragment\") => \"/root-path/sub%2Fpath\"",
+      "args": [
+        {
+          "name": "rawURLString",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "hostname",
+      "description": "Returns hostname for the URL, stripping any valid port number if present. If input is enclosed in square brackets, as literal IPv6 addresses are, the square brackets are removed from the output.",
+      "example": "url.hostname(\"https://example.com:8080/root-path/sub-path?query=example+query+%2F+question#fragment\") => example.com",
+      "args": [
+        {
+          "name": "rawURLString",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "path",
+      "description": "Returns the path part of URL",
+      "example": "url.path(\"https://example.com:8080/root-path/sub-path?query=example+query+%2F+question#fragment\") => \"/root-path/sub-path\"",
+      "args": [
+        {
+          "name": "rawURLString",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "pathEscape",
+      "description": "Returns the escaped string so it can be safely placed inside a URL path segment, replacing special characters (including /) with %XX sequences as needed.",
+      "example": "url.pathEscape(\"/some-path with ([brackets])\") => \"%2Fsome-path%20with%20%28%5Bbrackets%5D%29\"",
+      "args": [
+        {
+          "name": "pathString",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "port",
+      "description": "Returns the port part of URL, without the leading colon. If URL doesn't contain a valid numeric port, port returns an empty string.",
+      "example": "url.port(\"https://example.com:8080/root-path/sub-path?query=example+query+%2F+question#fragment\") => \"8080\"",
+      "args": [
+        {
+          "name": "rawURLString",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "query",
+      "description": "Returns the encoded query string if second parameter is true else returns an object with key value pair of query and value",
+      "example": "url.query(\"https://example.com:8080/root-path/sub-path?query=example+query+%2F+question#fragment\", true) => \"query=example+query+%2F+question\"",
+      "args": [
+        {
+          "name": "rawURLString",
+          "type": "string"
+        },
+        {
+          "name": "encode",
+          "type": "boolean"
+        }
+      ],
+      "return": {
+        "type": "any"
+      }
+    },
+    {
+      "name": "queryEscape",
+      "description": "Encodes the input string so it can be safely placed inside a URL query. Please note, this does not create the full query string.",
+      "example": "url.queryEscape(\"hello world\") => hello+world",
+      "args": [
+        {
+          "name": "queryValue",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "scheme",
+      "description": "Returns the URL scheme",
+      "example": "url.scheme(\"https://example.com:8080/root-path/sub-path?query=example+query+%2F+question#fragment\") => https",
+      "args": [
+        {
+          "name": "rawURLString",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    }
+  ]
+}

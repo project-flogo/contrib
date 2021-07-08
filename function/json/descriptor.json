@@ -1,11 +1,87 @@
 {
   "name": "json",
   "type": "flogo:function",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "title": "Json Functions",
   "description": "Json Functions",
   "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/json",
   "functions": [
+    {
+      "name": "get",
+      "description": "Get value of associated key from json object",
+      "example": "json.get(jsonObject, \"key\") => value",
+      "args": [
+        {
+          "name": "jsonObject",
+          "type": "object"
+        },
+        {
+          "name": "key",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "any"
+      }
+    },
+    {
+      "name": "length",
+      "description": "Get the number of elements in json object or array",
+      "example": "json.length(jsonObjectOrArray) => value",
+      "args": [
+        {
+          "name": "jsonObjectOrArray",
+          "type": "any"
+        }
+      ],
+      "return": {
+        "type": "int"
+      }
+    },
+    {
+      "name": "numbersToString",
+      "description": "Convert every number type to string in a json object or array",
+      "example": "json.numbersToString(jsonObjectOrArray) => value",
+      "args": [
+        {
+          "name": "jsonObjectOrArray",
+          "type": "any"
+        }
+      ],
+      "return": {
+        "type": "any"
+      }
+    },
+    {
+      "name": "objKeys",
+      "description": "Get the list of top level keys of json object",
+      "example": "json.objKeys(jsonObject) => value",
+      "args": [
+        {
+          "name": "jsonObject",
+          "type": "object"
+        }
+      ],
+      "return": {
+        "type": "array",
+        "valueType": "string"
+      }
+    },
+    {
+      "name": "objValues",
+      "description": "Get list of all the values of a json object",
+      "example": "json.objValues(jsonObject) => value",
+      "args": [
+        {
+          "name": "jsonObject",
+          "type": "object"
+        }
+      ],
+      "return": {
+        "type": "array",
+        "valueType": "any"
+      }
+    },
     {
       "name": "path",
       "description": "Use JSONPath expression to get value from JSON object. Refer https://github.com/oliveagle/jsonpath for expression format.",
@@ -17,6 +93,28 @@
         },
         {
           "name": "object",
+          "type": "any"
+        }
+      ],
+      "return": {
+        "type": "any"
+      }
+    },
+    {
+      "name": "set",
+      "description": "Set the value of existing key or add new key and set it's value in a json object",
+      "example": "json.set(jsonObject, \"key\", value) => value",
+      "args": [
+        {
+          "name": "jsonObject",
+          "type": "object"
+        },
+        {
+          "name": "key",
+          "type": "string"
+        },
+        {
+          "name": "value",
           "type": "any"
         }
       ],

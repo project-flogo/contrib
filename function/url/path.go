@@ -1,10 +1,11 @@
-package json
+package url
 
 import (
-	"strings"
+	"fmt"
+	"net/url"
 
-	"github.com/oliveagle/jsonpath"
 	"github.com/project-flogo/core/data"
+	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/expression/function"
 )
 
@@ -22,15 +23,18 @@ func (fnPath) Name() string {
 
 // Sig returns the function signature
 func (fnPath) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeString, data.TypeAny}, false
+	return []data.Type{data.TypeString}, false
 }
 
 // Eval executes the function
 func (fnPath) Eval(params ...interface{}) (interface{}, error) {
-	expression := params[0].(string)
-	//tmp fix to take $loop as $. for now
-	if strings.HasPrefix(strings.TrimSpace(expression), "$loop.") {
-		expression = strings.Replace(expression, "$loop", "$", -1)
+	rawString, err := coerce.ToString(params[0])
+	if err != nil {
+		return nil, fmt.Errorf("Unable to coerce [%+v] to string: %s", params[0], err.Error())
 	}
-	return jsonpath.JsonPathLookup(params[1], expression)
+	u, err := url.Parse(rawString)
+	if err != nil {
+		return nil, fmt.Errorf("Unable to parse url: %s", err.Error())
+	}
+	return u.Path, nil
 }
