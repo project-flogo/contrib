@@ -27,7 +27,7 @@
     {
       "name": "length",
       "description": "Get the number of elements in json object or array",
-      "example": "json.length(jsonObjectOrArray) => value",
+      "example": "json.length(jsonObjectOrArray) => lengthInteger",
       "args": [
         {
           "name": "jsonObjectOrArray",
@@ -41,7 +41,7 @@
     {
       "name": "numbersToString",
       "description": "Convert every number type to string in a json object or array",
-      "example": "json.numbersToString(jsonObjectOrArray) => value",
+      "example": "json.numbersToString(jsonObjectOrArray) => jsonObjectOrArray",
       "args": [
         {
           "name": "jsonObjectOrArray",
@@ -54,8 +54,8 @@
     },
     {
       "name": "objKeys",
-      "description": "Get the list of top level keys of json object",
-      "example": "json.objKeys(jsonObject) => value",
+      "description": "Get the list of all top level keys of json object",
+      "example": "json.objKeys(jsonObject) => arrayOfStrings",
       "args": [
         {
           "name": "jsonObject",
@@ -69,8 +69,8 @@
     },
     {
       "name": "objValues",
-      "description": "Get list of all the values of a json object",
-      "example": "json.objValues(jsonObject) => value",
+      "description": "Get the list of all top level values of json object",
+      "example": "json.objValues(jsonObject) => arrayOfValues",
       "args": [
         {
           "name": "jsonObject",
@@ -103,7 +103,7 @@
     {
       "name": "set",
       "description": "Set the value of existing key or add new key and set it's value in a json object",
-      "example": "json.set(jsonObject, \"key\", value) => value",
+      "example": "json.set(jsonObject, \"key\", value) => jsonObject",
       "args": [
         {
           "name": "jsonObject",
