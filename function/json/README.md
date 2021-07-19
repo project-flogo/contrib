@@ -24,7 +24,7 @@ Get value of associated key from json object
 
 
 ## length()
-Get the number of elements in json object or array
+Get the number of top level elements in json object or array
 
 ### Input Args
 
@@ -34,9 +34,9 @@ Get the number of elements in json object or array
 
 ### Output
 
-| Arg           | Type   | Description                         |
-|:--------------|:-------|:------------------------------------|
-| lengthInteger | int    | The length items in the json object |
+| Arg           | Type   | Description                            |
+|:--------------|:-------|:---------------------------------------|
+| lengthInteger | int    | The top level items in the json object |
 
 
 ## numbersToString()
@@ -82,9 +82,9 @@ Get the list of all top level values of json object
 
 ### Output
 
-| Arg           | Type   | Description                            |
-|:--------------|:-------|:---------------------------------------|
-| arrayOfValues | array  | The list all the values in json object |
+| Arg           | Type   | Description                                     |
+|:--------------|:-------|:------------------------------------------------|
+| arrayOfValues | array  | The list of all top level values in json object |
 
 
 ## path()

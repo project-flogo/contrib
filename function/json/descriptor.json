@@ -26,7 +26,7 @@
     },
     {
       "name": "length",
-      "description": "Get the number of elements in json object or array",
+      "description": "Get the number of top level elements in json object or array",
       "example": "json.length(jsonObjectOrArray) => lengthInteger",
       "args": [
         {
