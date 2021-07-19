@@ -24,7 +24,7 @@ Get value of associated key from json object
 
 
 ## length()
-Get the number of elements in json object or array
+Get the number of top level elements in json object or array
 
 ### Input Args
 
@@ -34,9 +34,10 @@ Get the number of elements in json object or array
 
 ### Output
 
-| Arg       | Type   | Description                         |
-|:----------|:-------|:------------------------------------|
-| returnVal | int    | The length items in the json object |
+| Arg           | Type   | Description                            |
+|:--------------|:-------|:---------------------------------------|
+| lengthInteger | int    | The top level items in the json object |
+
 
 ## numbersToString()
 Convert every number type to string in a json object or array
@@ -49,12 +50,13 @@ Convert every number type to string in a json object or array
 
 ### Output
 
-| Arg       | Type   | Description                                              |
-|:----------|:-------|:---------------------------------------------------------|
-| returnVal | any    | The json object or array with numbers encoded as strings |
+| Arg               | Type   | Description                                              |
+|:------------------|:-------|:---------------------------------------------------------|
+| jsonObjectOrArray | any    | The json object or array with numbers encoded as strings |
+
 
 ## objKeys()
-Get the list of top level keys of json object
+Get the list of all top level keys of json object
 
 ### Input Args
 
@@ -64,13 +66,13 @@ Get the list of top level keys of json object
 
 ### Output
 
-| Arg       | Type   | Description                |
-|:----------|:-------|:---------------------------|
-| returnVal | array  | The list of top level keys |
+| Arg            | Type   | Description                |
+|:---------------|:-------|:---------------------------|
+| arrayOfStrings | array  | The list of top level keys |
 
 
 ## objValues()
-Get list of all the values of a json object
+Get the list of all top level values of json object
 
 ### Input Args
 
@@ -80,9 +82,9 @@ Get list of all the values of a json object
 
 ### Output
 
-| Arg       | Type   | Description                            |
-|:----------|:-------|:---------------------------------------|
-| returnVal | array  | The list all the values in json object |
+| Arg           | Type   | Description                                     |
+|:--------------|:-------|:------------------------------------------------|
+| arrayOfValues | array  | The list of all top level values in json object |
 
 
 ## path()
@@ -115,6 +117,6 @@ Set the value of existing key or add new key and set it's value in a json object
 
 ### Output
 
-| Arg       | Type   | Description             |
-|:----------|:-------|:------------------------|
-| returnVal | any    | The updated json object |
+| Arg        | Type   | Description             |
+|:-----------|:-------|:------------------------|
+| jsonObject | any    | The updated json object |
