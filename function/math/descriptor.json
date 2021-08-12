@@ -1,0 +1,112 @@
+{
+  "name": "math",
+  "type": "flogo:function",
+  "version": "0.1.0",
+  "title": "Math Functions",
+  "description": "Common Math Functions",
+  "homepage": "https://github.com/prject-flogo/contrib/tree/master/function/math",
+  "functions": [
+    {
+      "name": "ceil",
+      "description": "Ceil returns the least integer value greater than or equal to input",
+      "example": "math.ceil(1.49) => 2.0",
+      "args": [
+        {
+          "name": "inputNumber",
+          "type": "number"
+        }
+      ],
+      "return": {
+        "type": "number"
+      }
+    },
+    {
+      "name": "floor",
+      "description": "Floor returns the greatest integer value less than or equal to input",
+      "example": "math.ceil(1.51) => 1.0",
+      "args": [
+        {
+          "name": "inputNumber",
+          "type": "number"
+        }
+      ],
+      "return": {
+        "type": "number"
+      }
+    },
+    {
+      "name": "isNaN",
+      "description": "IsNaN reports whether input is an IEEE 754 \"not-a-number\" value",
+      "example": "math.isNaN(1.0) => false",
+      "args": [
+        {
+          "name": "input",
+          "type": "any"
+        }
+      ],
+      "return": {
+        "type": "boolean"
+      }
+    },
+    {
+      "name": "mod",
+      "description": "Mod returns the floating-point remainder of x/y. The magnitude of the result is less than y and its sign agrees with that of x",
+      "example": "math.mod(7, 4) => 3.0",
+      "args": [
+        {
+          "name": "x",
+          "type": "number"
+        },
+        {
+          "name": "y",
+          "type": "number"
+        }
+      ],
+      "return": {
+        "type": "number"
+      }
+    },
+    {
+      "name": "round",
+      "description": "Round returns the nearest integer, rounding half away from zero",
+      "example": "math.round(1.50) => 2.0",
+      "args": [
+        {
+          "name": "inputNumber",
+          "type": "number"
+        }
+      ],
+      "return": {
+        "type": "number"
+      }
+    },
+    {
+      "name": "roundToEven",
+      "description": "RoundToEven returns the nearest integer, rounding ties to even",
+      "example": "math.round(12.5) => 12.0",
+      "args": [
+        {
+          "name": "inputNumber",
+          "type": "number"
+        }
+      ],
+      "return": {
+        "type": "number"
+      }
+    },
+    {
+      "name": "trunc",
+      "description": "Trunc returns the integer value of input",
+      "example": "math.round(3.142) => 3.0",
+      "args": [
+        {
+          "name": "inputNumber",
+          "type": "number"
+        }
+      ],
+      "return": {
+        "type": "number"
+      }
+    }
+  ]
+}
