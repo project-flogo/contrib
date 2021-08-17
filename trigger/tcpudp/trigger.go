@@ -2,10 +2,9 @@ package tcpudp
 
 import (
 	"bufio"
-	"bytes"
 	"context"
 	"errors"
-	"io"
+	"io/ioutil"
 	"net"
 	"strings"
 	"time"
@@ -111,77 +110,80 @@ func (t *Trigger) handleNewConnection(conn net.Conn) {
 
 	//Gather connection list for later cleanup
 	t.connections = append(t.connections, conn)
-
-	if t.settings.TimeOut > 0 {
-		t.logger.Info("Setting timeout: ", t.settings.TimeOut)
-		conn.SetDeadline(time.Now().Add(time.Duration(t.settings.TimeOut) * time.Millisecond))
-	}
-
-	output := &Output{}
-
-	if t.delimiter != 0 {
-		data, err := bufio.NewReader(conn).ReadBytes(t.delimiter)
-		if err != nil {
-			errString := err.Error()
-			if !strings.Contains(errString, "use of closed network connection") {
-				t.logger.Error("Error reading data from connection: ", err.Error())
-			} else {
-				t.logger.Info("Connection is closed.")
-			}
-			if nerr, ok := err.(net.Error); !ok || !nerr.Timeout() {
-				// Return if not timeout error
-				return
-			}
-
-		} else {
-			output.Data = string(data[:len(data)-1])
+	for {
+		if t.settings.TimeOut > 0 {
+			t.logger.Info("Setting timeout: ", t.settings.TimeOut)
+			conn.SetDeadline(time.Now().Add(time.Duration(t.settings.TimeOut) * time.Millisecond))
 		}
-	} else {
-		var buf bytes.Buffer
-		_, err := io.Copy(&buf, conn)
-		if err != nil {
-			errString := err.Error()
-			if !strings.Contains(errString, "use of closed network connection") {
-				t.logger.Error("Error reading data from connection: ", err.Error())
+
+		output := &Output{}
+
+		if t.delimiter != 0 {
+			data, err := bufio.NewReader(conn).ReadBytes(t.delimiter)
+			if err != nil {
+				errString := err.Error()
+				if !strings.Contains(errString, "use of closed network connection") {
+					t.logger.Error("Error reading data from connection: ", err.Error())
+				} else {
+					t.logger.Info("Connection is closed.")
+				}
+				if nerr, ok := err.(net.Error); !ok || !nerr.Timeout() {
+					// Return if not timeout error
+					return
+				}
+
 			} else {
-				t.logger.Info("Connection is closed.")
-			}
-			if nerr, ok := err.(net.Error); !ok || !nerr.Timeout() {
-				// Return if not timeout error
-				return
+				output.Data = string(data[:len(data)-1])
 			}
 		} else {
-			output.Data = string(buf.Bytes())
-		}
-	}
-
-	if output.Data != "" {
-		var replyData []string
-		for i := 0; i < len(t.handlers); i++ {
-			results, err := t.handlers[i].Handle(context.Background(), output)
+			data, err := ioutil.ReadAll(conn)
 			if err != nil {
-				t.logger.Error("Error invoking action : ", err.Error())
-				continue
-			}
-
-			reply := &Reply{}
-			err = reply.FromMap(results)
-			if err != nil {
-				t.logger.Error("Failed to convert flow output : ", err.Error())
-				continue
-			}
-			if reply.Reply != "" {
-				replyData = append(replyData, reply.Reply)
+				errString := err.Error()
+				if !strings.Contains(errString, "use of closed network connection") {
+					t.logger.Error("Error reading data from connection: ", err.Error())
+				} else {
+					t.logger.Info("Connection is closed.")
+				}
+				if nerr, ok := err.(net.Error); !ok || !nerr.Timeout() {
+					// Return if not timeout error
+					return
+				}
+			} else {
+				output.Data = string(data)
 			}
 		}
 
-		if len(replyData) > 0 {
-			replyToSend := strings.Join(replyData, string(t.delimiter))
-			// Send a response back to client contacting us.
-			_, err := conn.Write([]byte(replyToSend + "\n"))
-			if err != nil {
-				t.logger.Error("Failed to write to connection : ", err.Error())
+		if output.Data != "" {
+			var replyData []string
+			for i := 0; i < len(t.handlers); i++ {
+				results, err := t.handlers[i].Handle(context.Background(), output)
+				if err != nil {
+					t.logger.Error("Error invoking action : ", err.Error())
+					continue
+				}
+
+				reply := &Reply{}
+				err = reply.FromMap(results)
+				if err != nil {
+					t.logger.Error("Failed to convert flow output : ", err.Error())
+					continue
+				}
+				if reply.Reply != "" {
+					replyData = append(replyData, reply.Reply)
+				}
 			}
+
+			if len(replyData) > 0 {
+				replyToSend := strings.Join(replyData, string(t.delimiter))
+				// Send a response back to client contacting us.
+				_, err := conn.Write([]byte(replyToSend + "\n"))
+				if err != nil {
+					t.logger.Error("Failed to write to connection : ", err.Error())
+				}
+			}
+		}
+		if t.delimiter == 0 {
+			break
 		}
 	}
 }
