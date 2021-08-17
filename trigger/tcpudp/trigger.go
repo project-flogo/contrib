@@ -2,9 +2,10 @@ package tcpudp
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net"
 	"strings"
 	"time"
@@ -136,7 +137,8 @@ func (t *Trigger) handleNewConnection(conn net.Conn) {
 				output.Data = string(data[:len(data)-1])
 			}
 		} else {
-			data, err := ioutil.ReadAll(conn)
+			var buf bytes.Buffer
+			_, err := io.Copy(&buf, conn)
 			if err != nil {
 				errString := err.Error()
 				if !strings.Contains(errString, "use of closed network connection") {
@@ -149,7 +151,7 @@ func (t *Trigger) handleNewConnection(conn net.Conn) {
 					return
 				}
 			} else {
-				output.Data = string(data)
+				output.Data = string(buf.Bytes())
 			}
 		}
 
