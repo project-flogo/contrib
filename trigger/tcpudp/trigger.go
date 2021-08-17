@@ -2,7 +2,6 @@ package tcpudp
 
 import (
 	"bufio"
-	"bytes"
 	"context"
 	"errors"
 	"io"
@@ -121,9 +120,13 @@ func (t *Trigger) handleNewConnection(conn net.Conn) {
 
 		if t.delimiter != 0 {
 			data, err := bufio.NewReader(conn).ReadBytes(t.delimiter)
+			if len(data) > 0 {
+				output.Data = string(data)
+				t.triggerFlow(conn, output)
+			}
 			if err != nil {
 				errString := err.Error()
-				if !strings.Contains(errString, "use of closed network connection") {
+				if !strings.Contains(errString, "use of closed network connection") && err != io.EOF {
 					t.logger.Error("Error reading data from connection: ", err.Error())
 				} else {
 					t.logger.Info("Connection is closed.")
@@ -132,16 +135,16 @@ func (t *Trigger) handleNewConnection(conn net.Conn) {
 					// Return if not timeout error
 					return
 				}
-
-			} else {
-				output.Data = string(data[:len(data)-1])
 			}
 		} else {
-			var buf bytes.Buffer
-			_, err := io.Copy(&buf, conn)
+			data, err := bufio.NewReader(conn).ReadBytes('\n')
+			if len(data) > 0 {
+				output.Data = string(data)
+				t.triggerFlow(conn, output)
+			}
 			if err != nil {
 				errString := err.Error()
-				if !strings.Contains(errString, "use of closed network connection") {
+				if !strings.Contains(errString, "use of closed network connection") && err != io.EOF {
 					t.logger.Error("Error reading data from connection: ", err.Error())
 				} else {
 					t.logger.Info("Connection is closed.")
@@ -150,42 +153,39 @@ func (t *Trigger) handleNewConnection(conn net.Conn) {
 					// Return if not timeout error
 					return
 				}
-			} else {
-				output.Data = string(buf.Bytes())
+			}
+		}
+	}
+}
+
+func (t *Trigger) triggerFlow(conn net.Conn, output *Output) {
+	if output.Data != "" {
+		var replyData []string
+		for i := 0; i < len(t.handlers); i++ {
+			results, err := t.handlers[i].Handle(context.Background(), output)
+			if err != nil {
+				t.logger.Error("Error invoking action : ", err.Error())
+				continue
+			}
+
+			reply := &Reply{}
+			err = reply.FromMap(results)
+			if err != nil {
+				t.logger.Error("Failed to convert flow output : ", err.Error())
+				continue
+			}
+			if reply.Reply != "" {
+				replyData = append(replyData, reply.Reply)
 			}
 		}
 
-		if output.Data != "" {
-			var replyData []string
-			for i := 0; i < len(t.handlers); i++ {
-				results, err := t.handlers[i].Handle(context.Background(), output)
-				if err != nil {
-					t.logger.Error("Error invoking action : ", err.Error())
-					continue
-				}
-
-				reply := &Reply{}
-				err = reply.FromMap(results)
-				if err != nil {
-					t.logger.Error("Failed to convert flow output : ", err.Error())
-					continue
-				}
-				if reply.Reply != "" {
-					replyData = append(replyData, reply.Reply)
-				}
+		if len(replyData) > 0 {
+			replyToSend := strings.Join(replyData, string(t.delimiter))
+			// Send a response back to client contacting us.
+			_, err := conn.Write([]byte(replyToSend + "\n"))
+			if err != nil {
+				t.logger.Error("Failed to write to connection : ", err.Error())
 			}
-
-			if len(replyData) > 0 {
-				replyToSend := strings.Join(replyData, string(t.delimiter))
-				// Send a response back to client contacting us.
-				_, err := conn.Write([]byte(replyToSend + "\n"))
-				if err != nil {
-					t.logger.Error("Failed to write to connection : ", err.Error())
-				}
-			}
-		}
-		if t.delimiter == 0 {
-			break
 		}
 	}
 }

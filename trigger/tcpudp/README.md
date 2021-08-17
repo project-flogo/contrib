@@ -20,7 +20,7 @@ flogo install github.com/project-flogo/contrib/trigger/tcpudp
 | network    | string  | Network type. Supported types: tcp,tcp4,tcp6,udp,udp4,udp6  - ***REQUIRED***
 | host       | string  | Host IP or DNS resolvable name
 | port       | string  | Port to listen on - ***REQUIRED***
-| delimiter  | string  | Delimiter for read and write. If not set, trigger will read data until EOF
+| delimiter  | string  | Delimiter for read and write. If not set, trigger will take line delimiter '\n' as default value
 | timeout    | integer | Read and Write timeout in milliseconds. To disable timeout, set value to 0.
 
 
