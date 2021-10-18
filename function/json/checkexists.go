@@ -1,6 +1,7 @@
 package json
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/oliveagle/jsonpath"
@@ -22,19 +23,22 @@ func (fnCheckExists) Name() string {
 
 // Sig returns the function signature
 func (fnCheckExists) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeString, data.TypeAny}, false
+	return []data.Type{data.TypeAny, data.TypeString}, false
 }
 
 // Eval executes the function
 func (fnCheckExists) Eval(params ...interface{}) (interface{}, error) {
-	expression := params[0].(string)
+	expression, ok := params[1].(string)
+	if !ok {
+		return false, fmt.Errorf("The JSON key/path must be a string")
+	}
 	//tmp fix to take $loop as $. for now
 	if strings.HasPrefix(strings.TrimSpace(expression), "$loop.") {
 		expression = strings.Replace(expression, "$loop", "$", -1)
 	}
-	_, err := jsonpath.JsonPathLookup(params[1], expression)
+	_, err := jsonpath.JsonPathLookup(params[0], expression)
 	if err != nil {
-		return false, nil
+		return false, err
 	}
 	return true, nil
 }
