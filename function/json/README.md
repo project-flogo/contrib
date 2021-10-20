@@ -6,6 +6,21 @@ weight: 4601
 # JSON Functions
 This function package exposes common json functions.
 
+## checkExists()
+Check if the key/JSONPath is present in the json object. Refer https://github.com/oliveagle/jsonpath for expression format.
+### Input Args
+
+| Arg      | Type   | Description                  |
+|:---------|:-------|:-----------------------------|
+| object   | any    | The json object              |
+| key      | string | The key or JSONPath to check |
+
+### Output
+
+| Arg       | Type   | Description                                         |
+|:----------|:-------|:----------------------------------------------------|
+| returnVal | bool   | True if value is associated with the key / JSONPath |
+
 ## get()
 Get value of associated key from json object
 

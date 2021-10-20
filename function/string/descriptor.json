@@ -13,7 +13,7 @@
       "varArgs": true,
       "args": [
         {
-          "name": "str",
+          "name": "str1",
           "type": "string"
         },
         {
