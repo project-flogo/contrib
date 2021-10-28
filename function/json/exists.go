@@ -10,24 +10,24 @@ import (
 )
 
 func init() {
-	_ = function.Register(&fnCheckExists{})
+	_ = function.Register(&fnExists{})
 }
 
-type fnCheckExists struct {
+type fnExists struct {
 }
 
 // Name returns the name of the function
-func (fnCheckExists) Name() string {
-	return "checkExists"
+func (fnExists) Name() string {
+	return "exists"
 }
 
 // Sig returns the function signature
-func (fnCheckExists) Sig() (paramTypes []data.Type, isVariadic bool) {
+func (fnExists) Sig() (paramTypes []data.Type, isVariadic bool) {
 	return []data.Type{data.TypeAny, data.TypeString}, false
 }
 
 // Eval executes the function
-func (fnCheckExists) Eval(params ...interface{}) (interface{}, error) {
+func (fnExists) Eval(params ...interface{}) (interface{}, error) {
 	expression, ok := params[1].(string)
 	if !ok {
 		return false, fmt.Errorf("The JSON key/path must be a string")
