@@ -38,7 +38,7 @@ func TestFnCheckExists(t *testing.T) {
 	err := json.Unmarshal([]byte(inputCheckExists), &inputJSON)
 	assert.Nil(t, err)
 
-	f := &fnCheckExists{}
+	f := &fnExists{}
 	v, err := function.Eval(f, inputJSON, "$.store.book[?(@.price == 12.99)].price[0]")
 	assert.Nil(t, err)
 	assert.Equal(t, true, v)
@@ -49,7 +49,7 @@ func TestFnCheckExistsLoop(t *testing.T) {
 	err := json.Unmarshal([]byte(inputCheckExists), &inputJSON)
 	assert.Nil(t, err)
 
-	f := &fnCheckExists{}
+	f := &fnExists{}
 	v, err := function.Eval(f, inputJSON, "$loop.store.book[?(@.price == 22.99)].price[0]")
 	assert.NotNil(t, err)
 	assert.Equal(t, false, v)
@@ -60,7 +60,7 @@ func TestFnCheckExistsNegative(t *testing.T) {
 	err := json.Unmarshal([]byte(inputCheckExists), &inputJSON)
 	assert.Nil(t, err)
 
-	f := &fnCheckExists{}
+	f := &fnExists{}
 	v, err := function.Eval(f, inputJSON, "$.store.abc")
 	assert.NotNil(t, err)
 	assert.Equal(t, false, v)
@@ -71,7 +71,7 @@ func TestFnCheckExistsEmpty(t *testing.T) {
 	err := json.Unmarshal([]byte(inputCheckExists), &inputJSON)
 	assert.Nil(t, err)
 
-	f := &fnCheckExists{}
+	f := &fnExists{}
 	v, err := function.Eval(f, inputJSON, "$.emptyString")
 	assert.Nil(t, err)
 	assert.Equal(t, true, v)
