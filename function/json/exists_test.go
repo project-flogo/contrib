@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const inputCheckExists = `{
+const inputExists = `{
     "store": {
         "book": [
             {
@@ -35,7 +35,7 @@ const inputCheckExists = `{
 
 func TestFnCheckExists(t *testing.T) {
 	var inputJSON interface{}
-	err := json.Unmarshal([]byte(inputCheckExists), &inputJSON)
+	err := json.Unmarshal([]byte(inputExists), &inputJSON)
 	assert.Nil(t, err)
 
 	f := &fnExists{}
@@ -44,35 +44,46 @@ func TestFnCheckExists(t *testing.T) {
 	assert.Equal(t, true, v)
 }
 
-func TestFnCheckExistsLoop(t *testing.T) {
+func TestFnExistsLoop(t *testing.T) {
 	var inputJSON interface{}
-	err := json.Unmarshal([]byte(inputCheckExists), &inputJSON)
+	err := json.Unmarshal([]byte(inputExists), &inputJSON)
 	assert.Nil(t, err)
 
 	f := &fnExists{}
 	v, err := function.Eval(f, inputJSON, "$loop.store.book[?(@.price == 22.99)].price[0]")
-	assert.NotNil(t, err)
+	assert.Nil(t, err)
 	assert.Equal(t, false, v)
 }
 
-func TestFnCheckExistsNegative(t *testing.T) {
+func TestFnExistsNegative(t *testing.T) {
 	var inputJSON interface{}
-	err := json.Unmarshal([]byte(inputCheckExists), &inputJSON)
+	err := json.Unmarshal([]byte(inputExists), &inputJSON)
 	assert.Nil(t, err)
 
 	f := &fnExists{}
 	v, err := function.Eval(f, inputJSON, "$.store.abc")
-	assert.NotNil(t, err)
+	assert.Nil(t, err)
 	assert.Equal(t, false, v)
 }
 
-func TestFnCheckExistsEmpty(t *testing.T) {
+func TestFnExistsEmpty(t *testing.T) {
 	var inputJSON interface{}
-	err := json.Unmarshal([]byte(inputCheckExists), &inputJSON)
+	err := json.Unmarshal([]byte(inputExists), &inputJSON)
 	assert.Nil(t, err)
 
 	f := &fnExists{}
 	v, err := function.Eval(f, inputJSON, "$.emptyString")
+	assert.Nil(t, err)
+	assert.Equal(t, true, v)
+}
+
+func TestFnExistsWithoutJSONPath(t *testing.T) {
+	var inputJSON interface{}
+	err := json.Unmarshal([]byte(inputExists), &inputJSON)
+	assert.Nil(t, err)
+
+	f := &fnExists{}
+	v, err := function.Eval(f, inputJSON, "expensive")
 	assert.Nil(t, err)
 	assert.Equal(t, true, v)
 }
