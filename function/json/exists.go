@@ -36,9 +36,12 @@ func (fnExists) Eval(params ...interface{}) (interface{}, error) {
 	if strings.HasPrefix(strings.TrimSpace(expression), "$loop.") {
 		expression = strings.Replace(expression, "$loop", "$", -1)
 	}
+	if !strings.HasPrefix(expression, "$.") {
+		expression = "$." + expression
+	}
 	_, err := jsonpath.JsonPathLookup(params[0], expression)
 	if err != nil {
-		return false, err
+		return false, nil
 	}
 	return true, nil
 }
