@@ -62,7 +62,7 @@
         }
       ],
       "return": {
-        "type": "bool"
+        "type": "boolean"
       }
     },
     {
@@ -80,7 +80,7 @@
         }
       ],
       "return": {
-        "type": "bool"
+        "type": "boolean"
       }
     },
     {
@@ -98,7 +98,7 @@
         }
       ],
       "return": {
-        "type": "bool"
+        "type": "boolean"
       }
     },
     {
@@ -186,7 +186,7 @@
         }
       ],
       "return": {
-        "type": "bool"
+        "type": "boolean"
       }
     },
     {
@@ -226,7 +226,7 @@
         }
       ],
       "return": {
-        "type": "bool"
+        "type": "boolean"
       }
     },
     {
