@@ -72,7 +72,7 @@ func format(format string) string {
 
 	if strings.Contains(strings.ToLower(format), "ss") {
 		format = strings.Replace(format, "ss", "05", -1)
-		format = strings.Replace(format, "SS", "05", -1)
+		format = strings.Replace(format, "SSS", "999", -1)
 
 	}
 	return format
