@@ -19,19 +19,25 @@ func TestRegister(t *testing.T) {
 }
 
 func TestSettings(t *testing.T) {
-	settings := &Settings{Method: "POS", Uri: "http://petstore.swagger.io/v2/pet"}
+	settings := &Settings{UseEnvProp: "NO", Method: "POS", Uri: "http://petstore.swagger.io/v2/pet"}
 
 	iCtx := test.NewActivityInitContext(settings, nil)
 	_, err := New(iCtx)
 	assert.NotNil(t, err)
 
-	settings = &Settings{Method: "POST", Uri: ""}
+	settings = &Settings{UseEnvProp: "YES", Method: "POS", Uri: ""}
 
 	iCtx = test.NewActivityInitContext(settings, nil)
 	_, err = New(iCtx)
 	assert.NotNil(t, err)
 
-	settings = &Settings{Method: "pOsT", Uri: "http://petstore.swagger.io/v2/pet"}
+	settings = &Settings{UseEnvProp: "NO", Method: "pOsT", Uri: "http://petstore.swagger.io/v2/pet"}
+
+	iCtx = test.NewActivityInitContext(settings, nil)
+	_, err = New(iCtx)
+	assert.Nil(t, err)
+
+	settings = &Settings{UseEnvProp: "YES", Method: "pOsT", Uri: "http://petstore.swagger.io/v2/pet"}
 
 	iCtx = test.NewActivityInitContext(settings, nil)
 	_, err = New(iCtx)
@@ -47,7 +53,7 @@ var petID string
 
 func TestSimplePost(t *testing.T) {
 
-	settings := &Settings{Method: "POST", Uri: "http://petstore.swagger.io/v2/pet"}
+	settings := &Settings{UseEnvProp: "NO", Method: "POST", Uri: "http://petstore.swagger.io/v2/pet"}
 
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
@@ -65,9 +71,9 @@ func TestSimplePost(t *testing.T) {
 
 }
 
-func TestSimpleGet(t *testing.T) {
+func TestPassThrough(t *testing.T) {
 
-	settings := &Settings{Method: "GET", Uri: "http://petstore.swagger.io/v2/pet/16"}
+	settings := &Settings{UseEnvProp: "NO", Method: "TRIGGER", Uri: "http://petstore.swagger.io/v2/pet"}
 
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
@@ -76,6 +82,55 @@ func TestSimpleGet(t *testing.T) {
 
 	tc := test.NewActivityContext(act.Metadata())
 
+	//setup attrs
+	tc.SetInput("content", reqPostStr)
+	tc.SetInput("method", "GET")
+
+	//eval
+	act.Eval(tc)
+	assert.NotNil(t, tc.GetOutput("data"))
+
+}
+
+func TestPassThroughEnv(t *testing.T) {
+
+	// url to hit: http://petstore.swagger.io/v2/pet
+
+	settings := &Settings{UseEnvProp: "YES", Method: "TRIGGER", Uri: "{envProp}/:restOfPath"}
+
+	mf := mapper.NewFactory(resolve.GetBasicResolver())
+	iCtx := test.NewActivityInitContext(settings, mf)
+	act, err := New(iCtx)
+	assert.Nil(t, err)
+
+	tc := test.NewActivityContext(act.Metadata())
+
+	//setup attrs
+	pathParams := map[string]string{
+		"restOfPath": "v2/pet",
+	}
+	tc.SetInput("content", reqPostStr)
+	tc.SetInput("method", "GET")
+	tc.SetInput("envPropUri", "http://petstore.swagger.io")
+	tc.SetInput("pathParams", pathParams)
+
+	//eval
+	act.Eval(tc)
+	assert.NotNil(t, tc.GetOutput("data"))
+
+}
+
+func TestSimpleGet(t *testing.T) {
+
+	settings := &Settings{UseEnvProp: "YES", Method: "GET", Uri: "{prop}/v2/pet/16"}
+
+	mf := mapper.NewFactory(resolve.GetBasicResolver())
+	iCtx := test.NewActivityInitContext(settings, mf)
+	act, err := New(iCtx)
+	assert.Nil(t, err)
+
+	tc := test.NewActivityContext(act.Metadata())
+	tc.SetInput("envPropUri", "http://www.httpbin.org/anything/firstPart")
 	//eval
 	act.Eval(tc)
 
@@ -85,7 +140,7 @@ func TestSimpleGet(t *testing.T) {
 
 func TestSimpleGetWithHeaders(t *testing.T) {
 
-	settings := &Settings{Method: "GET", Uri: "http://petstore.swagger.io/v2/pet/1"}
+	settings := &Settings{UseEnvProp: "YES", Method: "GET", Uri: "http://petstore.swagger.io/v2/pet/1"}
 
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
@@ -97,7 +152,7 @@ func TestSimpleGetWithHeaders(t *testing.T) {
 	headers := make(map[string]string)
 	headers["TestHeader"] = "TestValue"
 	tc.SetInput("headers", headers)
-
+	tc.SetInput("envPropUri", "http://www.httpbin.org/anything/firstPart")
 	//eval
 	act.Eval(tc)
 
@@ -109,7 +164,7 @@ func TestSimpleGetWithHeaders(t *testing.T) {
 
 func TestParamGet(t *testing.T) {
 
-	settings := &Settings{Method: "GET", Uri: "http://petstore.swagger.io/v2/pet/:id"}
+	settings := &Settings{UseEnvProp: "YES", Method: "GET", Uri: "http://petstore.swagger.io/v2/pet/:id"}
 
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
@@ -130,30 +185,9 @@ func TestParamGet(t *testing.T) {
 
 }
 
-//func TestSimpleGetWithProxy(t *testing.T) {
-//
-//	settings := &Settings{Method:"GET", Uri:"http://petstore.swagger.io/v2/pet/1"}
-//	settings.Proxy = "http://localhost:12345"
-//
-//	mf := mapper.NewFactory(resolve.GetBasicResolver())
-//	iCtx := test.NewActivityInitContext(settings, mf)
-//	act, err := New(iCtx)
-//	assert.Nil(t, err)
-//
-//	tc := test.NewActivityContext(act.Metadata())
-//
-//	//eval
-//	_, err = act.Eval(tc)
-//	if err != nil {
-//		fmt.Printf("error: %v\n", err)
-//	}
-//	val := tc.GetOutput("result")
-//	fmt.Printf("result: %v\n", val)
-//}
-
 func TestSimpleGetQP(t *testing.T) {
 
-	settings := &Settings{Method: "GET", Uri: "http://petstore.swagger.io/v2/pet/findByStatus"}
+	settings := &Settings{UseEnvProp: "YES", Method: "GET", Uri: "http://petstore.swagger.io/v2/pet/findByStatus"}
 
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
@@ -181,7 +215,7 @@ func TestBuildURI(t *testing.T) {
 		"id": "1234",
 	}
 
-	newURI := BuildURI(uri, params)
+	newURI, _ := BuildURI(uri, params)
 
 	assert.NotNil(t, newURI)
 }
@@ -195,19 +229,20 @@ func TestBuildURI2(t *testing.T) {
 		"id":  "1234",
 	}
 
-	newURI := BuildURI(uri, params)
+	newURI, _ := BuildURI(uri, params)
 	assert.NotNil(t, newURI)
 }
 
 func TestBuildURI3(t *testing.T) {
 
-	uri := "http://localhost/flow/:id"
+	uri := "http://:localhost/flow/:id"
 
 	params := map[string]string{
-		"id": "1234",
+		"id":        "1234",
+		"localhost": "google.com",
 	}
 
-	newURI := BuildURI(uri, params)
+	newURI, _ := BuildURI(uri, params)
 
 	assert.NotNil(t, newURI)
 }
@@ -221,7 +256,29 @@ func TestBuildURI4(t *testing.T) {
 		"id":  "1234",
 	}
 
-	newURI := BuildURI(uri, params)
+	newURI, _ := BuildURI(uri, params)
 
 	assert.NotNil(t, newURI)
+}
+
+func TestReplaceSubStringNothingToReplace(t *testing.T) {
+
+	uri := "{startdomainname}/:cmd/:id/test"
+
+	result := replaceSubString(uri, "http://www.google.com")
+	assert.Contains(t, result, "http://www.google.com/:cmd/:id/test")
+}
+
+func TestReplaceSubString(t *testing.T) {
+
+	uri := "{startdomainname}/:cmd/:id/test"
+
+	result := replaceSubString(uri, "http://www.google.com")
+	assert.Contains(t, result, "http://www.google.com/:cmd/:id/test")
+}
+
+func TestMe(t *testing.T) {
+	e := "X-Autorisation"
+	a := e[2:]
+	assert.Equal(t, "Autorisation", a)
 }
