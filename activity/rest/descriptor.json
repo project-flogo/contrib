@@ -1,23 +1,30 @@
 {
-  "name": "flogo-rest",
+  "name": "flogo-lp-rest",
   "type": "flogo:activity",
-  "version": "0.10.0",
-  "title": "REST Invoke",
-  "description": "Invokes a REST Service",
-  "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/rest",
+  "version": "1.0.0",
+  "title": "REST uri-pass through",
+  "description": "HTTP Method uri-part pass through activity",
+  "homepage": "https://gitlab.core-services.leaseplan.systems/workloads/0026-wkl-ng-integration/integration/shared/flogoresttrigger",
   "settings": [
     {
       "name": "method",
       "type": "string",
       "required": true,
-      "allowed": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
-      "description" : "The HTTP method to invoke"
+      "allowed": [ "GET", "POST", "PUT", "PATCH", "DELETE", "TRIGGER" ],
+      "description" : "The HTTP method to invoke; Passed down from trigger then select TRIGGER"
+    },
+    {
+      "name": "useEnvProp",
+      "type": "string",
+      "required": true,
+      "allowed": [ "YES", "NO"],
+      "description" : "If YES, then the input param envPropUri is used for the [schema://hostname:port/initialPart] of the uri; uri is concat behind the envPropUri"
     },
     {
       "name": "uri",
       "type": "string",
       "required": true,
-      "description" : "The URI of the service to invoke"
+      "description" : "The URI of the service to invoke; use /:restOfThePath to replace with incoming path"
     },
     {
       "name": "headers",
@@ -86,9 +93,19 @@
       "description" : "The HTTP header parameters"
     },
     {
+      "name": "method",
+      "type": "string",
+      "description": "The HTTP method to use"
+    },
+    {
       "name": "content",
       "type": "any",
       "description" : "The message content to send. This is only used in POST, PUT, and PATCH"
+    },
+    {
+      "name": "envPropUri",
+      "type": "string",
+      "description" : "To push the environment property for the uri to use (schema://hostname:port/partialUrl)"
     }
   ],
   "output": [
