@@ -1,0 +1,21 @@
+{
+  "name": "flogo-gpio-output",
+  "type": "flogo:activity",
+  "version": "0.0.1",
+  "title": "GPIO Output",
+  "description": "Turn on, turn off or toggle GPIO pin",
+  "input": [
+    {
+      "name": "action",
+      "type": "string",
+      "value": "TurnOn",
+      "description": "Action"
+    },
+    {
+      "name": "gpioPin",
+      "type": "int",
+      "value": "10",
+      "description": "Pin number"
+    }
+  ]
+}

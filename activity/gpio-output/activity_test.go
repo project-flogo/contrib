@@ -1,11 +1,10 @@
-package sleep
+package gpio_output
 
 import (
-	"github.com/project-flogo/core/support/test"
-	"testing"
-
 	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/support/test"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestRegister(t *testing.T) {
@@ -21,7 +20,7 @@ func TestEval(t *testing.T) {
 	act := &Activity{}
 	tc := test.NewActivityContext(act.Metadata())
 
-	input := &Input{SleepTime: 1}
+	input := &Input{Action: actionTurnOn, GpioPin: 10}
 	tc.SetInputObject(input)
 
 	act.Eval(tc)
@@ -32,6 +31,7 @@ func TestAddToFlow(t *testing.T) {
 	act := &Activity{}
 	tc := test.NewActivityContext(act.Metadata())
 	//setup attrs
-	tc.SetInput("sleepTime", 1)
+	tc.SetInput("action", actionTurnOn)
+	tc.SetInput("gpioPin", 10)
 	act.Eval(tc)
 }
