@@ -9,6 +9,7 @@
       "name": "action",
       "type": "string",
       "value": "TurnOn",
+      "allowed" : ["TurnOn", "TurnOff", "Toggle"],
       "description": "Action"
     },
     {
