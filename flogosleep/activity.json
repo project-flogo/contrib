@@ -1,0 +1,18 @@
+{
+  "name": "flogo-sleep-activity",
+  "type": "flogo:activity",
+  "ref": "github.com/vijaynalawade/flogo-contrib/activity/sleep",
+  "version": "0.0.1",
+  "title": "Flogo sleep activity",
+  "description": "Sleep in defined interval",
+  "homepage": "https://github.com/vijaynalawade/flogo-contrib/activity/sleep",
+  "input":[
+    {
+      "name": "interval",
+      "type": "integer"
+    }
+  ],
+  "output": [
+
+  ]
+}
