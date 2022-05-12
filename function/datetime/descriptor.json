@@ -1,416 +1,416 @@
 {
-    "name": "datetime",
-    "type": "flogo:function",
-    "version": "0.10.0",
-    "title": "datetimeFunctions",
-    "description": "datetimeFunctions",
-    "functions": [
+  "name": "datetime",
+  "type": "flogo:function",
+  "version": "0.10.0",
+  "title": "datetimeFunctions",
+  "description": "datetimeFunctions",
+  "functions": [
+    {
+      "name": "add",
+      "description": "Add the given number of years, months and days to the DateTime",
+      "example": "datetime.add(datetime.current(), 1, 0, 0) => 2023-05-11T15:38:55.34586567Z",
+      "args": [
         {
-            "name": "add",
-            "description": "Add the given number of years, months and days to the DateTime",
-            "example": "datetime.addHours(datetime.current(), 3) => 2021-05-30T16:38:55.34586567Z",
-            "args": [
-                {
-                    "name": "datetime",
-                    "type": "datetime"
-                },
-                {
-                    "name": "years",
-                    "type": "int",
-                    "value":0
-                },
-                {
-                    "name": "months",
-                    "type": "int",
-                    "value":0
-                },
-                {
-                    "name": "days",
-                    "type": "int",
-                    "value":0
-                }
-            ],
-            "return": {
-                "type": "datetime"
-            },
-            "display": {
-                "visible": true
-            }
+          "name": "datetime",
+          "type": "datetime"
         },
         {
-            "name": "addHours",
-            "description": "Add the given number of hours to the DateTime",
-            "example": "datetime.addHours(datetime.current(), 3) => 2020-04-27T19:38:55.345832054Z",
-            "args": [
-                {
-                    "name": "datetime",
-                    "type": "datetime"
-                },
-                {
-                    "name": "hours",
-                    "type": "int",
-                    "value":0
-                }
-            ],
-            "return": {
-                "type": "datetime"
-            },
-            "display": {
-                "visible": true
-            }
+          "name": "years",
+          "type": "int",
+          "value": 0
         },
         {
-            "name": "addMins",
-            "description": "Add the given number of mins to the DateTime",
-            "example": "datetime.addMins(datetime.current(), 30) => 2020-04-27T17:08:55.345841684Z",
-            "args": [
-                {
-                    "name": "datetime",
-                    "type": "datetime"
-                },
-                {
-                    "name": "mins",
-                    "type": "int",
-                    "value":0
-                }
-            ],
-            "return": {
-                "type": "datetime"
-            },
-            "display": {
-                "visible": true
-            }
+          "name": "months",
+          "type": "int",
+          "value": 0
         },
         {
-            "name": "addSeconds",
-            "description": "Add the given number of seconds to the DateTime",
-            "example": "datetime.addSeconds(datetime.current(), 30) => 2020-04-27T16:39:25.345860393Z",
-            "args": [
-                {
-                    "name": "datetime",
-                    "type": "datetime"
-                },
-                {
-                    "name": "seconds",
-                    "type": "int",
-                    "value":0
-                }
-            ],
-            "return": {
-                "type": "datetime"
-            },
-            "display": {
-                "visible": true
-            }
-        },
-        {
-            "name": "create",
-            "description": "Create date by given year, months, days, hours, mins, seconds, nanoseconds and timezone,  the timezone follow the IANA Time Zone",
-            "example": "datetime.create(2020,1,3,2,22,0,0, \"America/Los_Angeles\") => 2020-01-03T02:22:00-08:00",
-            "args": [
-                {
-                    "name": "years",
-                    "type": "int",
-                    "value": 0
-                },
-                {
-                    "name": "months",
-                    "type": "int",
-                    "value": 0
-                },
-                {
-                    "name": "days",
-                    "type": "int",
-                    "value": 0
-                },
-                {
-                    "name": "hours",
-                    "type": "int",
-                    "value": 0
-                },
-                {
-                    "name": "mins",
-                    "type": "int",
-                    "value": 0
-                },
-                {
-                    "name": "secs",
-                    "type": "int",
-                    "value": 0
-                },
-                {
-                    "name": "nsecs",
-                    "type": "int",
-                    "value": 0
-                },
-                {
-                    "name": "location",
-                    "type": "string",
-                    "value": "UTC"
-                }
-            ],
-            "return": {
-                "type": "datetime"
-            }
-        },
-        {
-            "name": "current",
-            "description": "Returns the current datetime with UTC timezone",
-            "example": "datetime.current() => 2020-04-21T03:16:44+00:00",
-            "args": [],
-            "return": {
-                "type": "datetime"
-            }
-        },
-        {
-            "name": "currentDate",
-            "description": "Returns the current date with UTC time zone.",
-            "example": "datetime.currentDate() => 2017-05-13+00:00",
-            "args": [],
-            "return": {
-                "type": "string"
-            }
-        },
-        {
-            "name": "currentDatetime",
-            "description": "Returns the current datetime with UTC timezone.",
-            "example": "datetime.currentDatetime() => 2017-05-13T22:27:54+00:00",
-            "args": [],
-            "return": {
-                "type": "string"
-            }
-        },
-        {
-            "name": "currentTime",
-            "description": "Returns the current time with UTC timezone.",
-            "example": "datetime.currentTime() => 22:27:54+00:00",
-            "args": [],
-            "return": {
-                "type": "string"
-            }
-        },
-        {
-            "name": "diff",
-            "description": "Return the difference between two given DateTime, the difference controlled by argument type, the type in (days,hours,mins and seconds)",
-            "example": "datetime.diff(datetime.current(), datetime.addHours(datetime.current(), 2), \"hours\") => 2",
-            "args": [
-                {
-                    "name": "start",
-                    "type": "datetime"
-                },
-                {
-                    "name": "end",
-                    "type": "datetime"
-                },
-                {
-                    "name": "type",
-                    "type": "string"
-                }
-            ],
-            "return": {
-                "type": "float64"
-            },
-            "display": {
-                "visible": true
-            }
-        },
-        {
-            "name": "format",
-            "description": "Format the date according to the specified format. The format uses MM(month), DD(day), YYYY(year), hh(hour), mm(minute) and ss(second), they are case insensitive except MM. it also can format with predefine layout ANSIC, UnixDate, RubyDate, RFC822, RFC822Z, RFC850, RFC1123, RFC1123Z, RFC3339 and RFC3339Nano",
-            "example": "datetime.format(datetime.current(), \"RFC3339\")=> 2020-04-27T16:38:45Z",
-            "args": [
-                {
-                    "name": "datetime",
-                    "type": "datetime"
-                },
-                {
-                    "name": "format",
-                    "type": "string"
-                }
-            ],
-            "return": {
-                "type": "string"
-            }
-        },
-        {
-            "name": "formatDate",
-            "description": "Format the date according to the specified format. The format uses MM(month), DD(day) and YYYY(year) and they are case insensitive",
-            "example": "datetime.formatDate（\"02/08/2017\", \"dd-MM-yyyy\"）=> 08-02-2017",
-            "args": [
-                {
-                    "name": "date",
-                    "type": "datetime"
-                },
-                {
-                    "name": "format",
-                    "type": "string"
-                }
-            ],
-            "return": {
-                "type": "string"
-            }
-        },
-        {
-            "name": "formatDatetime",
-            "description": "Format the date according to the specified format. The format uses MM(month), DD(day), YYYY(year), hh(hour), mm(minute) and ss(second), they are case insensitive except MM",
-            "example": "datetime.formatDatetime（\"2017-04-10T22:17:32.000+0700\", \"dd/MM/yyyy T hh:mm:ss\") => 10/04/2017 T 22:17:32",
-            "args": [
-                {
-                    "name": "datetime",
-                    "type": "datetime"
-                },
-                {
-                    "name": "format",
-                    "type": "string"
-                }
-            ],
-            "return": {
-                "type": "string"
-            }
-        },
-        {
-            "name": "formatTime",
-            "description": "Format the date according to the specified format. The format uses hh(hour), mm(minute), ss(second), they are case insensitive",
-            "example": "datetime.formatTime（\"10:11:05.00000\", \"hh-mm-ss\") => 10-11-05",
-            "args": [
-                {
-                    "name": "datetime",
-                    "type": "datetime"
-                },
-                {
-                    "name": "format",
-                    "type": "string"
-                }
-            ],
-            "return": {
-                "type": "string"
-            }
-        },
-        {
-            "name": "now",
-            "description": "Returns the current time with UTC timezone.",
-            "example": "datetime.now() => 2017-05-13T15:59:41+00:00",
-            "args": [],
-            "return": {
-                "type": "string"
-            }
-        },
-        {
-            "name": "parse",
-            "description": "Parse the given datetime to the DateTime with time zone, default base on UTC and timezone follow the IANA Time Zone ",
-            "example": "datetime.parse(\"2020-03-19T15:02:03+06:00\", \"America/Los_Angeles\") => 2020-03-19T02:02:03-07:00",
-            "args": [
-                {
-                    "name": "str",
-                    "type": "any"
-                },
-                {
-                    "name": "timezone",
-                    "type": "string",
-                    "value":"UTC"
-                }
-            ],
-            "return": {
-                "type": "datetime"
-            },
-            "display": {
-                "visible": true
-            }
-        },
-        {
-            "name": "sub",
-            "description": "Subtract the given number of years, months and days from the DateTime",
-            "example": "datetime.sub(datetime.current(), 1,1,1) => 2019-03-26T16:38:55.345876511Z",
-            "args": [
-                {
-                    "name": "datetime",
-                    "type": "datetime"
-                },
-                {
-                    "name": "years",
-                    "type": "int",
-                    "value":0
-                },
-                {
-                    "name": "months",
-                    "type": "int",
-                    "value":0
-                },
-                {
-                    "name": "days",
-                    "type": "int",
-                    "value":0
-                }
-            ],
-            "return": {
-                "type": "datetime"
-            },
-            "display": {
-                "visible": true
-            }
-        },
-        {
-            "name": "subHours",
-            "description": "Subtract the given number of hours from the DateTime",
-            "example": "datetime.subHours(datetime.current(),1) => 2020-04-27T15:38:55.345861378Z",
-            "args": [
-                {
-                    "name": "datetime",
-                    "type": "datetime"
-                },
-                {
-                    "name": "hours",
-                    "type": "int"
-                }
-            ],
-            "return": {
-                "type": "datetime"
-            },
-            "display": {
-                "visible": true
-            }
-        },
-        {
-            "name": "subMins",
-            "description": "Subtract the given number of minutes from the DateTime",
-            "example": "datetime.subMins(datetime.current(),10) => 2020-04-27T16:28:55.345864058Z",
-            "args": [
-                {
-                    "name": "datetime",
-                    "type": "datetime"
-                },
-                {
-                    "name": "mins",
-                    "type": "int"
-                }
-            ],
-            "return": {
-                "type": "datetime"
-            },
-            "display": {
-                "visible": true
-            }
-        },
-        {
-            "name": "subSeconds",
-            "description": "Subtract the given number of seconds from the DateTime",
-            "example": "datetime.subSeconds(datetime.current(),10) => 2020-04-27T16:38:45.346028182Z",
-            "args": [
-                {
-                    "name": "datetime",
-                    "type": "datetime"
-                },
-                {
-                    "name": "seconds",
-                    "type": "int"
-                }
-            ],
-            "return": {
-                "type": "datetime"
-            },
-            "display": {
-                "visible": true
-            }
+          "name": "days",
+          "type": "int",
+          "value": 0
         }
-    ]
+      ],
+      "return": {
+        "type": "datetime"
+      },
+      "display": {
+        "visible": true
+      }
+    },
+    {
+      "name": "addHours",
+      "description": "Add the given number of hours to the DateTime",
+      "example": "datetime.addHours(datetime.current(), 3) => 2020-04-27T19:38:55.345832054Z",
+      "args": [
+        {
+          "name": "datetime",
+          "type": "datetime"
+        },
+        {
+          "name": "hours",
+          "type": "int",
+          "value": 0
+        }
+      ],
+      "return": {
+        "type": "datetime"
+      },
+      "display": {
+        "visible": true
+      }
+    },
+    {
+      "name": "addMins",
+      "description": "Add the given number of mins to the DateTime",
+      "example": "datetime.addMins(datetime.current(), 30) => 2020-04-27T17:08:55.345841684Z",
+      "args": [
+        {
+          "name": "datetime",
+          "type": "datetime"
+        },
+        {
+          "name": "mins",
+          "type": "int",
+          "value": 0
+        }
+      ],
+      "return": {
+        "type": "datetime"
+      },
+      "display": {
+        "visible": true
+      }
+    },
+    {
+      "name": "addSeconds",
+      "description": "Add the given number of seconds to the DateTime",
+      "example": "datetime.addSeconds(datetime.current(), 30) => 2020-04-27T16:39:25.345860393Z",
+      "args": [
+        {
+          "name": "datetime",
+          "type": "datetime"
+        },
+        {
+          "name": "seconds",
+          "type": "int",
+          "value": 0
+        }
+      ],
+      "return": {
+        "type": "datetime"
+      },
+      "display": {
+        "visible": true
+      }
+    },
+    {
+      "name": "create",
+      "description": "Create date by given year, months, days, hours, mins, seconds, nanoseconds and timezone,  the timezone follow the IANA Time Zone",
+      "example": "datetime.create(2020,1,3,2,22,0,0, \"America/Los_Angeles\") => 2020-01-03T02:22:00-08:00",
+      "args": [
+        {
+          "name": "years",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "name": "months",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "name": "days",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "name": "hours",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "name": "mins",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "name": "secs",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "name": "nsecs",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "value": "UTC"
+        }
+      ],
+      "return": {
+        "type": "datetime"
+      }
+    },
+    {
+      "name": "current",
+      "description": "Returns the current datetime with UTC timezone",
+      "example": "datetime.current() => 2020-04-21T03:16:44+00:00",
+      "args": [],
+      "return": {
+        "type": "datetime"
+      }
+    },
+    {
+      "name": "currentDate",
+      "description": "Returns the current date with UTC time zone.",
+      "example": "datetime.currentDate() => 2017-05-13+00:00",
+      "args": [],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "currentDatetime",
+      "description": "Returns the current datetime with UTC timezone.",
+      "example": "datetime.currentDatetime() => 2017-05-13T22:27:54+00:00",
+      "args": [],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "currentTime",
+      "description": "Returns the current time with UTC timezone.",
+      "example": "datetime.currentTime() => 22:27:54+00:00",
+      "args": [],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "diff",
+      "description": "Return the difference between two given DateTime, the difference controlled by argument type, the type in (days,hours,mins and seconds)",
+      "example": "datetime.diff(datetime.current(), datetime.addHours(datetime.current(), 2), \"hours\") => 2",
+      "args": [
+        {
+          "name": "start",
+          "type": "datetime"
+        },
+        {
+          "name": "end",
+          "type": "datetime"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "float64"
+      },
+      "display": {
+        "visible": true
+      }
+    },
+    {
+      "name": "format",
+      "description": "Format the date according to the specified format. The format uses MM(month), DD(day), YYYY(year), hh(hour), mm(minute) and ss(second), they are case insensitive except MM. it also can format with predefine layout ANSIC, UnixDate, RubyDate, RFC822, RFC822Z, RFC850, RFC1123, RFC1123Z, RFC3339 and RFC3339Nano",
+      "example": "datetime.format(datetime.current(), \"RFC3339\")=> 2020-04-27T16:38:45Z",
+      "args": [
+        {
+          "name": "datetime",
+          "type": "datetime"
+        },
+        {
+          "name": "format",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "formatDate",
+      "description": "Format the date according to the specified format. The format uses MM(month), DD(day) and YYYY(year) and they are case insensitive",
+      "example": "datetime.formatDate（\"02/08/2017\", \"dd-MM-yyyy\"）=> 08-02-2017",
+      "args": [
+        {
+          "name": "date",
+          "type": "datetime"
+        },
+        {
+          "name": "format",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "formatDatetime",
+      "description": "Format the date according to the specified format. The format uses MM(month), DD(day), YYYY(year), hh(hour), mm(minute) and ss(second), they are case insensitive except MM",
+      "example": "datetime.formatDatetime（\"2017-04-10T22:17:32.000+0700\", \"dd/MM/yyyy T hh:mm:ss\") => 10/04/2017 T 22:17:32",
+      "args": [
+        {
+          "name": "datetime",
+          "type": "datetime"
+        },
+        {
+          "name": "format",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "formatTime",
+      "description": "Format the date according to the specified format. The format uses hh(hour), mm(minute), ss(second), they are case insensitive",
+      "example": "datetime.formatTime（\"10:11:05.00000\", \"hh-mm-ss\") => 10-11-05",
+      "args": [
+        {
+          "name": "datetime",
+          "type": "datetime"
+        },
+        {
+          "name": "format",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "now",
+      "description": "Returns the current time with UTC timezone.",
+      "example": "datetime.now() => 2017-05-13T15:59:41+00:00",
+      "args": [],
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "parse",
+      "description": "Parse the given datetime to the DateTime with time zone, default base on UTC and timezone follow the IANA Time Zone ",
+      "example": "datetime.parse(\"2020-03-19T15:02:03+06:00\", \"America/Los_Angeles\") => 2020-03-19T02:02:03-07:00",
+      "args": [
+        {
+          "name": "str",
+          "type": "any"
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "value": "UTC"
+        }
+      ],
+      "return": {
+        "type": "datetime"
+      },
+      "display": {
+        "visible": true
+      }
+    },
+    {
+      "name": "sub",
+      "description": "Subtract the given number of years, months and days from the DateTime",
+      "example": "datetime.sub(datetime.current(), 1,1,1) => 2019-03-26T16:38:55.345876511Z",
+      "args": [
+        {
+          "name": "datetime",
+          "type": "datetime"
+        },
+        {
+          "name": "years",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "name": "months",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "name": "days",
+          "type": "int",
+          "value": 0
+        }
+      ],
+      "return": {
+        "type": "datetime"
+      },
+      "display": {
+        "visible": true
+      }
+    },
+    {
+      "name": "subHours",
+      "description": "Subtract the given number of hours from the DateTime",
+      "example": "datetime.subHours(datetime.current(),1) => 2020-04-27T15:38:55.345861378Z",
+      "args": [
+        {
+          "name": "datetime",
+          "type": "datetime"
+        },
+        {
+          "name": "hours",
+          "type": "int"
+        }
+      ],
+      "return": {
+        "type": "datetime"
+      },
+      "display": {
+        "visible": true
+      }
+    },
+    {
+      "name": "subMins",
+      "description": "Subtract the given number of minutes from the DateTime",
+      "example": "datetime.subMins(datetime.current(),10) => 2020-04-27T16:28:55.345864058Z",
+      "args": [
+        {
+          "name": "datetime",
+          "type": "datetime"
+        },
+        {
+          "name": "mins",
+          "type": "int"
+        }
+      ],
+      "return": {
+        "type": "datetime"
+      },
+      "display": {
+        "visible": true
+      }
+    },
+    {
+      "name": "subSeconds",
+      "description": "Subtract the given number of seconds from the DateTime",
+      "example": "datetime.subSeconds(datetime.current(),10) => 2020-04-27T16:38:45.346028182Z",
+      "args": [
+        {
+          "name": "datetime",
+          "type": "datetime"
+        },
+        {
+          "name": "seconds",
+          "type": "int"
+        }
+      ],
+      "return": {
+        "type": "datetime"
+      },
+      "display": {
+        "visible": true
+      }
+    }
+  ]
 }
