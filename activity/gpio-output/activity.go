@@ -55,12 +55,12 @@ func (a *Activity) Metadata() *activity.Metadata {
 
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
-	settings := &Input{}
-	ctx.GetInputObject(settings)
+	inputParams := &Input{}
+	ctx.GetInputObject(inputParams)
 
-	pinNumber := settings.GpioPin
+	pinNumber := inputParams.GpioPin
 	pin := rpio.Pin(pinNumber)
-	action := settings.Action
+	action := inputParams.Action
 
 	log.RootLogger().Debug("Action %s, pin %d", action, pinNumber)
 
