@@ -49,11 +49,11 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 
 // Trigger REST trigger struct
 type Trigger struct {
-	server           *Server
-	settings         *Settings
-	id               string
-	logger           log.Logger
-//	serverInstanceID string
+	server   *Server
+	settings *Settings
+	id       string
+	logger   log.Logger
+	//	serverInstanceID string
 }
 
 func (t *Trigger) Initialize(ctx trigger.InitContext) error {
@@ -79,7 +79,12 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 
 		method := s.Method
 		path := s.Path
-
+		if s.IsPassThroughUri == "YES" {
+			if len(path) == 0 || path[len(path)-1] != '/' {
+				path = path + "/"
+			}
+			path = path + "*restOfThePath"
+		}
 		t.logger.Debugf("Registering handler [%s: %s]", method, path)
 
 		if _, ok := pathMap[path]; !ok {
@@ -138,6 +143,13 @@ type IDResponse struct {
 	ID string `json:"id"`
 }
 
+func removeFirstCharIfForwardSlash(input string) string {
+	if input[0] == '/' {
+		return input[1:]
+	}
+	return input
+}
+
 func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httprouter.Handle {
 
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -157,7 +169,7 @@ func newActionHandler(rt *Trigger, method string, handler trigger.Handler) httpr
 
 		out.PathParams = make(map[string]string)
 		for _, param := range ps {
-			out.PathParams[param.Key] = param.Value
+			out.PathParams[param.Key] = removeFirstCharIfForwardSlash(param.Value) // router 'catch all' path part remove '/' to make pathParams look the same
 		}
 
 		queryValues := r.URL.Query()

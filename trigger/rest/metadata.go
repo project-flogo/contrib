@@ -12,8 +12,9 @@ type Settings struct {
 }
 
 type HandlerSettings struct {
-	Method string `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"` // The HTTP method (ie. GET,POST,PUT,PATCH or DELETE)
-	Path   string `md:"path,required"`                                      // The resource path
+	IsPassThroughUri string `md:"isPassThroughUri,required,allowed(YES,NO)"`          // use as a pass through will automatically add a 'partial' part of the defined 'path' as a pathParam with name 'restOfThePath'
+	Method           string `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"` // The HTTP method (ie. GET,POST,PUT,PATCH or DELETE)
+	Path             string `md:"path,required"`                                      // The resource path
 }
 
 type Output struct {

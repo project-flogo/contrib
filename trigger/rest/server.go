@@ -12,20 +12,20 @@ import (
 )
 
 const (
-	httpDefaultAddr = ":http" //todo should this be :8080
+	httpDefaultAddr    = ":http"  //todo should this be :8080
 	httpDefaultTlsAddr = ":https" //todo should this be :8443
 
-	httpDefaultReadTimeout = 15 * time.Second
+	httpDefaultReadTimeout  = 15 * time.Second
 	httpDefaultWriteTimeout = 15 * time.Second
 )
 
 type Server struct {
 	running bool
-	srv *http.Server
+	srv     *http.Server
 
 	tlsEnabled bool
-	certFile string
-	keyFile string
+	certFile   string
+	keyFile    string
 }
 
 func NewServer(addr string, handler http.Handler, opts ...func(*Server)) (*Server, error) {
@@ -36,10 +36,10 @@ func NewServer(addr string, handler http.Handler, opts ...func(*Server)) (*Serve
 
 	srv := &Server{}
 	srv.srv = &http.Server{
-		Addr: addr,
-		Handler: handler,
-		ReadTimeout:httpDefaultReadTimeout,
-		WriteTimeout:httpDefaultWriteTimeout,
+		Addr:         addr,
+		Handler:      handler,
+		ReadTimeout:  httpDefaultReadTimeout,
+		WriteTimeout: httpDefaultWriteTimeout,
 	}
 
 	for _, opt := range opts {
@@ -52,7 +52,6 @@ func NewServer(addr string, handler http.Handler, opts ...func(*Server)) (*Serve
 
 	return srv, nil
 }
-
 
 ///////////////////////
 // Options
@@ -145,7 +144,7 @@ func (s *Server) Stop() error {
 ///////////////////////
 // Validation Helpers
 
-func (s *Server) validateStart()  error {
+func (s *Server) validateStart() error {
 
 	//check if port is available
 	ln, err := net.Listen("tcp", s.srv.Addr)
@@ -157,7 +156,7 @@ func (s *Server) validateStart()  error {
 	return nil
 }
 
-func (s *Server) validateInit()  error {
+func (s *Server) validateInit() error {
 
 	if s.tlsEnabled {
 		// using tls, so validate cert & key
