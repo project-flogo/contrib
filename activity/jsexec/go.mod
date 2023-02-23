@@ -7,7 +7,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/project-flogo/core v0.9.4-hf.1
 	github.com/stretchr/testify v1.4.0
-	golang.org/x/text v0.3.2 // indirect
+	golang.org/x/text v0.3.8 // indirect
 )
 
 go 1.12
