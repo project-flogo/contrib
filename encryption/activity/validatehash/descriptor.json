@@ -1,0 +1,35 @@
+{
+    "name": "flogo-validate-hash",
+    "type": "flogo:activity",
+    "version": "0.1.0",
+    "title": "Validate Hash",
+    "description": "Validate a hash for the 1 time link click",
+    "display": {
+        "category": "encryption",
+        "visible": true,
+        "description": "This activity validate a hash base on the provided data"
+    },
+    "ref": "github.com/project-flogo/contrib/encryption/activity/validatehash",
+    "settings": [],
+    "input": [
+        {
+            "name": "hash",
+            "type": "string",
+            "description": "Hash to validate against the data field",
+            "required": true
+        },
+        {
+            "name": "data",
+            "type": "string",
+            "description": "Data to validate against the hash field",
+            "required": true
+        }
+    ],
+    "output": [
+        {
+            "name": "valid",
+            "type": "boolean",
+            "description": ""
+        }
+    ]
+}
