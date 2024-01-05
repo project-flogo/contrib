@@ -135,3 +135,20 @@ Set the value of existing key or add new key and set it's value in a json object
 | Arg        | Type   | Description             |
 |:-----------|:-------|:------------------------|
 | jsonObject | any    | The updated json object |
+
+
+## jq()
+Process the JSON inputs based on a provided query and return the filtered output
+
+### Input Args
+
+| Arg      | Type   | Description                        |
+|:---------|:-------|:-----------------------------------|
+| object   | any    | The json object                    |
+| query    | string | Query to perform                   |
+
+### Output
+
+| Arg        | Type   | Description             |
+|:-----------|:-------|:------------------------|
+| output     | any    | result of the jq filter |
