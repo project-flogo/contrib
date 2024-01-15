@@ -61,8 +61,5 @@ func (jq) Eval(params ...interface{}) (interface{}, error) {
 		result = append(result, v)
 	}
 
-	if len(result) == 1 {
-		return result[0], nil
-	}
 	return result, nil
 }
