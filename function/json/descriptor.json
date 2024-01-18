@@ -143,7 +143,7 @@
     {
       "name": "jq",
       "description": "process the JSON inputs based on a provided query and return the filtered array output",
-      "example": "json.jq(inputJSON, \"query\") => [output1, output2 ...]]",
+      "example": "json.jq(inputJSON, \"query\") => [output1, output2 ...]",
       "args": [
         {
           "name": "inputJSON",
@@ -155,7 +155,8 @@
         }
       ],
       "return": {
-        "type": "array"
+        "type": "array",
+        "valueType": "any"
       },
       "display": {
         "visible": true
