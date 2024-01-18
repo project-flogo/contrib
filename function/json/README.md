@@ -151,4 +151,4 @@ Process the JSON inputs based on a provided query and return the filtered output
 
 | Arg        | Type   | Description             |
 |:-----------|:-------|:------------------------|
-| output     | any    | result of the jq filter |
+| output     | array  | result of the jq filter |
