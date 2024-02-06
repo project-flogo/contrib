@@ -139,6 +139,28 @@
       "return": {
         "type": "any"
       }
+    },
+    {
+      "name": "jq",
+      "description": "process the JSON inputs based on a provided query and return the filtered array output",
+      "example": "json.jq(inputJSON, \"query\") => [output1, output2 ...]",
+      "args": [
+        {
+          "name": "inputJSON",
+          "type": "any"
+        },
+        {
+          "name": "query",
+          "type": "string"
+        }
+      ],
+      "return": {
+        "type": "array",
+        "valueType": "any"
+      },
+      "display": {
+        "visible": true
+      }
     }
   ]
 }
