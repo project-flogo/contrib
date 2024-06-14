@@ -1,0 +1,29 @@
+{
+    "name": "flogo-obtain-hash",
+    "type": "flogo:activity",
+    "version": "0.1.0",
+    "title": "Obtain Hash",
+    "description": "Obtain a hash for the 1 time link click",
+    "display": {
+        "category": "encryption",
+        "visible": true,
+        "description": "This activity generate a hash base on the provided data"
+    },
+    "ref": "github.com/project-flogo/contrib/encryption/activity/obtainhash",
+    "settings": [],
+    "input": [
+        {
+            "name": "data",
+            "type": "string",
+            "description": "",
+            "required": true
+        }
+    ],
+    "output": [
+        {
+            "name": "hash",
+            "type": "string",
+            "description": "Hash for the data"
+        }
+    ]
+}
