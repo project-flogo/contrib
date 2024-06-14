@@ -1,3 +1,3 @@
-module github.com/project-flogo/contrib
+module github.com/AkshayGadikar/contrib
 
 go 1.18

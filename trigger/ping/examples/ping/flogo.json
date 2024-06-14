@@ -1,0 +1,25 @@
+{
+  "name": "Ping",
+  "type": "flogo:app",
+  "version": "1.0.0",
+  "title": "Ping Trigger",
+  "description": "This is a simple ping example.",
+  "triggers": [
+    {
+      "name": "ping",
+      "id": "flogo-ping",
+      "ref": "github.com/project-flogo/contrib/trigger/ping",
+      "description": "Ping Example",
+      "settings": {
+        "port": "9096",
+        "version": "1.1",
+        "appversion":"",
+        "appdescription":"",
+        "password":"Test12345"
+      },
+      "handlers": []
+    }
+  ],
+  "actions": [],
+  "resources": []
+}
