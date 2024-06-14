@@ -20,14 +20,18 @@ func init() {
 }
 
 const (
-	methodPOST  = "POST"
-	methodPUT   = "PUT"
-	methodPATCH = "PATCH"
+	methodPOST    = "POST"
+	methodPUT     = "PUT"
+	methodPATCH   = "PATCH"
+	methodTRIGGER = "TRIGGER"
 )
 
 var activityMd = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
 
 func New(ctx activity.InitContext) (activity.Activity, error) {
+	logger := ctx.Logger()
+	logger.Debugf("Create REST activity")
+
 	s := &Settings{}
 	err := metadata.MapToStruct(ctx.Settings(), s, true)
 	if err != nil {
@@ -45,8 +49,6 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		httpTransportSettings.ResponseHeaderTimeout = time.Second * time.Duration(s.Timeout)
 	}
 
-	logger := ctx.Logger()
-
 	// Set the proxy server to use, if supplied
 	if len(s.Proxy) > 0 {
 		proxyURL, err := url.Parse(s.Proxy)
@@ -60,7 +62,6 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	}
 
 	if strings.HasPrefix(s.Uri, "https") {
-
 		cfg := &ssl.Config{}
 
 		if len(s.SSLConfig) != 0 {
@@ -111,7 +112,8 @@ func (a *Activity) Metadata() *activity.Metadata {
 
 // Eval implements api.Activity.Eval - Invokes a REST Operation
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
-
+	logger := ctx.Logger()
+	logger.Debugf("ACTIVITY CALL START")
 	input := &Input{}
 	err = ctx.GetInputObject(input)
 	if err != nil {
@@ -119,42 +121,44 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	uri := a.settings.Uri
-
+	if a.settings.UseEnvProp == "YES" {
+		uri = replaceSubString(uri, input.EnvPropUri)
+	}
 	if a.containsParam {
-
-		if len(input.PathParams) == 0 {
+		if len(input.PathParams) == 0 && strings.Index(strings.Replace(uri, ":restOfThePath", "", 1), "/:") > -1 {
 			err := activity.NewError("Path Params not specified, required for URI: "+uri, "", nil)
 			return false, err
 		}
-
-		uri = BuildURI(a.settings.Uri, input.PathParams)
+		uri, err = BuildURI(uri, input.PathParams)
+		if err != nil {
+			return false, err
+		}
+	} else {
+		logger.Debugf("No call to buildURI")
 	}
 
 	if len(input.QueryParams) > 0 {
 		qp := url.Values{}
-
 		for key, value := range input.QueryParams {
 			qp.Set(key, value)
 		}
-
 		uri = uri + "?" + qp.Encode()
 	}
 
-	logger := ctx.Logger()
-
+	method := a.settings.Method
+	if method == methodTRIGGER {
+		method = input.Method
+	}
 	if logger.DebugEnabled() {
-		logger.Debugf("REST Call: [%s] %s", a.settings.Method, uri)
+		logger.Debugf("REST Call: [%s] %s", method, uri)
 	}
 
 	var reqBody io.Reader
 
 	contentType := "application/json; charset=UTF-8"
-	method := a.settings.Method
 
 	if method == methodPOST || method == methodPUT || method == methodPATCH {
-
 		contentType = getContentType(input.Content)
-
 		if input.Content != nil {
 			if str, ok := input.Content.(string); ok {
 				reqBody = bytes.NewBuffer([]byte(str))
@@ -177,17 +181,22 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	headers := a.getHeaders(input.Headers)
-
-	// Set headers
 	if len(headers) > 0 {
-		if logger.DebugEnabled() {
-			logger.Debug("Setting HTTP request headers...")
-		}
 		for key, value := range headers {
-			if logger.TraceEnabled() {
-				logger.Trace("%s: %s", key, value)
+			if strings.HasPrefix(key, "X-Forwarded") {
+				if logger.DebugEnabled() {
+					logger.Debugf("NOT Adding HTTP request headers: |%s| : |%s|", key, value)
+				}
+
+			} else {
+				if strings.HasPrefix(key, "X-Authorization") {
+					key = key[2:]
+				}
+				if logger.DebugEnabled() {
+					logger.Debugf("Adding HTTP request headers: |%s| : |%s|", key, value)
+				}
+				req.Header.Set(key, value)
 			}
-			req.Header.Set(key, value)
 		}
 	}
 
@@ -197,7 +206,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	if resp == nil {
-		logger.Trace("Empty response")
+		logger.Debugf("Called but caller returned an empty response")
 		return true, nil
 	}
 
@@ -208,9 +217,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}()
 
 	if logger.DebugEnabled() {
-		logger.Debug("Response status:", resp.Status)
+		logger.Debugf("Response status: %s", resp.Status)
 	}
-
 	respHeaders := make(map[string]string, len(resp.Header))
 
 	for key := range resp.Header {
@@ -249,22 +257,32 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		result = string(b)
 	}
 
-	if logger.TraceEnabled() {
-		logger.Trace("Response body:", result)
+	if logger.DebugEnabled() {
+		for key, value := range respHeaders {
+			logger.Debugf("Response headers from REST CALL key: %s value: %s", key, value)
+		}
+		logger.Debugf("Status and code of HTTP Response: %s | %s", resp.StatusCode, resp.Status)
+		logger.Debugf("Response body:", result)
 	}
-
-
-	output := &Output{Status: resp.StatusCode, Data: result, Headers:respHeaders, Cookies:cookies}
+	output := &Output{Status: resp.StatusCode, Data: result, Headers: respHeaders, Cookies: cookies}
 	err = ctx.SetOutputObject(output)
 	if err != nil {
 		return false, err
 	}
-
 	return true, nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Utils
+func replaceSubString(uri string, replacement string) string {
+	startChar := strings.Index(uri, "{")
+	endChar := strings.Index(uri, "}")
+	if startChar == -1 || endChar == -1 {
+		return uri
+	}
+
+	return strings.Replace(uri, uri[startChar:endChar+1], replacement, 1)
+}
 
 func (a *Activity) getHeaders(inputHeaders map[string]string) map[string]string {
 
@@ -287,7 +305,6 @@ func (a *Activity) getHeaders(inputHeaders map[string]string) map[string]string 
 	return headers
 }
 
-
 //todo just make contentType a setting
 func getContentType(replyData interface{}) string {
 
@@ -307,24 +324,26 @@ func getContentType(replyData interface{}) string {
 	return contentType
 }
 
-// BuildURI is a temporary crude URI builder
-func BuildURI(uri string, values map[string]string) string {
+func BuildURI(uri string, values map[string]string) (string, error) {
 
 	var buffer bytes.Buffer
+	var i int
 	buffer.Grow(len(uri))
 
+	// schema://host:port/path?query#fragment
+	// continue with normal processing as before having static domain:port
 	addrStart := strings.Index(uri, "://")
+	i = addrStart + 3
 
-	i := addrStart + 3
-
-	for i < len(uri) {
-		if uri[i] == '/' {
-			break
+	if uri[addrStart+3] != ':' {
+		for i < len(uri) {
+			if uri[i] == '/' {
+				break
+			}
+			i++
 		}
-		i++
+		buffer.WriteString(uri[0:i])
 	}
-
-	buffer.WriteString(uri[0:i])
 
 	for i < len(uri) {
 		if uri[i] == ':' {
@@ -332,13 +351,10 @@ func BuildURI(uri string, values map[string]string) string {
 			for j < len(uri) && uri[j] != '/' {
 				j++
 			}
-
 			if i+1 == j {
-
 				buffer.WriteByte(uri[i])
 				i++
 			} else {
-
 				param := uri[i+1 : j]
 				value := values[param]
 				buffer.WriteString(value)
@@ -347,12 +363,10 @@ func BuildURI(uri string, values map[string]string) string {
 				}
 				i = j + 1
 			}
-
 		} else {
 			buffer.WriteByte(uri[i])
 			i++
 		}
 	}
-
-	return buffer.String()
+	return buffer.String(), nil
 }
