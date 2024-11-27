@@ -34,7 +34,7 @@ Core collection of Flogo contributions.  This repository consists of activities,
 * [json](function/json): JSON
 * [number](function/number): Numbers
 * [string](function/string): Strings
-* [string](function/crypto): Strings
+* [crypto](function/crypto): Strings
 
 ## Installation
 
