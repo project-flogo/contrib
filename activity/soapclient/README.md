@@ -1,16 +1,16 @@
 <!--
-title: REST
+title: SOAP Client
 weight: 4618
 -->
 
-# REST
-This activity allows you to invoke a REST service.
+# SOAP Client
+This activity allows you to invoke a SOAP service.
 
 ## Installation
 
 ### Flogo CLI
 ```bash
-flogo install github.com/project-flogo/contrib/activity/rest
+flogo install github.com/project-flogo/contrib/activity/soapclient
 ```
 
 ## Configuration
