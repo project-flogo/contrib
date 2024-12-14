@@ -162,12 +162,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		env.Header().Content = headerBytes
 	}
 
-	if input.RequestBody != nil {
+	if input.SOAPRequestBody != nil {
 		var b_xml_bytes []byte
 		if a.xmlPassThroughMode {
-			b_xml_bytes = []byte(input.RequestBody.(string))
+			b_xml_bytes = []byte(input.SOAPRequestBody.(string))
 		} else {
-			b_bytes, err := json.Marshal(input.RequestBody)
+			b_bytes, err := json.Marshal(input.SOAPRequestBody)
 			if err != nil {
 				ctx.Logger().Errorf("Error marshalling JSON body: %s", err.Error())
 				return false, err

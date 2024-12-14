@@ -31,7 +31,7 @@ func TestSOAPClientActivity(t *testing.T) {
 	tc := test.NewActivityContext(act.Metadata())
 
 	//setup attrs
-	input := &Input{SoapAction: "NumberToWords", RequestBody: map[string]interface{}{"NumberToWords": map[string]interface{}{"ubiNum": 100, "@xmlns": "http://www.dataaccess.com/webservicesserver/"}}}
+	input := &Input{SoapAction: "NumberToWords", SOAPRequestBody: map[string]interface{}{"NumberToWords": map[string]interface{}{"ubiNum": 100, "@xmlns": "http://www.dataaccess.com/webservicesserver/"}}}
 	tc.SetInputObject(input)
 
 	done, err := act.Eval(tc)
@@ -57,7 +57,7 @@ func TestSOAPClientActivityFault(t *testing.T) {
 	tc := test.NewActivityContext(act.Metadata())
 
 	//setup attrs
-	input := &Input{RequestBody: map[string]interface{}{"Divide": map[string]interface{}{"intA": 6, "intB": 0}}}
+	input := &Input{SOAPRequestBody: map[string]interface{}{"Divide": map[string]interface{}{"intA": 6, "intB": 0}}}
 	tc.SetInputObject(input)
 
 	done, err := act.Eval(tc)

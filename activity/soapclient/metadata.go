@@ -18,7 +18,7 @@ type Input struct {
 	SoapAction         string            `md:"soapAction"`
 	HttpQueryParams    map[string]string `md:"httpQueryParams"`    // The HTTP query parameters
 	SOAPRequestHeaders interface{}       `md:"soapRequestHeaders"` // The HTTP header parameters
-	RequestBody        interface{}       `md:"soapRequestBody"`    // The message content to send. This is only used in POST, PUT, and PATCH
+	SOAPRequestBody    interface{}       `md:"soapRequestBody"`    // The message content to send. This is only used in POST, PUT, and PATCH
 }
 
 func (i *Input) ToMap() map[string]interface{} {
@@ -26,13 +26,13 @@ func (i *Input) ToMap() map[string]interface{} {
 		"soapAction":         i.SoapAction,
 		"httpQueryParams":    i.HttpQueryParams,
 		"soapRequestHeaders": i.SOAPRequestHeaders,
-		"soapRequestBody":    i.RequestBody,
+		"soapRequestBody":    i.SOAPRequestBody,
 	}
 }
 
 func (i *Input) FromMap(values map[string]interface{}) error {
 	i.SOAPRequestHeaders = values["soapRequestHeaders"]
-	i.RequestBody = values["soapRequestBody"]
+	i.SOAPRequestBody = values["soapRequestBody"]
 	i.HttpQueryParams, _ = coerce.ToParams(values["httpQueryParams"])
 	i.SoapAction, _ = values["soapAction"].(string)
 	return nil
