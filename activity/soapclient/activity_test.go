@@ -43,8 +43,8 @@ func TestSOAPClientActivity(t *testing.T) {
 	assert.NotNil(t, output)
 	assert.Equal(t, 200, output.HttpStatus)
 	assert.False(t, output.IsFault)
-	assert.NotNil(t, output.ResponsePayload)
-	res, err1 := coerce.ToObject(output.ResponsePayload)
+	assert.NotNil(t, output.SOAPResponsePayload)
+	res, err1 := coerce.ToObject(output.SOAPResponsePayload)
 	assert.Nil(t, err1)
 	resObj := res["NumberToWordsResponse"].(map[string]interface{})
 	assert.Equal(t, "one hundred", resObj["NumberToWordsResult"])
@@ -69,5 +69,5 @@ func TestSOAPClientActivityFault(t *testing.T) {
 	assert.NotNil(t, output)
 	assert.Equal(t, 500, output.HttpStatus)
 	assert.True(t, output.IsFault)
-	assert.NotNil(t, output.ResponseFault)
+	assert.NotNil(t, output.SOAPResponseFault)
 }

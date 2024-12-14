@@ -140,7 +140,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return false, err
 	}
 
-	headers := input.RequestHeaders
+	headers := input.SOAPRequestHeaders
 	if headers != nil {
 		var headerBytes []byte
 		if a.xmlPassThroughMode {
@@ -228,13 +228,13 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 		if res.Env.Header() != nil {
 			if a.xmlPassThroughMode {
-				output.ResponseHeaders = string(res.Env.Header().Content)
+				output.SOAPResponseHeaders = string(res.Env.Header().Content)
 			} else {
 				headers_xml, err := mxj.NewMapXml(res.Env.Header().Content, false)
 				if err != nil {
 					return false, err
 				}
-				output.ResponseHeaders = headers_xml.Old()
+				output.SOAPResponseHeaders = headers_xml.Old()
 			}
 		}
 
@@ -242,26 +242,26 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			soap11ResponseBody := res.Env.Body().(*soap.Body11)
 			if soap11ResponseBody.PayloadElem != nil {
 				if a.xmlPassThroughMode {
-					output.ResponsePayload = string(soap11ResponseBody.PayloadElem)
+					output.SOAPResponsePayload = string(soap11ResponseBody.PayloadElem)
 				} else {
 					mv, err := mxj.NewMapXml(soap11ResponseBody.PayloadElem, false)
 					if err != nil {
 						return false, err
 					}
-					output.ResponsePayload = mv.Old()
+					output.SOAPResponsePayload = mv.Old()
 				}
 			}
 		} else {
 			soap12ResponseBody := res.Env.Body().(*soap.Body12)
 			if soap12ResponseBody.PayloadElem != nil {
 				if a.xmlPassThroughMode {
-					output.ResponsePayload = string(soap12ResponseBody.PayloadElem)
+					output.SOAPResponsePayload = string(soap12ResponseBody.PayloadElem)
 				} else {
 					mv, err := mxj.NewMapXml(soap12ResponseBody.PayloadElem, false)
 					if err != nil {
 						return false, err
 					}
-					output.ResponsePayload = mv.Old()
+					output.SOAPResponsePayload = mv.Old()
 				}
 			}
 		}
@@ -274,13 +274,13 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 		if res.Env.Header() != nil {
 			if a.xmlPassThroughMode {
-				output.ResponseHeaders = string(res.Env.Header().Content)
+				output.SOAPResponseHeaders = string(res.Env.Header().Content)
 			} else {
 				headers_xml, err := mxj.NewMapXml(res.Env.Header().Content, false)
 				if err != nil {
 					return false, err
 				}
-				output.ResponseHeaders = headers_xml.Old()
+				output.SOAPResponseHeaders = headers_xml.Old()
 			}
 		}
 
@@ -291,7 +291,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				fault := soap11ResponseBody.FaultElem
 				if a.xmlPassThroughMode {
 					xmlFault, _ := xml.Marshal(soap11ResponseBody.FaultElem)
-					output.ResponseFault = string(xmlFault)
+					output.SOAPResponseFault = string(xmlFault)
 				} else {
 					faultObj := make(map[string]interface{})
 					faultObj["faultcode"] = fault.Code
@@ -304,7 +304,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 						}
 						faultObj["detail"] = mv.Old()
 					}
-					output.ResponseFault = faultObj
+					output.SOAPResponseFault = faultObj
 				}
 			}
 		} else {
@@ -314,7 +314,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				fault := soap12ResponseBody.FaultElem
 				if a.xmlPassThroughMode {
 					xmlFault, _ := xml.Marshal(soap12ResponseBody.FaultElem)
-					output.ResponseFault = string(xmlFault)
+					output.SOAPResponseFault = string(xmlFault)
 				} else {
 					faultObj := make(map[string]interface{})
 					fc_bytes, err := xml.Marshal(fault.Code)
@@ -340,7 +340,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 						}
 						faultObj["Detail"] = mv.Old()
 					}
-					output.ResponseFault = faultObj
+					output.SOAPResponseFault = faultObj
 				}
 			}
 		}
