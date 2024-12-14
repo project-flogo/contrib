@@ -227,11 +227,15 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		}
 
 		if res.Env.Header() != nil {
-			headers_xml, err := mxj.NewMapXml(res.Env.Header().Content, false)
-			if err != nil {
-				return false, err
+			if a.xmlPassThroughMode {
+				output.ResponseHeaders = string(res.Env.Header().Content)
+			} else {
+				headers_xml, err := mxj.NewMapXml(res.Env.Header().Content, false)
+				if err != nil {
+					return false, err
+				}
+				output.ResponseHeaders = headers_xml.Old()
 			}
-			output.ResponseHeaders = headers_xml.Old()
 		}
 
 		if a.settings.SoapVersion == "1.1" {
@@ -269,11 +273,15 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		}
 
 		if res.Env.Header() != nil {
-			headers_xml, err := mxj.NewMapXml(res.Env.Header().Content, false)
-			if err != nil {
-				return false, err
+			if a.xmlPassThroughMode {
+				output.ResponseHeaders = string(res.Env.Header().Content)
+			} else {
+				headers_xml, err := mxj.NewMapXml(res.Env.Header().Content, false)
+				if err != nil {
+					return false, err
+				}
+				output.ResponseHeaders = headers_xml.Old()
 			}
-			output.ResponseHeaders = headers_xml.Old()
 		}
 
 		if a.settings.SoapVersion == "1.1" {
