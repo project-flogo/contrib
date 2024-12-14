@@ -1,0 +1,148 @@
+{
+  "name": "flogo-soap-client",
+  "type": "flogo:activity",
+  "version": "0.0.1",
+  "title": "SOAP Client",
+  "description": "Invoke a SOAP Service",
+  "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/soapclient",
+  "display": {
+    "smallIcon": "soap.png",
+    "largeIcon": "soap.png"
+  },
+  "settings": [
+    {
+      "name": "soapServiceEndpoint",
+      "type": "string",
+      "required": true,
+      "description": "The endpoint of the SOAP service to invoke",
+      "value": "",
+      "display": {
+        "appPropertySupport": true,
+        "name": "SOAP Service Endpoint"
+      }
+    },
+    {
+      "name": "soapVersion",
+      "type": "string",
+      "required": true,
+      "allowed": ["1.1", "1.2"],
+      "description": "The SOAP version to use",
+      "value": "1.1",
+      "display": {
+        "name": "SOAP Version"
+      }
+    },
+    {
+      "name": "xmlPassthroughMode",
+      "type": "boolean",
+      "description": "When enabled, you must configure input body and headers as XML string. The output will be in XML string format. When disabled, the input and output will be processed as JSON. You can configure JSON schema equivalent of XML data for input and output. This activity will convert JSON to XML behind the scene.",
+      "value": false,
+      "display": {
+        "name": "Use XML Passthrough Mode"
+      }
+    },
+    {
+      "name": "attributePrefix",
+      "type": "string",
+      "description": "Attribute prefix for JSON to XML conversion. Default is '-'. This is only used when XML Passthrough mode is disabled.",
+      "value": "-",
+      "display": {
+        "name": "XML Attribute Prefix"
+      }
+    },
+    {
+      "name": "timeout",
+      "type": "integer",
+      "description": "The request timeout in seconds",
+      "value": 30,
+      "display": {
+        "appPropertySupport": true,
+         "name": "Timeout"
+      }
+    },
+    {
+      "name": "enableTLS",
+      "type": "boolean",
+      "description": "Enable secure connection using TLS. When disabled, the connection will be insecure.",
+      "value": false,
+      "display": {
+        "name": "Enable TLS",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "serverCertificate",
+      "type": "string",
+      "display": {
+        "description": "A PEM encoded CA or Server certificate. You can configure either base64 encoded certificate value or file path with prefix 'file://'",
+        "name": "Server Certificate",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "clientCertificate",
+      "type": "string",
+      "display": {
+        "description": "A PEM encoded client certificate. You can configure either base64 encoded certificate value or file path with prefix 'file://'",
+        "name": "Client Certificate",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "clientKey",
+      "type": "string",
+      "display": {
+        "description": "A PEM encoded private key. You can configure either base64 encoded certificate value or file path with prefix 'file://'",
+        "name": "Client Key",
+        "appPropertySupport": true
+      }
+    }
+  ],
+  "input": [
+    {
+      "name": "soapAction",
+      "type": "string"
+    },
+    {
+      "name": "httpQueryParams",
+      "type": "object",
+      "enablecoercing": "true"
+    },
+    {
+      "name": "soapRequestHeaders",
+      "type": "any",
+      "enablecoercing": "true"
+    },
+    {
+      "name": "soapRequestBody",
+      "type": "any",
+      "enablecoercing": "true"
+    }
+  ],
+  "output": [
+    {
+      "name": "httpStatus",
+      "type": "int",
+      "description": "The HTTP status code"
+    },
+    {
+      "name": "soapResponseHeaders",
+      "type": "any",
+      "enablecoercing": "true"
+    },
+    {
+      "name": "isFault",
+      "type": "boolean"
+    },
+    {
+      "name": "soapResponsePayload",
+      "type": "any",
+      "enablecoercing": "true"
+    },
+    {
+      "name": "soapResponseFault",
+      "type": "any",
+      "enablecoercing": "true"
+    }
+  ]
+}
