@@ -33,18 +33,18 @@
       }
     },
     {
-      "name": "xmlPassthroughMode",
+      "name": "xmlMode",
       "type": "boolean",
       "description": "When enabled, you must configure input body and headers as XML string. The output will be in XML string format. When disabled, the input and output will be processed as JSON. You can configure JSON schema equivalent of XML data for input and output. This activity will convert JSON to XML behind the scene.",
       "value": false,
       "display": {
-        "name": "Use XML Passthrough Mode"
+        "name": "XML Mode"
       }
     },
     {
-      "name": "attributePrefix",
+      "name": "xmlAttributePrefix",
       "type": "string",
-      "description": "Attribute prefix for JSON to XML conversion. Default is '-'. This is only used when XML Passthrough mode is disabled.",
+      "description": "Attribute prefix for JSON to XML conversion. Default is '-'. This is only used when XML mode is disabled.",
       "value": "-",
       "display": {
         "name": "XML Attribute Prefix"

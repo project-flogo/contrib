@@ -33,10 +33,10 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, err
 	}
 
-	if s.UseXMLPassThru == false {
+	if s.XMLMode == false {
 		// Set attribure prefix for JSON to XML and XML to JSON conversion
 		// e.g If the prefix is set to '@', <car electric="true">Tesla</car> will be converted to {"car": {"@electric": "true", "#text": "Tesla"}}
-		mxj.SetAttrPrefix(s.AttributePrefix)
+		mxj.SetAttrPrefix(s.XMLAttributePrefix)
 	}
 
 	clientPool := updater_http.NewClientPool()
@@ -90,7 +90,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 	httpAdapter := soap_http.NewClientAdapter(soap_http.ClientPool(clientPool), soap_http.Timeout(time.Duration(s.Timeout)*time.Second))
 	act := &Activity{settings: s}
 	act.clientAdapter = httpAdapter
-	act.xmlPassThroughMode = s.UseXMLPassThru
+	act.xmlPassThroughMode = s.XMLMode
 
 	return act, nil
 }

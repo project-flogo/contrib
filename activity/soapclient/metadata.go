@@ -7,8 +7,8 @@ type Settings struct {
 	SoapVersion         string `md:"soapVersion"`                  // The address of the proxy server to be use
 	Timeout             int    `md:"timeout"`                      // The request timeout in seconds
 	EnableTLS           bool   `md:"enableTLS"`                    // Skip SSL validation
-	AttributePrefix     string `md:"attributePrefix"`              // The prefix to use for attributes
-	UseXMLPassThru      bool   `md:"xmlPassthroughMode"`           // Use XML pass-thru
+	XMLAttributePrefix  string `md:"xmlAttributePrefix"`           // The prefix to use for XML attributes while converting XML to JSON
+	XMLMode             bool   `md:"xmlMode"`                      // Configure direct XML input/output
 	ServerCertificate   string `md:"serverCertificate"`            // The server certificate
 	ClientCertificate   string `md:"clientCertificate"`            // The client certificate
 	ClientKey           string `md:"clientKey"`                    // The client key
