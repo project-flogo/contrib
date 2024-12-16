@@ -1,0 +1,33 @@
+{
+    "name": "xml",
+    "type": "flogo:function",
+    "version": "0.0.1a",
+    "title": "xpath",
+    "description": "Executes an XPATH statement against an XML String and returns the results",
+    "functions": [{
+            "name": "xpath",
+            "description": "Executes an XPATH query against an XML Document.",
+            "example": "returns XML String or Data values dependant on asXML (true for XML representation)",
+            "args": [
+            {
+                "name": "xpath",
+                "type": "string"
+            },
+            {
+                "name": "xml",
+                "type": "string"
+            },
+            {
+                "name": "asXML",
+                "type": "boolean"
+            }],
+            "return": {
+                "name": "result",
+                "type": "string"
+            },
+            "display": {
+                "visible": true
+            }
+        }
+    ]
+}
