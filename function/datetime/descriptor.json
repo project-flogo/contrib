@@ -6,6 +6,19 @@
   "description": "datetimeFunctions",
   "functions": [
     {
+      "name": "timestamp",
+      "description": "Returns the time in milliseconds since the Unix epoch (Jan 1 1970 00:00:00)",
+      "example": "datetime.timestamp() => 1728752120000",
+      "args": [],
+      "return": {
+          "name": "timestamp",
+          "type": "string"
+      },
+      "display": {
+          "visible": true
+      }
+    },
+    {
       "name": "add",
       "description": "Add the given number of years, months and days to the DateTime",
       "example": "datetime.add(datetime.current(), 1, 0, 0) => 2023-05-11T15:38:55.34586567Z",
