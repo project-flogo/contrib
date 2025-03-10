@@ -2,10 +2,10 @@ package rest
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -27,14 +27,15 @@ func TestTrigger_Register(t *testing.T) {
 }
 
 const testConfig string = `{
-	"id": "trigger-rest",
-	"ref": "github.com/project-flogo/contrib/trigger/rest",
+	"id": "trigger-restOld",
+	"ref": "github.com/project-flogo/contrib/trigger/restOld",
 	"settings": {
         "port": "8888"
     },
 	"handlers": [
 	  {
 		"settings": {
+		  "isPassThroughUri": "NO",
 		  "method": "GET",
 		  "path": "/test"
 		},
@@ -69,7 +70,7 @@ func TestRestTrigger_Initialize(t *testing.T) {
 
 func Test_App(t *testing.T) {
 	var wg sync.WaitGroup
-	app := myApp()
+	app := myApp("NO")
 
 	e, err := api.NewEngine(app)
 
@@ -84,35 +85,64 @@ func Test_App(t *testing.T) {
 
 	go func() {
 		time.Sleep(5 * time.Second)
-		roots := x509.NewCertPool()
-
-		conn, err := tls.Dial("tcp", "localhost:5050", &tls.Config{
-			RootCAs: roots,
-		})
+		bodyReader := strings.NewReader("{\"marker\":\"hello\"}")
+		_, err := http.Post("http://localhost:5050", "application/json", bodyReader)
 		if err != nil {
 			panic("failed to connect: " + err.Error())
 		}
-		conn.Close()
+
 		if err != nil {
 			assert.NotNil(t, err)
 			wg.Done()
 		}
-
-		//todo fix this
-		// /assert.Equal(t, "text/plain; charset=UTF-8", resp.Header.Get("Content-type"))
 		wg.Done()
 	}()
 	wg.Wait()
 	fmt.Println("The response is")
+	e.Stop()
 }
 
-func myApp() *api.App {
+func Test_AppWith(t *testing.T) {
+	var wg sync.WaitGroup
+	app := myApp("YES")
+
+	e, err := api.NewEngine(app)
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	//assert.Nil(t, err)
+
+	wg.Add(1)
+	go engine.RunEngine(e)
+
+	go func() {
+		time.Sleep(5 * time.Second)
+		bodyReader := strings.NewReader("{\"marker\":\"hello\"}")
+		_, err := http.Post("http://localhost:5050", "application/json", bodyReader)
+		if err != nil {
+			panic("failed to connect: " + err.Error())
+		}
+
+		if err != nil {
+			assert.NotNil(t, err)
+			wg.Done()
+		}
+		wg.Done()
+	}()
+	wg.Wait()
+	fmt.Println("The response is")
+	e.Stop()
+}
+
+func myApp(isProxyValue string) *api.App {
 
 	app := api.NewApp()
 
-	trg := app.NewTrigger(&Trigger{}, &Settings{Port: 5050, EnableTLS: true, CertFile: "/cert.pem", KeyFile: "/key.pem"})
+	trg := app.NewTrigger(&Trigger{}, &Settings{Port: 5050})
 
-	h, _ := trg.NewHandler(&HandlerSettings{Method: "GET", Path: "/test"})
+	h, _ := trg.NewHandler(&HandlerSettings{IsPassThroughUri: isProxyValue, Method: "GET", Path: "/test"})
 
 	h.NewAction(RunActivities)
 
