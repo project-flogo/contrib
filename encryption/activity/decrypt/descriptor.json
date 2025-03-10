@@ -1,0 +1,38 @@
+{
+    "name": "decrypt",
+    "author": "Manuel Carlos Rodriguez",
+    "version": "1.0.0",
+    "type": "flogo:activity",
+    "title": "Decrypt",
+    "display": {
+        "description": "Activities created by TIBCO Labs",
+        "category": "encryption",
+        "visible": true
+    },
+    "feature": {
+        "iterator": {
+            "type": "iterator",
+            "enabled": true
+        }
+    },
+    "ref": "github.com/project-flogo/contrib/encryption/activity/decrypt",
+    "settings": [],
+    "inputs": [
+        {
+            "name": "data",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "passphrase",
+            "type": "string",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "data",
+            "type": "string"
+        }
+    ]
+}
