@@ -2,6 +2,8 @@ package json
 
 import (
 	"fmt"
+	"github.com/project-flogo/core/support/log"
+	"sync"
 
 	"github.com/itchyny/gojq"
 	"github.com/project-flogo/core/data"
@@ -11,24 +13,27 @@ import (
 
 func init() {
 	function.Register(&jq{})
+	log.RootLogger().Info("JQ init called $$$$$$")
 }
+
+var lock = &sync.Mutex{}
 
 type jq struct {
 }
 
 // Name returns the name of the function
-func (jq) Name() string {
+func (j jq) Name() string {
 	return "jq"
 }
 
 // Sig returns the function signature
-func (jq) Sig() (paramTypes []data.Type, isVariadic bool) {
+func (j jq) Sig() (paramTypes []data.Type, isVariadic bool) {
 	return []data.Type{data.TypeAny, data.TypeString}, false
 }
 
 // Eval executes the function
-func (jq) Eval(params ...interface{}) (interface{}, error) {
-
+func (j jq) Eval(params ...interface{}) (interface{}, error) {
+	lock.Lock()
 	var err error
 	var inputJSON interface{}
 
@@ -49,6 +54,7 @@ func (jq) Eval(params ...interface{}) (interface{}, error) {
 		return nil, err
 	}
 	var result []interface{}
+
 	iter := query.Run(inputJSON)
 	for {
 		v, ok := iter.Next()
@@ -60,6 +66,6 @@ func (jq) Eval(params ...interface{}) (interface{}, error) {
 		}
 		result = append(result, v)
 	}
-
+	lock.Unlock()
 	return result, nil
 }
