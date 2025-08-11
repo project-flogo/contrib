@@ -2,13 +2,11 @@ package json
 
 import (
 	"fmt"
-	"github.com/project-flogo/core/support/log"
-	"sync"
-
 	"github.com/itchyny/gojq"
 	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/expression/function"
+	"github.com/project-flogo/core/support/log"
 )
 
 func init() {
@@ -16,7 +14,7 @@ func init() {
 	log.RootLogger().Info("JQ init called $$$$$$")
 }
 
-var lock = &sync.Mutex{}
+//var lock *sync.Mutex = &sync.Mutex{}
 
 type jq struct {
 }
@@ -33,7 +31,6 @@ func (j jq) Sig() (paramTypes []data.Type, isVariadic bool) {
 
 // Eval executes the function
 func (j jq) Eval(params ...interface{}) (interface{}, error) {
-	lock.Lock()
 	var err error
 	var inputJSON interface{}
 
@@ -55,7 +52,8 @@ func (j jq) Eval(params ...interface{}) (interface{}, error) {
 	}
 	var result []interface{}
 
-	iter := query.Run(inputJSON)
+	input := copyInput(inputJSON)
+	iter := query.Run(input)
 	for {
 		v, ok := iter.Next()
 		if !ok {
@@ -66,6 +64,35 @@ func (j jq) Eval(params ...interface{}) (interface{}, error) {
 		}
 		result = append(result, v)
 	}
-	lock.Unlock()
+
 	return result, nil
+}
+
+// This function will deepcopy the array synchronously before passing to the jq evaluation.
+// If the array entry is map then it will deepcopy the map in each array element.
+// This is required because the same input is being modified internally in the jq code and simultaneously used in mapper
+// code
+func copyInput(input interface{}) interface{} {
+	//lock.Lock()
+	switch input := input.(type) {
+	case []any:
+		arr := make([]interface{}, len(input))
+		for i, v := range input {
+			switch v := v.(type) {
+			case map[string]interface{}:
+				copyMap := make(map[string]interface{})
+				for rk, rv := range v {
+					copyMap[rk] = rv
+				}
+				arr[i] = copyMap
+			case interface{}:
+				arr[i] = v
+			}
+		}
+		//lock.Unlock()
+		return arr
+	}
+
+	//lock.Unlock()
+	return input
 }
