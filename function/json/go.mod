@@ -1,6 +1,6 @@
 module github.com/project-flogo/contrib/function/json
 
-go 1.16
+go1.23
 
 require (
 	github.com/itchyny/gojq v0.12.13
