@@ -11,7 +11,6 @@ import (
 
 func init() {
 	function.Register(&jq{})
-	log.RootLogger().Info("JQ init called $$$$$$")
 }
 
 //var lock *sync.Mutex = &sync.Mutex{}
