@@ -1,0 +1,27 @@
+{
+  "name": "flogo-json2xml",
+  "type": "flogo:activity",
+  "ref": "github.com/project-flogo/contrib/activity/json2xml",
+  "version": "1.0.0",
+  "title": "JSON2XML Activity",
+  "description": "Converts given JSON into XML",
+  "homepage": "https://github.com/project-flogo/contrib/tree/master/activity/json2xml",
+  "input": [
+    {
+      "name": "json",
+      "type": "object",
+      "required": true
+    },
+    {
+      "name": "xmlRootTag",
+      "type": "string",
+      "required": false
+    }
+  ],
+  "output": [
+    {
+      "name": "xml",
+      "type": "bytes"
+    }
+  ]
+}
