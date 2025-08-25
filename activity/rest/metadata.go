@@ -5,16 +5,17 @@ import (
 )
 
 type Settings struct {
-	Method         string                 `md:"method,required,allowed(GET,POST,PUT,PATCH,DELETE)"` // The HTTP method to invoke
-	Uri            string                 `md:"uri,required"`                                       // The URI of the service to invoke
-	Headers        map[string]string      `md:"headers"`                                            // The HTTP header parameters
-	Proxy          string                 `md:"proxy"`                                              // The address of the proxy server to be use
-	Timeout        int                    `md:"timeout"`                                            // The request timeout in seconds
-	SkipSSLVerify  bool                   `md:"skipSSLVerify"`                                      // Skip SSL validation
-	CertFile       string                 `md:"certFile"`                                           // Path to PEM encoded client certificate
-	KeyFile        string                 `md:"keyFile"`                                            // Path to PEM encoded client key
-	CAFile         string                 `md:"CAFile"`                                             // Path to PEM encoded root certificates file
-	SSLConfig      map[string]interface{} `md:"sslConfig"`                                          // SSL Configuration
+	UseEnvProp    string                 `md:"useEnvProp,default,allowed(YES,NO)"`                // Do we want to use an environment property for the uri
+	Uri           string                 `md:"uri,required"`                                      // The URI of the service to invoke
+	Method        string                 `md:"method,allowed(TRIGGER,GET,POST,PUT,PATCH,DELETE)"` // The HTTP method to invoke
+	Headers       map[string]string      `md:"headers"`                                           // The HTTP header parameters
+	Proxy         string                 `md:"proxy"`                                             // The address of the proxy server to be use
+	Timeout       int                    `md:"timeout"`                                           // The request timeout in seconds
+	SkipSSLVerify bool                   `md:"skipSSLVerify"`                                     // Skip SSL validation
+	CertFile      string                 `md:"certFile"`                                          // Path to PEM encoded client certificate
+	KeyFile       string                 `md:"keyFile"`                                           // Path to PEM encoded client key
+	CAFile        string                 `md:"CAFile"`                                            // Path to PEM encoded root certificates file
+	SSLConfig     map[string]interface{} `md:"sslConfig"`                                         // SSL Configuration
 }
 
 type Input struct {
@@ -22,6 +23,8 @@ type Input struct {
 	QueryParams map[string]string `md:"queryParams"` // The path parameters (e.g., 'id' in http://.../pet/:id/name )
 	Headers     map[string]string `md:"headers"`     // The HTTP header parameters
 	Content     interface{}       `md:"content"`     // The message content to send. This is only used in POST, PUT, and PATCH
+	Method      string            `md:"method"`      // The HTTP method to use for this request
+	EnvPropUri  string            `md:"envPropUri"`  // Using an environment property for the uri
 }
 
 func (i *Input) ToMap() map[string]interface{} {
@@ -30,6 +33,8 @@ func (i *Input) ToMap() map[string]interface{} {
 		"queryParams": i.QueryParams,
 		"headers":     i.Headers,
 		"content":     i.Content,
+		"method":      i.Method,
+		"envPropUri":  i.EnvPropUri,
 	}
 }
 
@@ -49,7 +54,11 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 		return err
 	}
 	i.Content = values["content"]
-
+	i.Method, err = coerce.ToString(values["method"])
+	if err != nil {
+		return err
+	}
+	i.EnvPropUri, err = coerce.ToString(values["envPropUri"])
 	return nil
 }
 
