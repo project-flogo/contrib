@@ -1,10 +1,10 @@
 {
-  "name": "flogo-rest",
+  "name": "flogo-lp-rest",
   "type": "flogo:trigger",
-  "version": "0.10.0",
-  "title": "Receive HTTP Message",
-  "description": "Simple REST Trigger",
-  "homepage": "https://github.com/project-flogo/contrib/tree/master/trigger/rest",
+  "version": "1.0.0",
+  "title": "HTTP uri-path pass through",
+  "description": "Rest Trigger with uri-path pass through capabilities ",
+  "homepage": "https://gitlab.core-services.leaseplan.systems/workloads/0026-wkl-ng-integration/integration/shared/flogoresttrigger",
   "settings": [
     {
       "name": "port",
@@ -58,7 +58,7 @@
   "reply": [
     {
       "name": "code",
-      "type": "int",
+      "type": "number",
       "description": "The http code to reply with"
     },
     {
@@ -79,6 +79,13 @@
   ],
   "handler": {
     "settings": [
+      {
+        "name": "isPassThroughUri",
+        "type": "string",
+        "required" : true,
+        "allowed" : ["YES", "NO"],
+        "description": "use as a pass through will automatically add a 'partial' part of the defined 'path' as a pathParam with name 'restOfThePath'"
+      },
       {
         "name": "method",
         "type": "string",
