@@ -1,0 +1,130 @@
+{
+    "name": "crypto",
+    "type": "flogo:function",
+    "version": "0.0.1a",
+    "title": "crypto",
+    "author": "Mark Mussett",
+    "description": "Provides cryptographic functionality for Flogo",
+    "functions": [
+        {
+            "name": "hmac",
+            "description": "Generate a HMAC-SHA",
+            "example": "crypto.hmac(\"Hello, World!\",\"-----BEGIN PUBLIC KEY-----\") => \"9FznkZO1UM3oYl+Gpac0lii/+a/4o9rTLlCInfA=\"",
+            "args": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "description": "The string to generate the HMAC-SHA"
+                },
+                {
+                    "name": "key",
+                    "type": "string",
+                    "description": "The encryption key"
+                }
+            ],
+            "return": {
+                "name": "hmac",
+                "type": "string"
+            },
+            "display": {
+                "visible": true
+            }
+        },
+        {
+            "name": "aesEncrypt",
+            "description": "Encrypt a string using AES encryption",
+            "example": "crypto.aesEncrypt(\"Hello, World!\",\"1234543444555666\") => \"9FznkZO1UM3oYl+Gpac0lii/+a/4o9rTLlCInfA=\"",
+            "args": [
+                {
+                    "name": "plainText",
+                    "type": "string",
+                    "description": "The string to be encrypted"
+                },
+                {
+                    "name": "key",
+                    "type": "string",
+                    "description": "The encryption key"
+                }
+            ],
+            "return": {
+                "name": "cipherText",
+                "type": "string"
+            },
+            "display": {
+                "visible": true
+            }
+        },
+        {
+            "name": "aesDecrypt",
+            "description": "Decrypt a string using AES decryption",
+            "example": "crypto.aesDecrypt(\"9FznkZO1UM3oYl+Gpac0lii/+a/4o9rTLlCInfA=\",\"1234543444555666\") => \"Hello, World!\"",
+            "args": [
+                {
+                    "name": "cipherText",
+                    "type": "string",
+                    "description": "The string to be decrypted"
+                },
+                {
+                    "name": "key",
+                    "type": "string",
+                    "description": "The decryption key"
+                }
+            ],
+            "return": {
+                "name": "plainText",
+                "type": "string"
+            },
+            "display": {
+                "visible": true
+            }
+        },
+        {
+        "name": "rsaEncrypt",
+        "description": "Encrypt a string using RSA encryption",
+        "example": "crypto.rsaEncrypt()",
+        "args": [
+            {
+                "name": "plainText",
+                "type": "string",
+                "description": "The string to be encrypted"
+            },
+            {
+                "name": "publicKey",
+                "type": "string",
+                "description": "The encryption key"
+            }
+        ],
+        "return": {
+            "name": "cipherText",
+            "type": "string"
+        },
+        "display": {
+            "visible": true
+        }
+    },
+    {
+        "name": "rsaDecrypt",
+        "description": "Decrypt a string using RSA decryption",
+        "example": "crypto.rsaDecrypt()",
+        "args": [
+            {
+                "name": "cipherText",
+                "type": "string",
+                "description": "The string to be decrypted"
+            },
+            {
+                "name": "privateKey",
+                "type": "string",
+                "description": "The decryption key"
+            }
+        ],
+        "return": {
+            "name": "plainText",
+            "type": "string"
+        },
+        "display": {
+            "visible": true
+        }
+    }
+    ]
+}
